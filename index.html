@@ -26,32 +26,40 @@
             background: white;
             color: black;
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 20px; /* Más redondeado */
             width: 90%;
             max-width: 400px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
         .message-box h2 {
             margin-top: 0;
         }
         .buttons {
-            margin-top: 15px;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
         .btn {
             display: inline-block;
-            background-color: #fd297b;
-            color: white;
-            padding: 10px 20px;
-            margin: 5px;
-            border: none;
-            border-radius: 5px;
+            background-color: white;
+            color: #fd297b;
+            padding: 12px 25px;
+            border: 2px solid white;
+            border-radius: 30px; /* Botones más redondeados */
             cursor: pointer;
             text-decoration: none;
             font-size: 16px;
+            font-weight: bold;
+            width: 200px;
+            text-align: center;
+            transition: 0.3s ease;
         }
         .btn:hover {
-            background-color: #ff5864;
+            background-color: #fd297b;
+            color: white;
+            border: 2px solid white;
         }
     </style>
 </head>
@@ -62,10 +70,10 @@
         <h2>📢 ¡Estamos en desarrollo!</h2>
         <p>Gracias por tu interés en Unimatch. Estamos trabajando arduamente para ofrecerte la mejor experiencia. Pronto lanzaremos nuestra aplicación.</p>
         <p>¡Mantente atento a futuras actualizaciones!</p>
-        <div class="buttons">
-            <a href="#" class="btn">Iniciar Sesión</a>
-            <a href="#" class="btn">Registrarse</a>
-        </div>
+    </div>
+    <div class="buttons">
+        <a href="#" class="btn">Iniciar Sesión</a>
+        <a href="#" class="btn">Registrarse</a>
     </div>
 </body>
 </html>
