@@ -3,43 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Uni Match</title>
+    <title>UniMatch</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
-            background-color: #f3f3f3;
+            padding: 0;
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
             text-align: center;
-            color: #333;
+            color: white;
         }
         .container {
-            padding: 40px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
-        img {
-            width: 200px;
-            border-radius: 20px;
+        .logo {
+            width: 100px;
             margin-bottom: 20px;
         }
         h1 {
             font-size: 3rem;
             margin: 0;
         }
+        p {
+            font-size: 1.2rem;
+            margin: 10px 20px;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        .btn {
+            background: white;
+            color: #ff758c;
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            margin: 10px;
+            display: inline-block;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: #ffebee;
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <img src="https://source.unsplash.com/200x200/?university,students" alt="Uni Match">
-    <h1>Uni Match</h1>
-    <p>Encuentra gente de tu universidad para citas y quedadas 🔥</p>
-</div>
+    <div class="container">
+        <img src="logo.png" alt="UniMatch Logo" class="logo">
+        <h1>UniMatch</h1>
+        <p>Encuentra tu match universitario ❤️</p>
+        <div class="buttons">
+            <a href="#" class="btn">Registrarse</a>
+            <a href="#" class="btn">Iniciar Sesión</a>
+        </div>
+    </div>
 </body>
 </html>
-
