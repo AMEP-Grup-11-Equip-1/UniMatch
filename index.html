@@ -3,75 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UniMatch</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+    <title>Unimatch - En Desarrollo</title>
     <style>
         body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #ff5864, #fd297b);
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            background-color: #222;
         }
-        .mobile-container {
-            position: relative;
-            width: 300px;
+        .logo {
+            width: 100px;
+            height: auto;
         }
-        .mobile-frame {
-            width: 100%;
-            display: block;
+        .message-box {
+            background: white;
+            color: black;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            text-align: left;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        .screen-content {
-            position: absolute;
-            top: 8%;
-            left: 9%;
-            width: 82%;
-            height: 84%;
-            background: linear-gradient(135deg, #ff758c, #ff7eb3);
-            border-radius: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-            font-family: 'Poppins', sans-serif;
-        }
-        .screen-content img {
-            width: 80px;
-            margin-bottom: 15px;
-        }
-        .screen-content h1 {
-            font-size: 1.8rem;
-            margin: 5px 0;
-        }
-        .buttons {
-            margin-top: 15px;
-        }
-        .buttons button {
-            background-color: white;
-            border: none;
-            padding: 10px 20px;
-            margin: 5px;
-            border-radius: 20px;
-            font-weight: bold;
-            cursor: pointer;
+        .message-box h2 {
+            margin-top: 0;
         }
     </style>
 </head>
 <body>
-    <div class="mobile-container">
-        <img src="/mnt/data/white-smartphone-mockup-blank-screen-isolated-on-transparent-background-smartphone-mockup-frame-free-png.webp" alt="Mobile Frame" class="mobile-frame">
-        <div class="screen-content">
-            <img src="https://via.placeholder.com/80" alt="UniMatch Logo">
-            <h1>UniMatch</h1>
-            <p>Encuentra tu match universitario 💕</p>
-            <div class="buttons">
-                <button>Registrarse</button>
-                <button>Iniciar Sesión</button>
-            </div>
-        </div>
+    <img src="tu_logo.png" alt="Unimatch Logo" class="logo">
+    <h1>Bienvenido a Unimatch</h1>
+    <div class="message-box">
+        <h2>📢 ¡Estamos en desarrollo!</h2>
+        <p>Gracias por tu interés en Unimatch. Estamos trabajando arduamente para ofrecerte la mejor experiencia. Pronto lanzaremos nuestra aplicación.</p>
+        <p>¡Mantente atento a futuras actualizaciones!</p>
     </div>
 </body>
 </html>
