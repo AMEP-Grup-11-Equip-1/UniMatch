@@ -22,11 +22,12 @@
             background: white;
             color: black;
             padding: 20px;
-            border-radius: 20px; /* Más redondeado */
+            border-radius: 20px;
             width: 90%;
             max-width: 400px;
             text-align: center;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
         }
         .message-box h2 {
             margin-top: 0;
@@ -34,7 +35,7 @@
         .buttons {
             margin-top: 20px;
             display: flex;
-            flex-direction: column;
+            flex-direction: column;  /* Esto asegura que los botones estén en columna */
             gap: 10px;
         }
         .btn {
@@ -43,7 +44,7 @@
             color: #fd297b;
             padding: 12px 25px;
             border: 2px solid white;
-            border-radius: 30px; /* Botones más redondeados */
+            border-radius: 30px;
             cursor: pointer;
             text-decoration: none;
             font-size: 16px;
@@ -57,18 +58,116 @@
             color: white;
             border: 2px solid white;
         }
+        .form-box {
+            display: none;
+            background: white;
+            color: black;
+            padding: 20px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        .form-box input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #fd297b;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #333;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .form-box button {
+            background-color: #fd297b;
+            color: white;
+            padding: 12px 25px;
+            border: 2px solid #fd297b;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 200px;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .form-box button:hover {
+            background-color: #e11d5e;
+            border-color: #e11d5e;
+        }
+        .back-btn {
+            position: absolute;
+            top: 10px; /* Posicionar en la parte superior */
+            right: 20px; /* Moverla un poco más a la izquierda */
+            font-size: 28px;
+            color: black;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .back-btn:hover {
+            color: #fd297b;
+        }
     </style>
 </head>
 <body>
-    <h1>Bienvenido a Unimatch</h1>
-    <div class="message-box">
+    <h1 id="welcome-text">Bienvenido a Unimatch</h1>
+    <div class="message-box" id="message-box">
         <h2>📢 ¡Estamos en desarrollo!</h2>
         <p>Gracias por tu interés en Unimatch. Estamos trabajando arduamente para ofrecerte la mejor experiencia. Pronto lanzaremos nuestra aplicación.</p>
         <p>¡Mantente atento a futuras actualizaciones!</p>
     </div>
-    <div class="buttons">
-        <a href="#" class="btn">Iniciar Sesión</a>
-        <a href="#" class="btn">Registrarse</a>
+    <div class="buttons" id="buttons">
+        <a href="javascript:void(0);" onclick="showForm('login-form')" class="btn">Iniciar Sesión</a>
+        <a href="javascript:void(0);" onclick="showForm('register-form')" class="btn">Registrarse</a>
     </div>
+
+    <!-- Formulario de Inicio de Sesión -->
+    <div class="form-box" id="login-form">
+        <a href="javascript:void(0);" onclick="backToMain()" class="back-btn">←</a>
+        <h2>Iniciar Sesión</h2>
+        <form action="#" method="POST">
+            <input type="text" id="username" placeholder="Nombre de perfil o Correo" required>
+            <input type="password" id="password" placeholder="Contraseña" required>
+            <button type="submit">Acceder</button>
+        </form>
+    </div>
+
+    <!-- Formulario de Registro -->
+    <div class="form-box" id="register-form">
+        <a href="javascript:void(0);" onclick="backToMain()" class="back-btn">←</a>
+        <h2>Registrarse</h2>
+        <form action="registro.php" method="POST">
+            <input type="text" id="new-username" name="new-username" placeholder="Nombre de usuario" required>
+            <input type="email" id="email" name="email" placeholder="Correo electrónico" required>
+            <input type="password" id="new-password" name="new-password" placeholder="Contraseña" required>
+            <button type="submit">Registrarse</button>
+        </form>
+    </div>
+
+    <script>
+        function showForm(formId) {
+            // Ocultar los elementos principales
+            document.getElementById('message-box').style.display = 'none';
+            document.getElementById('buttons').style.display = 'none';
+            document.getElementById('welcome-text').style.display = 'none';
+
+            // Mostrar el formulario correspondiente
+            document.getElementById(formId).style.display = 'block';
+        }
+
+        function backToMain() {
+            // Mostrar los elementos principales y ocultar los formularios
+            document.getElementById('message-box').style.display = 'block';
+            document.getElementById('buttons').style.display = 'flex'; // Asegura que los botones se mantengan en columna
+            document.getElementById('welcome-text').style.display = 'block';
+            
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'none';
+        }
+    </script>
 </body>
 </html>
