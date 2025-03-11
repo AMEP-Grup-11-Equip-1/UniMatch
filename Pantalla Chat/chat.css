@@ -32,7 +32,8 @@ body {
     transition: 0.3s;
     padding-top: 60px;
     z-index: 9999;
-    display: none; /* Menú oculto por defecto */
+    display: none;
+    /* Menú oculto por defecto */
 }
 
 .side-menu a {
@@ -115,10 +116,13 @@ body {
 
 .messages {
     flex: 1;
-    overflow-y: auto; /* Permite desplazamiento */
-    max-height: 100%; /* Limita la altura máxima */
+    overflow-y: auto;
+    /* Permite desplazamiento */
+    max-height: 100%;
+    /* Limita la altura máxima */
     margin-bottom: 10px;
-    padding-right: 10px; /* Espacio para el scroll */
+    padding-right: 10px;
+    /* Espacio para el scroll */
 }
 
 .message {
