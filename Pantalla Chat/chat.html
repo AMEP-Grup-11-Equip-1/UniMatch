@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chats - Unimatch</title>
-    <link rel="icon" href="../Imagenes/img1.png" type="image/x-icon">
+    <link rel="icon" href="img1.png" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="chat.css">
+
 </head>
+
 <body>
 
     <!-- Icono de las tres rayas para abrir el menú lateral -->
@@ -16,16 +19,17 @@
     <!-- Barra lateral de opciones -->
     <div id="sideMenu" class="side-menu">
         <span class="close-btn" onclick="closeMenu()">&times;</span>
-        
+
         <!-- Lista de opciones del menú -->
         <a href="../Pantalla%20Inicio/bienvenida.html">Inicio</a>
-        <a href="../Pantalla%20Perfil/perfil.html">Perfil</a> <!-- Enlace a perfil.php -->
-        <a href="chat.html">Chat</a>
-        <a href="../Pantalla%20Config/configuracion.html">Configuración</a>
+        <a href="../Pantalla%20Perfil/perfil.html">Perfil</a>
+        <a href="../Pantalla%20Chat/chat.html">Chats</a>
+        <a href="../Pantalla%20Config/configuracion.htmls">Configuración</a>
         <a href="../Pantalla%20Ayuda/ayuda.html">Ayuda</a>
-        
+        <a href="../Pantalla%20de%20Bloqueo/Pantalladebloqueo.html">Cerrar sesión</a>
+
         <!-- Botón de Cerrar sesión alineado a la izquierda -->
-        <button class="logout-btn-side" onclick="window.location.href='../Pantalla%20de%20Bloqueo/Pantalladebloqueo.html'">Cerrar sesión</button>
+        <button class="logout-btn-side" onclick="window.location.href='logout.php'">Cerrar sesión</button>
     </div>
 
     <div class="chat-container">
@@ -162,11 +166,11 @@
 
     <script>
         function openMenu() {
-            document.getElementById('sideMenu').style.display = 'block';  // Muestra el menú
+            document.getElementById('sideMenu').style.display = 'block'; // Muestra el menú
         }
 
         function closeMenu() {
-            document.getElementById('sideMenu').style.display = 'none';  // Oculta el menú
+            document.getElementById('sideMenu').style.display = 'none'; // Oculta el menú
         }
 
         // Desplazamiento automático hacia abajo de la conversación
@@ -174,4 +178,5 @@
     </script>
 
 </body>
+
 </html>
