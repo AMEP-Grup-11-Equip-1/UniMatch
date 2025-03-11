@@ -1,0 +1,149 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to bottom, #ff5864, #fd297b);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+}
+
+.perfil-container {
+    background-color: white;
+    padding: 40px;
+    border-radius: 15px;
+    width: 400px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+}
+
+.perfil-container h2 {
+    text-align: center;
+    color: #fd297b;
+}
+
+.perfil-container img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 20px auto;
+    display: block;
+}
+
+.perfil-container .avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 20px auto;
+    background-color: #d3d3d3; /* Color gris de fondo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+    color: #fff;
+}
+
+.perfil-container input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+}
+
+.perfil-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #fd297b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.perfil-container button:hover {
+    background-color: #e11d5e;
+}
+
+.back-btn {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.back-btn a {
+    text-decoration: none;
+    color: #fd297b;
+    font-weight: bold;
+}
+
+.back-btn a:hover {
+    color: #e11d5e;
+}
+
+/* Estilos para el menú lateral */
+.side-menu {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: white;
+    color: black;
+    overflow-x: hidden;
+    transition: 0.3s;
+    padding-top: 60px;
+    z-index: 9999;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 36px;
+    color: black;
+    cursor: pointer;
+}
+
+.side-menu a {
+    padding: 16px 32px;
+    text-decoration: none;
+    font-size: 20px;
+    color: black;
+    display: block;
+    transition: 0.3s;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.side-menu a:hover {
+    color: #fd297b;
+}
+
+.logout-btn-side {
+    font-size: 20px;
+    color: black;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    padding: 16px 32px;
+    width: 100%;
+    border-top: 1px solid #ddd;
+}
+
+.logout-btn-side:hover {
+    color: #fd297b;
+}
+
+.menu-icon {
+    font-size: 30px;
+    color: white;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    cursor: pointer;
+    z-index: 10000;
+}

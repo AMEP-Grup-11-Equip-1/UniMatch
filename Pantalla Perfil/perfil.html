@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil - Unimatch</title>
+    <link rel="icon" href="../Imagenes/img1.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="perfil.css">
+
+</head>
+<body>
+
+    <!-- Icono de las tres rayas (hamburguesa) en la esquina superior izquierda -->
+    <span class="menu-icon" onclick="openMenu()">&#9776;</span> <!-- Tres rayas para el menú -->
+
+    <!-- Pestaña lateral -->
+    <div id="sideMenu" class="side-menu">
+        <!-- Botón de cierre en la parte superior derecha -->
+        <span class="close-btn" onclick="closeMenu()">&times;</span>
+        
+        <!-- Enlaces del menú -->
+        <a href="../Pantalla%20Inicio/bienvenida.html">Inicio</a>
+        <a href="#">Perfil</a>
+        <a href="../Pantalla%20Chat/chat.html">Chats</a> <!-- Enlace a la página de chats -->
+        <a href="../Pantalla%20Config/configuracion.html">Configuraciones</a>
+        <a href="../Pantalla%20Ayuda/ayuda.html">Ayuda</a>
+        
+        <!-- Agregar la opción de cerrar sesión -->
+        <button class="logout-btn-side" onclick="window.location.href='../Pantalla%20de%20Bloqueo/Pantalladebloqueo.html'">Cerrar sesión</button>
+    </div>
+
+    <!-- Contenido principal de la página de perfil -->
+    <div class="perfil-container">
+        <h2>Mi Perfil</h2>
+
+        <!-- Mostrar foto de perfil o avatar gris -->
+        
+        <!-- Formulario para modificar el perfil -->
+        <form action="modificar_perfil.php" method="POST" enctype="multipart/form-data">
+            <input type="text" name="nombre" value="<?php echo $nombre; ?>" placeholder="Nombre" required>
+            <input type="email" name="email" value="<?php echo $email; ?>" placeholder="Correo electrónico" required>
+            <input type="file" name="foto" accept="image/*" placeholder="Cambiar foto de perfil">
+            <button type="submit">Actualizar Perfil</button>
+        </form>
+
+        <div class="back-btn">
+            <a href="bienvenida.html">Volver al inicio</a>
+        </div>
+    </div>
+
+    <script>
+        // Función para abrir el menú lateral
+        function openMenu() {
+            document.getElementById('sideMenu').style.width = '250px';
+        }
+
+        // Función para cerrar el menú lateral
+        function closeMenu() {
+            document.getElementById('sideMenu').style.width = '0';
+        }
+    </script>
+
+</body>
+</html>

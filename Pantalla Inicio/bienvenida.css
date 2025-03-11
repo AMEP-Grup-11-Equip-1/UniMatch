@@ -1,0 +1,158 @@
+body {
+    font-family: 'Poppins', sans-serif; /* Usar la fuente Poppins */
+    background: linear-gradient(to bottom, #ff5864, #fd297b);
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Ajuste para que la pantalla se mueva */
+    align-items: center;
+    height: 100%;
+    overflow-y: auto; /* Permite el desplazamiento de la pantalla */
+}
+
+/* Estilos para el tablón de anuncios */
+.message-box {
+    background: white;
+    color: black;
+    padding: 15px 20px;  /* Reducir padding para mayor ajuste */
+    border-radius: 15px;
+    width: 90%;
+    max-width: 800px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    
+    /* Centrado de texto */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.message-box h2 {
+    color: #fd297b;
+    margin-top: 0;
+    margin-bottom: 10px; /* Reducir el margen entre el título y el contenido */
+}
+
+.message-box p {
+    margin: 5px 0; /* Reducir margen entre los párrafos */
+}
+
+.btn {
+    display: inline-block;
+    background-color: white;
+    color: #fd297b;
+    padding: 12px 25px;
+    border: 2px solid white;
+    border-radius: 30px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    width: 200px;
+    text-align: center;
+    margin-top: 20px;
+    transition: 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #fd297b;
+    color: white;
+    border: 2px solid white;
+}
+
+/* Estilo de las islas de información */
+.info-island {
+    background: white;
+    color: black;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    width: 90%;
+    max-width: 800px;
+    text-align: left;
+}
+
+.info-island h3 {
+    color: #fd297b;
+    margin-bottom: 10px;
+}
+
+.info-island p {
+    font-size: 16px;
+    color: #333;
+}
+
+/* Estilos para la barra lateral */
+.side-menu {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: white; /* Fondo blanco */
+    color: black; /* Letras negras */
+    overflow-x: hidden;
+    transition: 0.3s;
+    padding-top: 60px;
+    z-index: 9999;
+}
+
+/* Alineación del icono de cerrar (X) */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 36px;
+    color: black;
+    cursor: pointer;
+}
+
+/* Enlaces del menú */
+.side-menu a {
+    padding: 16px 32px;
+    text-decoration: none;
+    font-size: 20px;
+    color: black; /* Letras negras */
+    display: block;
+    transition: 0.3s;
+    border-bottom: 1px solid #ddd; /* Línea separadora */
+    text-align: left; /* Alineado a la izquierda */
+}
+
+.side-menu a:hover {
+    color: #fd297b;
+}
+
+/* Estilo para el botón de cerrar sesión */
+.logout-btn-side {
+    font-size: 20px;
+    color: black;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    padding: 16px 32px;
+    width: 100%;
+    border-top: 1px solid #ddd; /* Separador superior */
+}
+
+.logout-btn-side:hover {
+    color: #fd297b;
+}
+
+/* Estilo del icono del menú hamburguesa */
+.menu-icon {
+    font-size: 30px;
+    color: white;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    cursor: pointer;
+    z-index: 10000;
+}
