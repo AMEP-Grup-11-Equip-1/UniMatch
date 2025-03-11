@@ -1,0 +1,48 @@
+Usuario: Adrià
+Email: adriaserraltalopez@gmail.com
+Contraseña: 123
+
+Usuario: a
+Email: adria.serralta@estudiantat.upc.edu
+Contraseña: a
+
+Usuario: 1
+Email: 1@1
+Contraseña: 1
+
+Usuario: Joana
+Email: j@j
+Contraseña: 123
+
+Usuario: Adrià
+Email: malombolombo@hotmail.com
+Contraseña: 123
+
+Usuario: Adrià
+Email: campelon@gmail.com
+Contraseña: 123
+
+Usuario: Adrià
+Email: malombolombo@hotmail.com
+Contraseña: 123
+
+Usuario: adria
+Email: malombolombo@hotmail.com
+Contraseña: q1231
+
+Usuario: a
+Email: adriaserraltalopez@gmail.com
+Contraseña: 2123
+
+Usuario: a
+Email: adriaserraltalopez@gmail.com
+Contraseña: 2123
+
+Usuario: a
+Email: adriaserraltalopez@gmail.com
+Contraseña: a
+
+Usuario: a
+Email: adriaserraltalopez@gmail.com
+Contraseña: a
+
