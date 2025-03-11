@@ -1,0 +1,180 @@
+body {
+    font-family: Arial, sans-serif;
+    background: black;
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+
+/* Iluminación rosa */
+
+body::before,
+body::after,
+.glow-1,
+.glow-2,
+.glow-3 {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.4;
+    filter: blur(120px);
+}
+
+body::before {
+    width: 400px;
+    height: 400px;
+    background: #ff4f7b;
+    top: 15%;
+    left: 20%;
+}
+
+body::after {
+    width: 350px;
+    height: 350px;
+    background: #fd297b;
+    bottom: 15%;
+    right: 20%;
+}
+
+.glow-1 {
+    width: 300px;
+    height: 300px;
+    background: #ff69b4;
+    top: 50%;
+    left: 10%;
+}
+
+.glow-2 {
+    width: 280px;
+    height: 280px;
+    background: #ff1493;
+    bottom: 50%;
+    right: 10%;
+}
+
+.glow-3 {
+    width: 350px;
+    height: 350px;
+    background: #ff85a2;
+    top: 30%;
+    right: 30%;
+}
+
+.message-box {
+    background: white;
+    color: black;
+    padding: 20px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.message-box h2 {
+    margin-top: 0;
+}
+
+.buttons {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn {
+    display: inline-block;
+    background-color: white;
+    color: #fd297b;
+    padding: 12px 25px;
+    border: 2px solid white;
+    border-radius: 30px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    width: 200px;
+    text-align: center;
+    transition: 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #fd297b;
+    color: white;
+    border: 2px solid white;
+}
+
+.form-box {
+    display: none;
+    background: white;
+    color: black;
+    padding: 20px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.form-box input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 2px solid #fd297b;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.form-box button {
+    background-color: #fd297b;
+    color: white;
+    padding: 12px 25px;
+    border: 2px solid #fd297b;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    width: 200px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.form-box button:hover {
+    background-color: #e11d5e;
+    border-color: #e11d5e;
+}
+
+.back-btn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    color: black;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.back-btn:hover {
+    color: #fd297b;
+}
+
+.error-message {
+    color: red;
+    margin-top: 10px;
+    font-weight: bold;
+}
