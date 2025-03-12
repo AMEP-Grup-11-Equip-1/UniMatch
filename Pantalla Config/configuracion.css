@@ -1,0 +1,164 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to bottom, #000000, #000000);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+
+/*------------------------------------ Fondo -------------------------------------->*/
+
+body::before,
+body::after,
+.glow-1,
+.glow-2,
+.glow-3 {
+    content: "";
+    position: fixed;
+    /* Fijar las bolas de luz al fondo */
+    border-radius: 50%;
+    opacity: 0.4;
+    filter: blur(200px);
+    z-index: -1;
+}
+
+body::before {
+    width: 450px;
+    height: 600px;
+    background: #ff4f7b;
+    top: 20%;
+    left: 45%;
+}
+
+body::after {
+    width: 450px;
+    height: 550px;
+    background: #e429fd;
+    bottom: 20%;
+    right: 45%;
+}
+
+.glow-1 {
+    width: 300px;
+    height: 300px;
+    background: #ff69b4;
+    top: 55%;
+    left: 15%;
+}
+
+.glow-2 {
+    width: 280px;
+    height: 280px;
+    background: #ff1493;
+    bottom: 45%;
+    right: 15%;
+}
+
+.glow-3 {
+    width: 350px;
+    height: 350px;
+    background: #ff85a2;
+    top: 25%;
+    right: 25%;
+}
+
+
+/*---------------------------------------------------------------------------------->*/
+
+
+/*----------------------------------- Isla Ajustes ---------------------------------->*/
+
+.config-container {
+    background-color: white;
+    border-radius: 15px;
+    padding: 30px 25px;
+    width: 450px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    position: relative;
+}
+
+.config-title {
+    text-align: center;
+    font-size: 28px;
+    color: #000000;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.config-option {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    white-space: nowrap;
+    /* Evita que el texto se divida en varias líneas */
+}
+
+.config-option label {
+    font-size: 16px;
+    /* Ajusté el tamaño del texto */
+    font-weight: 600;
+    color: #333;
+    text-align: left;
+    width: 80%;
+    /* Reducido para que haya más espacio para el interruptor */
+}
+
+
+/* Estilo para los cuadrados */
+
+.switch {
+    width: 24px;
+    /* Ancho reducido */
+    height: 24px;
+    /* Alto reducido */
+    border: 2px solid #000000;
+    border-radius: 4px;
+    /* Hacemos el borde ligeramente redondeado */
+    background-color: white;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.switch.active {
+    background-color: #000000;
+    /* Se llena de rosa cuando está activado */
+}
+
+.config-button {
+    background-color: #000000;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 20px;
+    width: 100%;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.config-button:hover {
+    background-color: #000000;
+}
+
+.back-link {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    font-size: 16px;
+    color: #000000;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+
+/*---------------------------------------------------------------------------------->*/

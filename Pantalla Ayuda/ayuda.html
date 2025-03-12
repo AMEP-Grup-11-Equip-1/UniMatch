@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayuda - Unimatch</title>
+    <link rel="icon" href="../Imagenes/img1.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="ayuda.css">
+    <link rel="stylesheet" href="../Menu/menu.css">
+
+
+</head>
+
+<body>
+
+    <!---------------------------------------- Menu Desplegable-------------------------------------------->
+
+    <span class="menu-icon" onclick="openMenu()">&#9776;</span>
+
+    <div id="sideMenu" class="side-menu">
+        <span class="close-btn" onclick="closeMenu()">&times;</span>
+        <a href="../Pantalla%20Inicio/bienvenida.html">Inicio</a>
+        <a href="../Pantalla%20Perfil/perfil.php">Perfil</a>
+        <a href="../Pantalla%20Chat/chat.html">Chats</a>
+        <a href="../Pantalla%20Config/configuracion.html">Configuraciones</a>
+        <a href="../Pantalla%20Ayuda/ayuda.html">Ayuda</a>
+        <button class="logout-btn-side" onclick="window.location.href='../Pantalla%20de%20Bloqueo/Pantalladebloqueo.html'">Cerrar sesión</button>
+    </div>
+
+
+    <script>
+        function openMenu() {
+            document.getElementById('sideMenu').style.width = '250px';
+        }
+
+        function closeMenu() {
+            document.getElementById('sideMenu').style.width = '0';
+        }
+    </script>
+
+    <!------------------------------------------------------------------------------------------------------>
+
+
+
+    <!------------------------------------------- Isla Ayuda------------------------------------------------>
+
+    <div class="help-container">
+        <h2 class="help-title">Pide ayuda</h2>
+
+        <!-- Opción para escribir la duda o problema -->
+        <div class="help-option">
+            <label for="mensaje">Escribe tu duda o problema aquí:</label>
+            <textarea class="help-textarea" id="mensaje" placeholder="Escribe tu mensaje aquí..."></textarea>
+        </div>
+
+        <!-- Botón para enviar el mensaje -->
+        <button class="help-button" onclick="enviarMensaje()">Enviar</button>
+
+        <!-- Enlace para volver al menú anterior -->
+        <a href="../Pantalla%20Inicio/bienvenida.html" class="back-link">Volver al menú</a>
+    </div>
+
+    <script>
+        // Función para manejar el envío del mensaje
+        function enviarMensaje() {
+            var mensaje = document.getElementById('mensaje').value;
+
+            if (mensaje.trim() === "") {
+                alert("Por favor, escribe un mensaje antes de enviarlo.");
+            } else {
+                alert("Tu mensaje ha sido enviado. Te responderemos lo antes posible.");
+                document.getElementById('mensaje').value = ""; // Limpiar el área de texto
+            }
+        }
+    </script>
+
+    <!------------------------------------------------------------------------------------------------------>
+
+</body>
+
+</html>

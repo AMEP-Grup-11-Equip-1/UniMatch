@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unimatch - En Desarrollo</title>
+
+    <link rel="icon" href="../Imagenes/img1.png" type="image/x-icon">
+    <link rel="stylesheet" href="Pantalladebloqueo.css">
+</head>
+
+<body>
+
+    <!------------------------------------------ INFO --------------------------------------------->
+
+    <h1 id="welcome-text">Bienvenido a Unimatch </h1>
+    <div class="message-box" id="message-box">
+        <h2>📢 ¡Estamos en desarrollo!</h2>
+        <p>Gracias por tu interés en Unimatch. Estamos trabajando duramente para ofrecerte la mejor experiencia. Pronto lanzaremos nuestra aplicación.</p>
+        <p>¡Mantente atento a futuras actualizaciones!</p>
+    </div>
+    <div class="buttons" id="buttons">
+        <a href="javascript:void(0);" onclick="showForm('login-form')" class="btn">Iniciar Sesión</a>
+        <a href="javascript:void(0);" onclick="showForm('register-form')" class="btn">Registrarse</a>
+    </div>
+
+    <!--------------------------------------------------------------------------------------------->
+
+
+    <!------------------------------------ Inicio de Sesión --------------------------------------->
+
+
+    <div class="form-box" id="login-form">
+        <a href="javascript:void(0);" onclick="backToMain()" class="back-btn">←</a>
+        <h2>Iniciar Sesión</h2>
+        <form action="../Gestion%20Usuario/login.php" method="POST">
+            <input type="text" id="username" name="username" placeholder="Nombre de perfil o Correo" required>
+            <input type="password" id="password" name="password" placeholder="Contraseña" required>
+            <button type="submit">Acceder</button>
+        </form>
+    </div>
+
+    <!--------------------------------------------------------------------------------------------->
+
+
+    <!---------------------------------------- Registro ------------------------------------------->
+
+    <div class="form-box" id="register-form">
+        <a href="javascript:void(0);" onclick="backToMain()" class="back-btn">←</a>
+        <h2>Registrarse</h2>
+        <form action="../Gestion%20Usuario/registro.php" method="POST">
+            <input type="text" id="new-username" name="new-username" placeholder="Nombre de usuario" required>
+            <input type="email" id="email" name="email" placeholder="Correo electrónico" required>
+            <input type="password" id="new-password" name="new-password" placeholder="Contraseña" required>
+            <button type="submit">Registrarse</button>
+        </form>
+    </div>
+
+    <!--------------------------------------------------------------------------------------------->
+
+
+
+    <!---------------------------------------- Scripts ------------------------------------------->
+    <script>
+        function showForm(formId) {
+            document.getElementById('message-box').style.display = 'none';
+            document.getElementById('buttons').style.display = 'none';
+            document.getElementById('welcome-text').style.display = 'none';
+            document.getElementById(formId).style.display = 'block';
+        }
+
+        function backToMain() {
+            document.getElementById('message-box').style.display = 'block';
+            document.getElementById('buttons').style.display = 'flex';
+            document.getElementById('welcome-text').style.display = 'block';
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'none';
+        }
+    </script>
+    <!--------------------------------------------------------------------------------------------->
+</body>
+
+</html>
