@@ -1,4 +1,3 @@
-
 <?php
 include '../Gestion Usuario/login.php';
 
@@ -38,6 +37,9 @@ include '../Gestion Usuario/login.php';
 
         <!-- Agregar la opción de cerrar sesión -->
         <button class="logout-btn-side" onclick="window.location.href='../Pantalla%20de%20Bloqueo/Pantalladebloqueo.html'">Cerrar sesión</button>
+        <button class="delete-account-btn" onclick="eliminarCuenta()" style="background-color: red; color: white; border: none; padding: 10px; width: 100%;">
+            Eliminar cuenta
+        </button>
     </div>
 
     
@@ -73,6 +75,26 @@ include '../Gestion Usuario/login.php';
             document.getElementById('sideMenu').style.width = '0';
         }
     </script>
+
+<script>
+    function eliminarCuenta() {
+        if (confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.")) {
+            fetch("../Gestion%20Usuario/user.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.status === "success") {
+                    window.location.href = "../Pantalla%20de%20Bloqueo/Pantalladebloqueo.html";
+                }
+            })
+            .catch(error => console.error("Error en la solicitud:", error));
+        }
+    }
+</script>
+
 
 </body>
 
