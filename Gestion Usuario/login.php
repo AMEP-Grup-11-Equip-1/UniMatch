@@ -66,3 +66,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $autenticacion->autenticar($username, $password);
 }
 ?>
+
