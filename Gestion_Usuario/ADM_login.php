@@ -31,7 +31,7 @@ class AutenticarADM {
     }
 }
 
-// Criar a conexão
+// Crea la conexión
 $bd = new ConexionBD();
 $conexion = $bd->getConexion();
 

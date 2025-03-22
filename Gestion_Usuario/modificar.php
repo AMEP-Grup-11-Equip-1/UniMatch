@@ -2,22 +2,10 @@
 session_start();
 
 class ActualizacionPerfil {
-    private $servidor = "ubiwan.epsevg.upc.edu";
-    private $usuario = "amep04";
-    private $clave = "od5Ieg6Keit0ai";
-    private $bd = "amep04";
     private $conn;
 
-    public function __construct() {
-        $this->conectarBD();
-    }
-
-    private function conectarBD() {
-        $this->conn = new mysqli($this->servidor, $this->usuario, $this->clave, $this->bd);
-
-        if ($this->conn->connect_error) {
-            die("Error de conexión: " . $this->conn->connect_error);
-        }
+    public function __construct($conexion) {
+        $this->conn = $conexion;
     }
 
     public function actualizarPerfil($nombre_usuario, $email, $password) {
@@ -77,4 +65,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = trim($_POST['contraseña']);
     $actualizacion->actualizarPerfil($nombre_usuario, $email, $password);
 }
+
+// Crea la conexión
+$bd = new ConexionBD();
+$conexion = $bd->getConexion();
+
 ?>
