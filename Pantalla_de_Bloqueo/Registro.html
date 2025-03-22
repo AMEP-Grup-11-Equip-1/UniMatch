@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unimatch - En Desarrollo</title>
+    <link rel="icon" href="../Imagenes/img1.png" type="image/x-icon">
+    <link rel="stylesheet" href="Pantalladebloqueo.css">
+    <style>
+        .form-box {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <!-----------------------------------------Registro------------------------------------------------->
+    <div class="form-box" id="register-form">
+        <a href="Pantalladebloqueo.html" class="back-btn">←</a>
+        <form-box>
+            <h2>Completar registro</h2>
+            <select id="SelectGender"></select>
+        </form-box>
+    </div>
+
+    <!---------------------------------------- Scripts ------------------------------------------->
+    <script>
+        // Função para obter os dados de 'gender' via AJAX
+        fetch("../Gestion_Usuario/registro.php")
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error("Erro ao carregar os dados de gênero:", data.error);
+                    return;
+                }
+
+                // Verifica se os dados foram retornados corretamente
+                if (data.data && Array.isArray(data.data)) {
+                    var dados = data.data;
+                    var select = document.getElementById("SelectGender");
+
+                    // Limpa o select antes de adicionar novas opções
+                    select.innerHTML = "";
+
+                    // Adiciona as opções ao select
+                    dados.forEach(function(item) {
+                        var option = document.createElement("option");
+                        option.value = item.id;
+                        option.text = item.Gender;
+                        select.appendChild(option);
+                    });
+                } else {
+                    console.error("Dados de gênero não encontrados ou formato inválido.");
+                }
+            })
+            .catch(error => console.error("Erro ao carregar os dados de gênero:", error));
+    </script>
+</body>
+
+</html>

@@ -24,10 +24,13 @@ class ConexionBD {
     }
 
     public function __destruct() {
-        $this->conn->close();
+        // Verifica se a conexão ainda está ativa antes de fechá-la
+        if ($this->conn) {
+            $this->conn->close();
+        }
     }
 
-    //Metodo pars obtener la conexion
+    // Método para obter a conexão
     public function getConexion() {
         return $this->conn;
     }
