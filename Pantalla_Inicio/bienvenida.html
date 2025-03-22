@@ -123,11 +123,11 @@
 
         <div id="sideMenu" class="side-menu">
             <span class="close-btn" onclick="closeMenu()">&times;</span>
-            <a href="../Pantalla%20Perfil/perfil.php">Perfil</a>
-            <a href="../Pantalla%20Chat/chat.html">Chats</a>
-            <a href="../Pantalla%20Config/configuracion.html">Configuraciones</a>
-            <a href="../Pantalla%20Ayuda/ayuda.html">Ayuda</a>
-            <button class="logout-btn-side" onclick="window.location.href='../Pantalla%20de%20Bloqueo/Pantalladebloqueo.html'">Cerrar sesión</button>
+            <a href="../Pantalla_Perfil/perfil.php">Perfil</a>
+            <a href="../Pantalla_Chat/chat.html">Chats</a>
+            <a href="../Pantalla_Config/configuracion.html">Configuraciones</a>
+            <a href="../Pantalla_Ayuda/ayuda.html">Ayuda</a>
+            <button class="logout-btn-side" onclick="window.location.href='../Pantalla_de_Bloqueo/Pantalladebloqueo.html'">Cerrar sesión</button>
             <button class="delete-account-btn" onclick="eliminarCuenta()" style="background-color: red; color: white; border: none; padding: 10px; width: 100%;">
                 Eliminar cuenta
             </button>
@@ -146,7 +146,7 @@
 <script>
     function eliminarCuenta() {
         if (confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.")) {
-            fetch("../Gestion%20Usuario/user.php", {
+            fetch("../Gestion_Usuario/user.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" }
             })
@@ -154,7 +154,7 @@
             .then(data => {
                 alert(data.message);
                 if (data.status === "success") {
-                    window.location.href = "../Pantalla%20de%20Bloqueo/Pantalladebloqueo.html";
+                    window.location.href = "../Pantalla_de_Bloqueo/Pantalladebloqueo.html";
                 }
             })
             .catch(error => console.error("Error en la solicitud:", error));

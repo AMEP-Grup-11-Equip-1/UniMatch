@@ -28,15 +28,15 @@ include '../Gestion Usuario/login.php';
         <span class="close-btn" onclick="closeMenu()">&times;</span>
 
         <!-- Enlaces del menú -->
-        <a href="../Pantalla%20Inicio/bienvenida.html">Inicio</a>
+        <a href="../Pantalla_Inicio/bienvenida.html">Inicio</a>
         <a href="#">Perfil</a>
-        <a href="../Pantalla%20Chat/chat.html">Chats</a>
+        <a href="../Pantalla_Chat/chat.html">Chats</a>
         <!-- Enlace a la página de chats -->
-        <a href="../Pantalla%20Config/configuracion.html">Configuraciones</a>
-        <a href="../Pantalla%20Ayuda/ayuda.html">Ayuda</a>
+        <a href="../Pantalla_Config/configuracion.html">Configuraciones</a>
+        <a href="../Pantalla_Ayuda/ayuda.html">Ayuda</a>
 
         <!-- Agregar la opción de cerrar sesión -->
-        <button class="logout-btn-side" onclick="window.location.href='../Pantalla%20de%20Bloqueo/Pantalladebloqueo.html'">Cerrar sesión</button>
+        <button class="logout-btn-side" onclick="window.location.href='../Pantalla_de_Bloqueo/Pantalladebloqueo.html'">Cerrar sesión</button>
         <button class="delete-account-btn" onclick="eliminarCuenta()" style="background-color: red; color: white; border: none; padding: 10px; width: 100%;">
             Eliminar cuenta
         </button>
@@ -52,7 +52,7 @@ include '../Gestion Usuario/login.php';
 
         <!-- Formulario para modificar el perfil -->
         <?echo $_SESSION['usuarioID']; ?>
-        <form action="../Gestion%20Usuario/modificar.php" method="POST" enctype="multipart/form-data">
+        <form action="../Gestion_Usuario/modificar.php" method="POST" enctype="multipart/form-data">
             <input type="text" name="nombre" value="<?php echo $_SESSION['usuario']; ?>" placeholder="Nombre" required>
             <input type="text" name="contraseña" value="********" placeholder="Contraseña Nueva">
             <input type="email" name="email" value="<?php echo $_SESSION['email']; ?>" placeholder="Correo electrónico" required>
@@ -60,7 +60,7 @@ include '../Gestion Usuario/login.php';
         </form>
 
         <div class="back-btn">
-            <a href="../Pantalla%20Inicio/bienvenida.html">Volver al inicio</a>
+            <a href="../Pantalla_Inicio/bienvenida.html">Volver al inicio</a>
         </div>
     </div>
 
@@ -79,7 +79,7 @@ include '../Gestion Usuario/login.php';
 <script>
     function eliminarCuenta() {
         if (confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.")) {
-            fetch("../Gestion%20Usuario/user.php", {
+            fetch("../Gestion_Usuario/user.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" }
             })
@@ -87,7 +87,7 @@ include '../Gestion Usuario/login.php';
             .then(data => {
                 alert(data.message);
                 if (data.status === "success") {
-                    window.location.href = "../Pantalla%20de%20Bloqueo/Pantalladebloqueo.html";
+                    window.location.href = "../Pantalla_de_Bloqueo/Pantalladebloqueo.html";
                 }
             })
             .catch(error => console.error("Error en la solicitud:", error));

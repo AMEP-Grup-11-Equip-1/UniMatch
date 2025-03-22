@@ -25,7 +25,7 @@ class ActualizacionPerfil {
 
         if ($this->usuarioOCorreoExistente($nombre_usuario, $email, $usuarioID)) {
             $_SESSION['error'] = "¡El usuario o correo ya están registrados!";
-            header("Location: ../Pantalla%20Perfil/perfil.php");
+            header("Location: ../Pantalla_Perfil/perfil.php");
             exit();
         }
 
@@ -41,7 +41,7 @@ class ActualizacionPerfil {
                 $_SESSION['contraseña'] = $password;
             }
 
-            header("Location: ../Pantalla%20Perfil/perfil.php");
+            header("Location: ../Pantalla_Perfil/perfil.php");
             exit();
         } else {
             $_SESSION['error'] = "Error al actualizar los datos del usuario.";

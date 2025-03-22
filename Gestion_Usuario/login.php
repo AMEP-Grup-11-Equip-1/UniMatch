@@ -41,7 +41,7 @@ class AutenticacionUsuario {
                 $_SESSION['contraseña'] = $fila['password'];
 
                 $_SESSION['error'] = "";
-                header("Location: ../Pantalla%20Inicio/bienvenida.html");
+                header("Location: ../Pantalla_Inicio/bienvenida.html");
                 exit();
             } else {
                 $_SESSION['error'] = "¡Contraseña incorrecta!";
@@ -50,7 +50,7 @@ class AutenticacionUsuario {
             $_SESSION['error'] = "¡Usuario no encontrado!";
         }
 
-        header("Location: ../Pantalla%20de%20Bloqueo/Pantalladebloqueo.html");
+        header("Location: ../Pantalla_de_Bloqueo/Pantalladebloqueo.html");
         exit();
     }
 
