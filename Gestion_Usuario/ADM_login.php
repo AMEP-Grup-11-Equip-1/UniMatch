@@ -19,7 +19,7 @@ class AutenticarADM {
             $admin = $result->fetch_assoc();
             $_SESSION['admin'] = $admin;  // Guarda toda la info del ADM
 
-            header("Location: perfil_ADM.php");
+            header("Location: ../ADM/perfil_ADM.html");
             exit();
         } else {
             $_SESSION['login_error'] = "Usuario o contraseña incorrectos.";
