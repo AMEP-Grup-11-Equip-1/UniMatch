@@ -1,5 +1,9 @@
 <?php
 session_start();
+include 'DataBase.php';
+
+$bd = new ConexionBD();
+$conexion = $bd->getConexion();
 
 class AutenticacionUsuario {
     private $conn;
@@ -9,7 +13,7 @@ class AutenticacionUsuario {
     }
 
     public function autenticar($username, $password) {
-        $sql = "SELECT * FROM usuarios WHERE nom_usuari = ?";
+        $sql = "SELECT id, name, password, mail FROM usuario WHERE mail = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("s", $username);
         $stmt->execute();
@@ -18,14 +22,12 @@ class AutenticacionUsuario {
         if ($resultado->num_rows > 0) {
             $fila = $resultado->fetch_assoc();
 
-            // Verificar contraseña sin encriptar
             if ($password === $fila['password']) {
-                $_SESSION['usuario'] = $fila['nom_usuari'];
-                $_SESSION['email'] = $fila['correu_electronic'];
+                $_SESSION['usuario'] = $fila['name'];
+                $_SESSION['email'] = $fila['mail'];
                 $_SESSION['usuarioID'] = $fila['id'];
-                $_SESSION['contraseña'] = $fila['password'];
-
                 $_SESSION['error'] = "";
+
                 header("Location: ../Pantalla_Inicio/bienvenida.html");
                 exit();
             } else {
@@ -35,20 +37,16 @@ class AutenticacionUsuario {
             $_SESSION['error'] = "¡Usuario no encontrado!";
         }
 
-        header("Location: ../Pantalla_de_Bloqueo/Pantalladebloqueo.html");
+        $error = urlencode($_SESSION['error']);
+        header("Location: ../Pantalla_de_Bloqueo/Login.html?error=" . $error);
         exit();
-    }
-
-    public function __destruct() {
-        $this->conn->close();
     }
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $autenticacion = new AutenticacionUsuario();
+    $autenticacion = new AutenticacionUsuario($conexion);
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
     $autenticacion->autenticar($username, $password);
 }
 ?>
-
