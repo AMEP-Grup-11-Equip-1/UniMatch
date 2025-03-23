@@ -19,6 +19,7 @@
         <a href="javascript:void(0);" onclick="backToMain()" class="back-btn">←</a>
         <h2>Registrarse</h2>
         <form action="../Gestion_Usuario/registro.php" method="POST">
+            <!-- action == verificar -->
             <input type="text" id="txt_email" name="txt_email" placeholder="Correo universitário" required>
             <label id="lbl_mail"></label>
             <input type="hidden" id="hidden_email" name="email_full">
@@ -26,11 +27,25 @@
             <button type="submit">Siguiente</button>
         </form>
     </div>
-    <!--SE DEVOLVER FALSE DEVE-->
 
-    <!---------------------------------------- Scripts ------------------------------------------->
+    <div class="form-box" id="regs-form" style="display: none;">
+        <a href="javascript:void(0);" onclick="oculto('regs-form')" class="back-btn">←</a>
+        <h2>Registrarse</h2>
+        <form action="../Gestion_Usuario/registro.php" method="POST">
+            <!-- action == registrar -->
+            <label id="lbl_mail"></label>
+            <input type="text" id="username" name="username" placeholder="Nombre de perfil (Inmutable)" required>
+            <input type="password" id="password" name="password" placeholder="Contraseña" required>
+            <select id="SelectGender" name="gender_id"></select>
+            <button type="submit">Siguiente</button>
+        </form>
+    </div>
 
     <script>
+        function oculto(id) {
+            document.getElementById(id).style.display = "none";
+        }
+
         fetch("../Gestion_Usuario/registro.php")
             .then(response => response.json())
             .then(data => {
@@ -61,12 +76,10 @@
 
                         var hiddenEmail = document.getElementById("hidden_email");
                         hiddenEmail.value = txtEmail + "@" + uniMail;
-
                     }
 
                     select.addEventListener("change", updateLabel);
                     document.getElementById("txt_email").addEventListener("input", updateLabel);
-
                 } else {
                     console.error("Datos de las universidades no encontrados o formato inválido.");
                 }
