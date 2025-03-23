@@ -18,15 +18,23 @@ class RegistroUsuario {
         $this->conn = $conexion;
     }
 
-    public function registrarUsuario($nombre_usuario, $email, $password) {
-        if ($this->usuarioExiste($email)) {
-            $_SESSION['error'] = "¡El Correo ya está registrado!";
+    public function registrarUsuario($nombre_usuario, $password, $email, $uni, $gender) {
+        //# id, name, password, mail, uni, gender, bloqued
+
+        $sql = "INSERT INTO usuario (name, password, mail, uni, gender) VALUES (?, ?, ?, ?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("sssss", $nombre_usuario, $password, $email, $uni, $gender);
+
+        if ($stmt->execute()) {
+            header("Location: ../Pantalla_de_Bloqueo/registro_exitos.html");
+            exit();
+        } else {
+            $_SESSION['error'] = "Error al registrar el usuario.";
             header("Location: ../Pantalla_de_Bloqueo/Pantalladebloqueo.html");
             exit();
         }
 
-        header("Location: ../Pantalla_de_Bloqueo/Registro.html");
-        exit();
+        $stmt->close();
     }
 
     public function usuarioExiste($email) {
@@ -64,7 +72,15 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         switch ($_GET['action']) {
             case 'getUniversities':
                 $universities = $bd->getUniversitiesJSON();
+                if (!$universities) {
+                    $universities = []; // Garante que o JSON sempre tenha um array
+                }
                 echo json_encode(["data" => $universities]);
+                break;
+
+            case 'getGenders':
+                $gender = $bd->getGenderJSON();
+                echo json_encode(["data" => $gender]);
                 break;
             
             case 'isValid':
@@ -89,6 +105,16 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         }
     } 
     exit();
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $registro = new RegistroUsuario($conexion);
+    $nombre_usuario = trim($_POST['username']);
+    $email = trim($_POST['email_full_2']);
+    $password = trim($_POST['password']);
+    $gender = trim ($_POST['id_gender']);
+    $uni = trim ($_POST['id_uni']);
+    $registro->registrarUsuario($nombre_usuario, $password, $email, $uni, $gender);
 }
 
 ?>

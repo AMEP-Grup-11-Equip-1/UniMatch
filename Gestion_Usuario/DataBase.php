@@ -60,5 +60,31 @@ class ConexionBD {
         return $universities;
         exit();
     }
+
+    public function getGenderJSON(){
+        $sql="SELECT * FROM generes";
+        $stmt = $this->conn->prepare($sql);
+
+        if (!$stmt) {
+            echo json_encode(["error" => "Error al preparar la consulta SQL."]);
+            exit();
+        }
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $generos = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $generos[] = [
+                "id" => $row['id'],
+                "Gender" => $row['Gender'],
+            ];
+        }
+
+        $stmt->close();
+        return $generos;
+        exit();
+    }
+
 }
 ?>

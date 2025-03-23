@@ -33,11 +33,14 @@
         <a href="javascript:void(0);" onclick="oculto('regs-form')" class="back-btn">←</a>
         <h2>Registrarse</h2>
         <form action="../Gestion_Usuario/registro.php" method="POST">
-            <label id="lbl_mail"></label>
+            <input type="hidden" id="id_gender" name="id_gender">
+            <input type="hidden" id="id_uni" name="id_uni">
+            <input type="hidden" id="hidden_email_2" name="email_full_2">
+            <label id="lbl_mail_regs"></label>
             <input type="text" id="username" name="username" placeholder="Nombre de perfil (Inmutable)" required>
             <input type="password" id="password" name="password" placeholder="Contraseña" required>
             <select id="SelectGender" name="gender_id"></select>
-            <button type="submit">Siguiente</button>
+            <button type="submit">Registrarse</button>
         </form>
     </div>
 
@@ -76,6 +79,9 @@
 
                         var hiddenEmail = document.getElementById("hidden_email");
                         hiddenEmail.value = txtEmail + "@" + uniMail;
+
+                        var hiddenEmail2 = document.getElementById("hidden_email_2");
+                        hiddenEmail2.value = txtEmail + "@" + uniMail;
                     }
 
                     select.addEventListener("change", updateLabel);
@@ -97,7 +103,23 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        alert("¡Validación exitosa!");
+                        document.getElementById("register-form").style.display = "none";
+                        document.getElementById("regs-form").style.display = "block";
+
+                        var emailCompleto = document.getElementById("hidden_email").value;
+                        document.getElementById("lbl_mail_regs").textContent = emailCompleto;
+
+                        var hiddenEmailInput = document.createElement("input");
+                        hiddenEmailInput.type = "hidden";
+                        hiddenEmailInput.name = "email_full";
+                        hiddenEmailInput.value = emailCompleto;
+                        document.querySelector("#regs-form form").appendChild(hiddenEmailInput);
+
+                        // Preencher o campo oculto id_uni com o ID da universidade selecionada
+                        var selectedUniId = document.getElementById("SelectUni").value;
+                        document.getElementById("id_uni").value = selectedUniId;
+
+                        getGenders();
                     } else {
                         document.getElementById("lbl_error").textContent = data.message || "Error en la validación.";
                     }
@@ -107,6 +129,38 @@
                     document.getElementById("lbl_error").textContent = "Error al conectar con el servidor.";
                 });
         });
+
+        function getGenders(){
+            fetch("../Gestion_Usuario/registro.php?action=getGenders")
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error("Error al cargar los datos de genero:", data.error);
+                    return;
+                }
+
+                if (data.data && Array.isArray(data.data)) {
+                    var datos = data.data;
+                    var select = document.getElementById("SelectGender");
+                    select.innerHTML = "";
+
+                    datos.forEach(function (item) {
+                        var option = document.createElement("option");
+                        option.value = item.id;
+                        option.text = item.Gender;
+                        select.appendChild(option);
+                    });
+
+                    // Preencher o campo oculto id_gender com o ID do gênero selecionado
+                    select.addEventListener("change", function() {
+                        document.getElementById("id_gender").value = this.value;
+                    });
+                } else {
+                    console.error("Datos de las universidades no encontrados o formato inválido.");
+                }
+            })
+            .catch(error => console.error("Error al cargar los datos de genero:", error));
+        }
     </script>
 </body>
 
