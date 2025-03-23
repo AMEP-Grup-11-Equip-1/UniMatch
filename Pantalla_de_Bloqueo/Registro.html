@@ -18,11 +18,12 @@
     <div class="form-box" id="register-form">
         <a href="javascript:void(0);" onclick="backToMain()" class="back-btn">←</a>
         <h2>Registrarse</h2>
-        <form action="../Gestion_Usuario/registro.php" method="POST">
-            <!-- action == verificar -->
+        <form id="registerForm" action="../Gestion_Usuario/registro.php" method="GET">
+            <input type="hidden" name="action" value="isValid">
             <input type="text" id="txt_email" name="txt_email" placeholder="Correo universitário" required>
             <label id="lbl_mail"></label>
             <input type="hidden" id="hidden_email" name="email_full">
+            <label id="lbl_error" style="color: red; padding: 5px;"></label>
             <select id="SelectUni" name="uni_id"></select>
             <button type="submit">Siguiente</button>
         </form>
@@ -32,7 +33,6 @@
         <a href="javascript:void(0);" onclick="oculto('regs-form')" class="back-btn">←</a>
         <h2>Registrarse</h2>
         <form action="../Gestion_Usuario/registro.php" method="POST">
-            <!-- action == registrar -->
             <label id="lbl_mail"></label>
             <input type="text" id="username" name="username" placeholder="Nombre de perfil (Inmutable)" required>
             <input type="password" id="password" name="password" placeholder="Contraseña" required>
@@ -46,7 +46,7 @@
             document.getElementById(id).style.display = "none";
         }
 
-        fetch("../Gestion_Usuario/registro.php")
+        fetch("../Gestion_Usuario/registro.php?action=getUniversities")
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
@@ -59,7 +59,7 @@
                     var select = document.getElementById("SelectUni");
                     select.innerHTML = "";
 
-                    datos.forEach(function(item) {
+                    datos.forEach(function (item) {
                         var option = document.createElement("option");
                         option.value = item.id;
                         option.text = item.Uni_acronym;
@@ -85,6 +85,28 @@
                 }
             })
             .catch(error => console.error("Error al cargar los datos de las universidades:", error));
+
+        document.getElementById("registerForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const formData = new URLSearchParams(new FormData(this));
+
+            fetch("../Gestion_Usuario/registro.php?" + formData.toString(), {
+                method: "GET",
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("¡Validación exitosa!");
+                    } else {
+                        document.getElementById("lbl_error").textContent = data.message || "Error en la validación.";
+                    }
+                })
+                .catch(error => {
+                    console.error("Error en la solicitud:", error);
+                    document.getElementById("lbl_error").textContent = "Error al conectar con el servidor.";
+                });
+        });
     </script>
 </body>
 

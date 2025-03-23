@@ -24,17 +24,41 @@ class ConexionBD {
     }
 
     public function __destruct() {
-        // Verifica se a conexão ainda está ativa antes de fechá-la
         if ($this->conn && !$this->conn->connect_error) {
             $this->conn->close();
         }
     }
 
-    // Método para obter a conexão
     public function getConexion() {
         return $this->conn;
     }
+
+    // Nova função para retornar universidades em JSON
+    public function getUniversitiesJSON() {
+        $sql = "SELECT * FROM universities";
+        $stmt = $this->conn->prepare($sql);
+
+        if (!$stmt) {
+            echo json_encode(["error" => "Error al preparar la consulta SQL."]);
+            exit();
+        }
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $universities = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $universities[] = [
+                "id" => $row['id'],
+                "Uni_name" => $row['Uni_name'],
+                "Uni_mail" => $row['Uni_mail'],
+                "Uni_acronym" => $row['Uni_acronym']
+            ];
+        }
+
+        $stmt->close();
+        return $universities;
+        exit();
+    }
 }
-
 ?>
-

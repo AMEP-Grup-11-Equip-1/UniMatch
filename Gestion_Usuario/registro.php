@@ -6,26 +6,9 @@ include 'DataBase.php';
 $bd = new ConexionBD();
 $conexion = $bd->getConexion();
 
+
 if (!$conexion) {
     die("Error al conectar a la base de datos.");
-}
-
-
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $registroUsuario = new RegistroUsuario($conexion); // Aqui, você inicializa o objeto da classe RegistroUsuario
-
-    $email = trim($_POST['email_full']);
-
-    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        echo json_encode(["error" => "Invalidy Mail."]);
-        exit();
-    }
-
-    $usuarioExiste = $registroUsuario->usuarioExiste($email);
-
-    echo json_encode(["existe" => $usuarioExiste]);
-    exit();
 }
 
 class RegistroUsuario {
@@ -49,46 +32,65 @@ class RegistroUsuario {
     public function usuarioExiste($email) {
         $sql = "SELECT * FROM usuario WHERE mail = ?";
         $stmt = $this->conn->prepare($sql);
+    
+        if (!$stmt) {
+            // Erro ao preparar a query
+            return false;
+        }
+    
         $stmt->bind_param("s", $email); 
-        $stmt->execute();
+        if (!$stmt->execute()) {
+            // Erro ao executar a query
+            $stmt->close();
+            return false;
+        }
+    
         $resultado = $stmt->get_result();
         $existe = $resultado->num_rows > 0;
         $stmt->close();
-
+    
         return $existe;
     }
+
+    
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     header('Content-Type: application/json');
 
-    $sql = "SELECT id, Uni_name, Uni_mail, Uni_acronym FROM universities";
-    $stmt = $conexion->prepare($sql);
+    if(isset($_GET['action'])) {
+        $registroUsuario = new RegistroUsuario($conexion); // Criar a instância da classe
 
-    if (!$stmt) {
-        echo json_encode(["error" => "Error al preparar la consulta SQL."]);
-        exit();
-    }
+        switch ($_GET['action']) {
+            case 'getUniversities':
+                $universities = $bd->getUniversitiesJSON();
+                echo json_encode(["data" => $universities]);
+                break;
+            
+            case 'isValid':
+                $email = trim($_GET['email_full']);
+                
+                if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    echo json_encode(["success" => false, "message" => "Correo electrónico inválido."]);
+                    exit();
+                }
+                
+                $usuarioExiste = $registroUsuario->usuarioExiste($email);
+                if ($usuarioExiste) {
+                    echo json_encode(["success" => false, "message" => "El correo electrónico ya está registrado."]);
+                } else {
+                    echo json_encode(["success" => true, "message" => "Correo electrónico válido."]);
+                }
+                break;
 
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $universities = [];
-
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $universities[] = [
-                "id" => $row['id'],
-                "Uni_name" => $row['Uni_name'],
-                "Uni_mail" => $row['Uni_mail'],
-                "Uni_acronym" => $row['Uni_acronym']
-            ];
+            default:
+                echo json_encode(['error' => 'Invalid action']);
+                break;
         }
-    } else {
-        $universities = [];
-    }
-
-    $stmt->close();
-    echo json_encode(["data" => $universities]);
+    } 
     exit();
 }
+
 ?>
+
+
