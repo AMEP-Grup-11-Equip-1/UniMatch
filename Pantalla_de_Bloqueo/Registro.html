@@ -16,7 +16,7 @@
 
 <body>
     <div class="form-box" id="register-form">
-        <a href="javascript:void(0);" onclick="backToMain()" class="back-btn">←</a>
+        <a href="Pantalladebloqueo.html" class="back-btn">←</a>
         <h2>Registrarse</h2>
         <form id="registerForm" action="../Gestion_Usuario/registro.php" method="GET">
             <input type="hidden" name="action" value="isValid">
@@ -30,7 +30,7 @@
     </div>
 
     <div class="form-box" id="regs-form" style="display: none;">
-        <a href="javascript:void(0);" onclick="oculto('regs-form')" class="back-btn">←</a>
+        <a href="javascript:void(0);" onclick="mostrarRegistro()" class="back-btn">←</a>
         <h2>Registrarse</h2>
         <form action="../Gestion_Usuario/registro.php" method="POST">
             <input type="hidden" id="id_gender" name="id_gender">
@@ -45,6 +45,11 @@
     </div>
 
     <script>
+        function mostrarRegistro() {
+            oculto('regs-form');
+            document.getElementById('register-form').style.display = "block";
+        }
+
         function oculto(id) {
             document.getElementById(id).style.display = "none";
         }
