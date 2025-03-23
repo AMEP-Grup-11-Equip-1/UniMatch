@@ -15,46 +15,63 @@
 </head>
 
 <body>
-    <!-----------------------------------------Registro------------------------------------------------->
     <div class="form-box" id="register-form">
-        <a href="Pantalladebloqueo.html" class="back-btn">←</a>
-        <form-box>
-            <h2>Completar registro</h2>
-            <select id="SelectGender"></select>
-        </form-box>
+        <a href="javascript:void(0);" onclick="backToMain()" class="back-btn">←</a>
+        <h2>Registrarse</h2>
+        <form action="../Gestion_Usuario/registro.php" method="POST">
+            <input type="text" id="txt_email" name="txt_email" placeholder="Correo universitário" required>
+            <label id="lbl_mail"></label>
+            <input type="hidden" id="hidden_email" name="email_full">
+            <select id="SelectUni" name="uni_id"></select>
+            <button type="submit">Siguiente</button>
+        </form>
     </div>
+    <!--SE DEVOLVER FALSE DEVE-->
 
     <!---------------------------------------- Scripts ------------------------------------------->
+
     <script>
-        // Função para obter os dados de 'gender' via AJAX
         fetch("../Gestion_Usuario/registro.php")
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
-                    console.error("Erro ao carregar os dados de gênero:", data.error);
+                    console.error("Error al cargar los datos de las universidades:", data.error);
                     return;
                 }
 
-                // Verifica se os dados foram retornados corretamente
                 if (data.data && Array.isArray(data.data)) {
-                    var dados = data.data;
-                    var select = document.getElementById("SelectGender");
-
-                    // Limpa o select antes de adicionar novas opções
+                    var datos = data.data;
+                    var select = document.getElementById("SelectUni");
                     select.innerHTML = "";
 
-                    // Adiciona as opções ao select
-                    dados.forEach(function(item) {
+                    datos.forEach(function(item) {
                         var option = document.createElement("option");
                         option.value = item.id;
-                        option.text = item.Gender;
+                        option.text = item.Uni_acronym;
+                        option.setAttribute("data-uni-mail", item.Uni_mail);
                         select.appendChild(option);
                     });
+
+                    function updateLabel() {
+                        var selectedOption = select.options[select.selectedIndex];
+                        var uniMail = selectedOption ? selectedOption.getAttribute("data-uni-mail") : "";
+                        var txtEmail = document.getElementById("txt_email").value;
+                        var lblMail = document.getElementById("lbl_mail");
+                        lblMail.textContent = txtEmail + "@" + uniMail;
+
+                        var hiddenEmail = document.getElementById("hidden_email");
+                        hiddenEmail.value = txtEmail + "@" + uniMail;
+
+                    }
+
+                    select.addEventListener("change", updateLabel);
+                    document.getElementById("txt_email").addEventListener("input", updateLabel);
+
                 } else {
-                    console.error("Dados de gênero não encontrados ou formato inválido.");
+                    console.error("Datos de las universidades no encontrados o formato inválido.");
                 }
             })
-            .catch(error => console.error("Erro ao carregar os dados de gênero:", error));
+            .catch(error => console.error("Error al cargar los datos de las universidades:", error));
     </script>
 </body>
 

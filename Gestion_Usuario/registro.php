@@ -1,25 +1,31 @@
 <?php
-//session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 include 'DataBase.php';
 
-// Cria a conexão
 $bd = new ConexionBD();
 $conexion = $bd->getConexion();
 
-// Verifica se a conexão foi estabelecida com sucesso
 if (!$conexion) {
-    die("Erro ao conectar ao banco de dados.");
+    die("Error al conectar a la base de datos.");
 }
 
-// Requisição POST para registrar um usuário
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $registro = new RegistroUsuario($conexion);
-    $nombre_usuario = trim($_POST['new-username']);
-    $email = trim($_POST['email']);
-    $password = trim($_POST['new-password']);
-    $registro->registrarUsuario($nombre_usuario, $email, $password);
+    $registroUsuario = new RegistroUsuario($conexion); // Aqui, você inicializa o objeto da classe RegistroUsuario
+
+    $email = trim($_POST['email_full']);
+
+    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo json_encode(["error" => "Invalidy Mail."]);
+        exit();
+    }
+
+    $usuarioExiste = $registroUsuario->usuarioExiste($email);
+
+    echo json_encode(["existe" => $usuarioExiste]);
+    exit();
 }
 
 class RegistroUsuario {
@@ -36,18 +42,11 @@ class RegistroUsuario {
             exit();
         }
 
-        // Aqui você deve adicionar a lógica para inserir o usuário no banco de dados
-        // Exemplo:
-        // $sql = "INSERT INTO usuario (nome, mail, senha) VALUES (?, ?, ?)";
-        // $stmt = $this->conn->prepare($sql);
-        // $stmt->bind_param("sss", $nombre_usuario, $email, $password);
-        // $stmt->execute();
-
         header("Location: ../Pantalla_de_Bloqueo/Registro.html");
         exit();
     }
 
-    private function usuarioExiste($email) {
+    public function usuarioExiste($email) {
         $sql = "SELECT * FROM usuario WHERE mail = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("s", $email); 
@@ -58,45 +57,40 @@ class RegistroUsuario {
 
         return $existe;
     }
-
-    public function __destruct() {
-        $this->conn->close();
-    }
 }
 
-// Requisição GET para retornar os dados de gênero
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     header('Content-Type: application/json');
 
-    $sql = "SELECT id, Gender FROM generes";
+    $sql = "SELECT id, Uni_name, Uni_mail, Uni_acronym FROM universities";
     $stmt = $conexion->prepare($sql);
 
     if (!$stmt) {
-        echo json_encode(["error" => "Erro ao preparar a consulta SQL."]);
+        echo json_encode(["error" => "Error al preparar la consulta SQL."]);
         exit();
     }
 
     $stmt->execute();
     $result = $stmt->get_result();
-    $genders = [];
+    $universities = [];
 
-    // Verifica se a consulta retornou algum dado
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            $genders[] = [
+            $universities[] = [
                 "id" => $row['id'],
-                "Gender" => $row['Gender']
+                "Uni_name" => $row['Uni_name'],
+                "Uni_mail" => $row['Uni_mail'],
+                "Uni_acronym" => $row['Uni_acronym']
             ];
         }
     } else {
-        // Se não houver dados, retorna um array vazio
-        $genders = [];
+        $universities = [];
     }
 
     $stmt->close();
-
-    // Retorna os dados como JSON
-    echo json_encode(["data" => $genders]);
+    echo json_encode(["data" => $universities]);
     exit();
 }
 ?>
+
+    <!---------------------------------------- Scripts ------------------------------------------->

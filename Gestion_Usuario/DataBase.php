@@ -25,7 +25,7 @@ class ConexionBD {
 
     public function __destruct() {
         // Verifica se a conexão ainda está ativa antes de fechá-la
-        if ($this->conn) {
+        if ($this->conn && !$this->conn->connect_error) {
             $this->conn->close();
         }
     }
