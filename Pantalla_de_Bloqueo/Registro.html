@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unimatch - En Desarrollo</title>
+    <link rel="icon" href="../Imagenes/img1.png" type="image/x-icon">
+    <link rel="stylesheet" href="Pantalladebloqueo.css">
+    <style>
+        .form-box {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-box" id="register-form">
+        <a href="Pantalladebloqueo.html" class="back-btn">←</a>
+        <h2>Registrarse</h2>
+        <form id="registerForm" action="../Gestion_Usuario/registro.php" method="GET">
+            <input type="hidden" name="action" value="isValid">
+            <input type="text" id="txt_email" name="txt_email" placeholder="Correo universitário" required>
+            <label id="lbl_mail"></label>
+            <input type="hidden" id="hidden_email" name="email_full">
+            <label id="lbl_error" style="color: red; padding: 5px;"></label>
+            <select id="SelectUni" name="uni_id"></select>
+            <button type="submit">Siguiente</button>
+        </form>
+    </div>
+
+    <div class="form-box" id="regs-form" style="display: none;">
+        <a href="javascript:void(0);" onclick="mostrarRegistro()" class="back-btn">←</a>
+        <h2>Registrarse</h2>
+        <form action="../Gestion_Usuario/registro.php" method="POST">
+            <input type="hidden" id="id_gender" name="id_gender">
+            <input type="hidden" id="id_uni" name="id_uni">
+            <input type="hidden" id="hidden_email_2" name="email_full_2">
+            <label id="lbl_mail_regs"></label>
+            <input type="text" id="username" name="username" placeholder="Nombre de perfil (Inmutable)" required>
+            <input type="password" id="password" name="password" placeholder="Contraseña" required>
+            <select id="SelectGender" name="gender_id"></select>
+            <button type="submit">Registrarse</button>
+        </form>
+    </div>
+
+    <script>
+        function mostrarRegistro() {
+            oculto('regs-form');
+            document.getElementById('register-form').style.display = "block";
+        }
+
+        function oculto(id) {
+            document.getElementById(id).style.display = "none";
+        }
+
+        fetch("../Gestion_Usuario/registro.php?action=getUniversities")
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error("Error al cargar los datos de las universidades:", data.error);
+                    return;
+                }
+
+                if (data.data && Array.isArray(data.data)) {
+                    var datos = data.data;
+                    var select = document.getElementById("SelectUni");
+                    select.innerHTML = "";
+
+                    datos.forEach(function (item) {
+                        var option = document.createElement("option");
+                        option.value = item.id;
+                        option.text = item.Uni_acronym;
+                        option.setAttribute("data-uni-mail", item.Uni_mail);
+                        select.appendChild(option);
+                    });
+
+                    function updateLabel() {
+                        var selectedOption = select.options[select.selectedIndex];
+                        var uniMail = selectedOption ? selectedOption.getAttribute("data-uni-mail") : "";
+                        var txtEmail = document.getElementById("txt_email").value;
+                        var lblMail = document.getElementById("lbl_mail");
+                        lblMail.textContent = txtEmail + "@" + uniMail;
+
+                        var hiddenEmail = document.getElementById("hidden_email");
+                        hiddenEmail.value = txtEmail + "@" + uniMail;
+
+                        var hiddenEmail2 = document.getElementById("hidden_email_2");
+                        hiddenEmail2.value = txtEmail + "@" + uniMail;
+                    }
+
+                    select.addEventListener("change", updateLabel);
+                    document.getElementById("txt_email").addEventListener("input", updateLabel);
+                } else {
+                    console.error("Datos de las universidades no encontrados o formato inválido.");
+                }
+            })
+            .catch(error => console.error("Error al cargar los datos de las universidades:", error));
+
+        document.getElementById("registerForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const formData = new URLSearchParams(new FormData(this));
+
+            fetch("../Gestion_Usuario/registro.php?" + formData.toString(), {
+                method: "GET",
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById("register-form").style.display = "none";
+                        document.getElementById("regs-form").style.display = "block";
+
+                        document.getElementById("id_gender").value = 1;
+
+                        var emailCompleto = document.getElementById("hidden_email").value;
+                        document.getElementById("lbl_mail_regs").textContent = emailCompleto;
+
+                        var hiddenEmailInput = document.createElement("input");
+                        hiddenEmailInput.type = "hidden";
+                        hiddenEmailInput.name = "email_full";
+                        hiddenEmailInput.value = emailCompleto;
+                        document.querySelector("#regs-form form").appendChild(hiddenEmailInput);
+
+                        // Preencher o campo oculto id_uni com o ID da universidade selecionada
+                        var selectedUniId = document.getElementById("SelectUni").value;
+                        document.getElementById("id_uni").value = selectedUniId;
+
+                        getGenders();
+                    } else {
+                        document.getElementById("lbl_error").textContent = data.message || "Error en la validación.";
+                    }
+                })
+                .catch(error => {
+                    console.error("Error en la solicitud:", error);
+                    document.getElementById("lbl_error").textContent = "Error al conectar con el servidor.";
+                });
+        });
+
+        function getGenders(){
+            fetch("../Gestion_Usuario/registro.php?action=getGenders")
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error("Error al cargar los datos de genero:", data.error);
+                    return;
+                }
+
+                if (data.data && Array.isArray(data.data)) {
+                    var datos = data.data;
+                    var select = document.getElementById("SelectGender");
+                    select.innerHTML = "";
+
+                    datos.forEach(function (item) {
+                        var option = document.createElement("option");
+                        option.value = item.id;
+                        option.text = item.Gender;
+                        select.appendChild(option);
+                    });
+
+                    // Preencher o campo oculto id_gender com o ID do gênero selecionado
+                    select.addEventListener("change", function() {
+                        document.getElementById("id_gender").value = this.value;
+                    });
+                } else {
+                    console.error("Datos de las universidades no encontrados o formato inválido.");
+                }
+            })
+            .catch(error => console.error("Error al cargar los datos de genero:", error));
+        }
+    </script>
+</body>
+
+</html>

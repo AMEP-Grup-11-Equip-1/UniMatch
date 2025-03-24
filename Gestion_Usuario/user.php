@@ -1,26 +1,16 @@
 <?php
 session_start();
+include 'DataBase.php';
 
 class AutenticacionUsuario {
-    private $servidor = "ubiwan.epsevg.upc.edu";
-    private $usuario = "amep04";
-    private $clave = "od5Ieg6Keit0ai";
-    private $bd = "amep04";
     private $conn;
 
-    public function __construct() {
-        $this->conectarBD();
-    }
-
-    private function conectarBD() {
-        $this->conn = new mysqli($this->servidor, $this->usuario, $this->clave, $this->bd);
-        if ($this->conn->connect_error) {
-            die("Error en la conexión a la base de datos: " . $this->conn->connect_error);
-        }
+    public function __construct($conexion) {
+        $this->conn = $conexion;
     }
 
     public function eliminarUsuario() {
-        if (!isset($_SESSION['usuarioID'])) { // Usamos 'usuarioID' en lugar de 'id'
+        if (!isset($_SESSION['usuarioID'])) { // Usamos 'usuarioID' em lugar de 'id'
             return json_encode(["status" => "error", "message" => "No hay usuario autenticado"]);
         }
 
@@ -43,8 +33,12 @@ class AutenticacionUsuario {
     }
 }
 
+// Crea la conexión correctamente
+$bd = new ConexionBD();
+$conexion = $bd->getConexion();
+
 // Ejecutar la eliminación
-$autenticacion = new AutenticacionUsuario();
+$autenticacion = new AutenticacionUsuario($conexion);
 echo $autenticacion->eliminarUsuario();
 ?>
 

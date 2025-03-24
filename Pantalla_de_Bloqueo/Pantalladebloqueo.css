@@ -125,7 +125,7 @@ body::after {
     padding: 20px;
     border-radius: 20px;
     width: 90%;
-    max-width: 400px;
+    width: 400px;
     text-align: center;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     position: relative;
@@ -183,4 +183,38 @@ body::after {
     color: red;
     margin-top: 10px;
     font-weight: bold;
+}
+
+label{
+    display: block;
+}
+
+select {
+    background-color: #000000;
+    color: white;
+    padding: 12px;
+    border: 2px solid #000000;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    width: 150px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+select:hover {
+    background-color: #1f1f1f;
+    border-color: #16070d;
+}
+
+select:focus {
+    outline: none;
+    border-color: #230b15;
+    box-shadow: 0 0 5px rgb(75 22 42);
+}
+
+option {
+    background-color: #000000;
+    color: white;
 }
