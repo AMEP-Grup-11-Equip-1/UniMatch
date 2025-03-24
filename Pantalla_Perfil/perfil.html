@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unimatch - ADM</title>
+    <link rel="stylesheet" href="ADM.css">
+</head>
+
+<body>
+
+    <div class="info-box">
+        <h2>Perfil do Administrador</h2>
+        <p><strong>ID:</strong> <span id="id"></span></p>
+        <p><strong>Nombre:</strong> <span id="name"></span></p>
+        <p><strong>Email:</strong> <span id="mail"></span></p>
+        <p><strong>Universidad:</strong> <span id="uni"></span></p>
+        <p><strong>Genero:</strong> <span id="gender"></span></p>
+        <p><strong>Verificado:</strong> <span id="verf"></span></p>
+
+
+    </div>
+
+    <script>
+        fetch("../Gestion_Usuario/login.php")
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    window.location.href = "login_ADM.html"; // Redireciona se não estiver logado
+                } else {
+                    document.getElementById("id").textContent = data.id;
+                    document.getElementById("name").textContent = data.name;
+                    document.getElementById("mail").textContent = data.mail;
+                    document.getElementById("uni").textContent = data.uni;
+                    document.getElementById("gender").textContent = data.gender;
+                    document.getElementById("verf").textContent = data.block;
+                }
+            })
+            .catch(error => console.error("Erro ao carregar os dados:", error));
+    </script>
+
+</body>
+
+</html>

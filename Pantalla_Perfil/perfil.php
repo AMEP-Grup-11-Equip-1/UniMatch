@@ -1,5 +1,5 @@
 <?php
-include '../Gestion Usuario/login.php';
+include '../Gestion_Usuario/login.php';
 
 ?>
 

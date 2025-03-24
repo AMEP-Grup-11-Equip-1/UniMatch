@@ -183,3 +183,13 @@ body::after {
     margin-top: 10px;
     font-weight: bold;
 }
+
+.menu-icon {
+    font-size: 30px;
+    color: white;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    cursor: pointer;
+    z-index: 10000;
+}
