@@ -16,7 +16,7 @@ class AutenticacionUsuario {
 
         $id = $_SESSION['usuarioID'];
 
-        $query = "DELETE FROM usuarios WHERE id = ?";
+        $query = "DELETE FROM usuario WHERE id = ?";
         $stmt = $this->conn->prepare($query);
         if (!$stmt) {
             return json_encode(["status" => "error", "message" => "Error en la preparación de la consulta"]);
