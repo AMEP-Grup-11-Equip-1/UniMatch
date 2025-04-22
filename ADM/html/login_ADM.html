@@ -6,21 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unimatch - ADM</title>
 
-    <link rel="icon" href="../Imagenes/img1.png" type="image/x-icon">
-    <link rel="stylesheet" href="ADM.css">
+    <link rel="icon" href="../../Imagenes/img1.png" type="image/x-icon">
+    <link rel="stylesheet" href="../css/principal.css">
 </head>
 
 <body>
 
     <div class="form-box">
         <h2>Iniciar Sesión</h2>
-        <form action="/Unimatch/Gestion_Usuario/ADM_login.php" method="POST">
+        <form action="../php/login_ADM.php" method="POST">
+            <!--
             <input type="text" id="mail" name="mail" placeholder="Correo" required>
-<<<<<<< HEAD
-=======
-
->>>>>>> Develop
             <input type="password" id="password" name="password" placeholder="Contraseña" required>
+            -->
+
+            <input type="text" id="mail" name="mail" placeholder="Correo" value="adm2@email.com" required>
+            <input type="password" id="password" name="password" placeholder="Contraseña" value="senha123" required>
+  
+            
+            
             <button type="submit">Acceder</button>
         </form>
     </div>
