@@ -6,9 +6,9 @@
 <!-- Menu lateral -->
 <div id="sideMenu" class="side-menu">
     <span class="close-btn" onclick="closeMenu()">&times;</span>
+    <a href="inicio.php">Inicio</a>
     <a href="perfil_ADM.php">Perfil</a>
-    <button class="logout-btn-side" onclick="window.location.href='login_ADM.html'">Cerrar sesión</button>
-</div>
+    <button class="logout-btn-side" onclick="window.location.href='../php/logout_ADM.php'">Cerrar sesión</button>    </div>
 
 <!-- Scripts para abrir/fechar o menu -->
 <script>
