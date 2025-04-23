@@ -20,4 +20,14 @@
     <h1>UniMatch</h1>
     </body>
 
+    <table class="table">
+        <tr>
+            <td>Nombre</td>
+            <td>Status</td>
+            <td>Denuncia</td>
+        </tr>
+        <?php include("../php/Gestion_tablas.php"); ?>
+
+
+
 </html>
