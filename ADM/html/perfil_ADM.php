@@ -1,3 +1,16 @@
+<!-- 
+DEBE SER UN PHP PORQUE ASÍ PODEMOS LLAMAR AL MENÚ LATERAL COMO UN 'OBJETO'
+
+TAMBIEN SE PODRÁ BORRAR EL SESSION_ADM.PHP Y HACER SUS FUNCIONES AQUÍ,
+    pero no es lo ideal, por si tenemos que hacer cambios. Lo ideal son archivos separados.
+
+TRANSFORMAR UN HTML NO HACE FALTA CAMBIAR NADA EN EL CÓDIGO GENERALMENTE
+    si es para algo basico
+    Los archivos que tenemos en HTML y que pueden venir a ser PHP no cambiarían mucho.
+    (Sobre todo para no estar reescribiendo códigos, como el del menú, por ejemplo).
+-->
+
+
 <!DOCTYPE html>
 <html lang="es">
 

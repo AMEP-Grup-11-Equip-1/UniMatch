@@ -1,44 +1,54 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
+    <!-- Configuración básica del documento -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unimatch - ADM</title>
-
+    
+    <!-- Favicon y hojas de estilo -->
     <link rel="icon" href="../../Imagenes/img1.png" type="image/x-icon">
     <link rel="stylesheet" href="../css/principal.css">
 </head>
 
 <body>
-
+    <!-- Contenedor del formulario de login -->
     <div class="form-box">
         <h2>Iniciar Sesión</h2>
+        
+        <!-- Formulario que envía credenciales a login_ADM.php -->
         <form action="../php/login_ADM.php" method="POST">
-            <!--
-            <input type="text" id="mail" name="mail" placeholder="Correo" required>
-            <input type="password" id="password" name="password" placeholder="Contraseña" required>
+            <!-- 
+                NOTA DE SEGURIDAD: 
+                Los valores predeterminados son solo para desarrollo
+                Deben eliminarse en producción
+
+                 <input type="text" id="mail" name="mail" placeholder="Correo" required>
+                 <input type="password" id="password" name="password" placeholder="Contraseña" required>
+      
             -->
-
-            <input type="text" id="mail" name="mail" placeholder="Correo" value="adm2@email.com" required>
-            <input type="password" id="password" name="password" placeholder="Contraseña" value="senha123" required>
-
-
+            <input type="text" id="mail" name="mail" placeholder="Correo" 
+                   value="adm2@email.com" required>
+                   
+            <input type="password" id="password" name="password" placeholder="Contraseña" 
+                   value="senha123" required>
 
             <button type="submit">Acceder</button>
         </form>
     </div>
 
+    <!-- Script que verifica sesión activa -->
     <script>
+        // Intenta verificar si hay una sesión activa al cargar la página
         fetch("../php/login_ADM.php")
             .then(response => response.json())
             .then(data => {
+                // Si ya está logueado, redirige al perfil
                 if (data.logged) {
-                    // talvez redirecionar ou mostrar algo?
                     window.location.href = "../html/perfil_ADM.php";
                 }
             })
-            .catch(error => console.error("Error al verificar sesión:", error));    </script>
+            .catch(error => console.error("Error al verificar sesión:", error));
+    </script>
 </body>
-
 </html>
