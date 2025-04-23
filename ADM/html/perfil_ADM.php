@@ -22,7 +22,7 @@
 
     <script>
         // Realiza una solicitud al archivo PHP para obtener los datos del administrador
-        fetch("../php/login_ADM.php", { cache: "no-store" })
+        fetch("../php/session_ADM.php", { cache: "no-store" })
             .then(response => response.json()) // Convierte la respuesta en formato JSON
             .then(data => {
                 // Si deseas ver los datos recibidos en la consola, puedes descomentar la siguiente línea

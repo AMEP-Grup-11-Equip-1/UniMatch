@@ -49,19 +49,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $autenticacion->autenticar($mail, $password);
 }
 
-// Se for uma requisição AJAX via GET, retorna os dados do ADM logado
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     header('Content-Type: application/json');
 
-    if (isset($_SESSION['admin'])) {
-        $admin = $_SESSION['admin'];
-        echo json_encode([
-            'id' => $admin['id'],           // ou 'id_ADM', dependendo do nome real no banco
-            'name' => $admin['name'],       // ajuste conforme o nome da coluna
-            'mail' => $admin['mail']
-        ]);
+    if (!isset($_SESSION['admin'])) {
+        echo json_encode(["logged" => false]);
     } else {
-        echo json_encode(['error' => 'não logado']);
+        echo json_encode(["logged" => true, "admin" => $_SESSION['admin']]);
     }
 
     exit();

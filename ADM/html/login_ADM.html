@@ -22,14 +22,23 @@
 
             <input type="text" id="mail" name="mail" placeholder="Correo" value="adm2@email.com" required>
             <input type="password" id="password" name="password" placeholder="Contraseña" value="senha123" required>
-  
-            
-            
+
+
+
             <button type="submit">Acceder</button>
         </form>
     </div>
 
+    <script>
+        fetch("../php/login_ADM.php")
+            .then(response => response.json())
+            .then(data => {
+                if (data.logged) {
+                    // talvez redirecionar ou mostrar algo?
+                    window.location.href = "../html/perfil_ADM.php";
+                }
+            })
+            .catch(error => console.error("Error al verificar sesión:", error));    </script>
 </body>
 
 </html>
-
