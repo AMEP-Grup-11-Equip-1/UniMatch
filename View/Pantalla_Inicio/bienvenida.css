@@ -1,0 +1,568 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to bottom, #000000, #000000);
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+    overflow-y: auto;
+    position: relative;
+}
+
+
+/*------------------------------------------------ Fondo ---------------------------------------------------->*/
+
+body::before,
+body::after,
+.glow-1,
+.glow-2,
+.glow-3 {
+    content: "";
+    position: fixed;
+    border-radius: 50%;
+    opacity: 0.4;
+    filter: blur(120px);
+    z-index: -1;
+}
+
+body::before {
+    width: 450px;
+    height: 600px;
+    background: #ff4f7b;
+    top: 20%;
+    left: 25%;
+}
+
+body::after {
+    width: 450px;
+    height: 550px;
+    background: #e429fd;
+    bottom: 20%;
+    right: 25%;
+}
+
+.glow-1 {
+    width: 300px;
+    height: 300px;
+    background: #ff69b4;
+    top: 55%;
+    left: 15%;
+}
+
+.glow-2 {
+    width: 280px;
+    height: 280px;
+    background: #ff1493;
+    bottom: 45%;
+    right: 15%;
+}
+
+.glow-3 {
+    width: 350px;
+    height: 350px;
+    background: #ff85a2;
+    top: 25%;
+    right: 25%;
+}
+
+
+/*---------------------------------------Botó Campana------------------------------------------------------------------>*/
+
+.notification-button {
+    position: absolute;
+    top: 15px;
+    right: 80px; /* Separado del botón "+" */
+    width: 50px;
+    height: 50px;
+    background-color: #000000;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.notification-button:hover {
+    background-color: white;
+    color: #000000;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.notification-popup {
+    position: fixed;
+    bottom: -100%;
+    right: 110px;
+    width: 90%;
+    max-width: 450px;
+    height: 500px;
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0px -5px 20px rgba(0, 0, 0, 0.2);
+    transition: bottom 0.5s ease-in-out;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    z-index: 999;
+}
+
+.notification-popup.show {
+    bottom: 50px;
+}
+
+.notification-popup h2 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+    margin: 20px 0;
+    width: 100%;
+}
+
+.notification-list p {
+    color: #444;
+    font-size: 16px;
+    background: #eee;
+    padding: 12px;
+    border-radius: 10px;
+    margin: 10px 0;
+    width: 100%;
+    text-align: center;
+}
+
+
+/*---------------------------------------- Subir Histoiria (+) --------------------------------------------->*/
+
+.add-button {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: #000000;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-button:hover {
+    background-color: white;
+    color: #000000;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.profile-popup {
+    position: fixed;
+    bottom: -100%;
+    right: 40px;
+    width: 90%;
+    max-width: 450px;
+    height: 500px;
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0px -5px 20px rgba(0, 0, 0, 0.2);
+    transition: bottom 0.5s ease-in-out;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.profile-popup.show {
+    bottom: 50px;
+}
+
+.profile-popup h2 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+    margin: 20px 0;
+    width: 100%;
+}
+
+.close-popup {
+    font-size: 30px;
+    color: #aaa;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.close-popup:hover {
+    color: #333;
+}
+
+.profile-popup input,
+.profile-popup textarea {
+    width: 90%;
+    margin-bottom: 25px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.profile-popup textarea {
+    height: 120px;
+    resize: none;
+}
+
+.profile-popup button {
+    background-color: #000000;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 18px;
+    width: 90%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.profile-popup button:hover {
+    background-color: #333;
+}
+
+
+/*--------------------------------------------Botó Like------------------------------------------------------------->*/
+.like-btn {
+    position: absolute;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: transform 0.15s cubic-bezier(.2,1.2,.3,1), filter 0.3s;
+}
+
+.like-btn .material-icons {
+    color: #ff4f7b;
+    font-size: 38px;
+    text-shadow: 0 0 14px #e429fd80, 0 2px 18px #e429fd44;
+    transition: color 0.15s, text-shadow 0.15s, transform 0.15s;
+}
+
+.like-btn.liked .material-icons {
+    color: #e429fd;
+    text-shadow: 0 0 26px #ff4f7bcc, 0 2px 30px #e429fdcc;
+}
+
+/* POP al passar el mouse per sobre */
+.like-btn:hover .material-icons {
+    transform: scale(1.25);
+    filter: brightness(1.15);
+}
+
+/* Heartbeat llarg quan fas like */
+.like-btn.heartbeat .material-icons {
+    animation: heartBeatLong 1.7s cubic-bezier(.3,1.8,.52,1.13);
+}
+@keyframes heartBeatLong {
+    0%   { transform: scale(1);}
+    9%   { transform: scale(1.13);}
+    16%  { transform: scale(1.36);}
+    22%  { transform: scale(1.05);}
+    28%  { transform: scale(1.21);}
+    36%  { transform: scale(1);}
+    46%  { transform: scale(1.23);}
+    56%  { transform: scale(0.97);}
+    63%  { transform: scale(1.14);}
+    74%  { transform: scale(1);}
+    81%  { transform: scale(1.08);}
+    88%  { transform: scale(1);}
+    100% { transform: scale(1);}
+}
+
+
+
+
+/*-------------------------------------------- Islas Centro------------------------------------------------>*/
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: black;
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    overflow: hidden;
+}
+
+h1 {
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+    position: absolute;
+    top: 10px;
+}
+
+.carousel-container {
+    position: relative;
+    width: 900px;
+    height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.island {
+    position: absolute;
+    width: 300px;
+    height: 400px;
+    background-color: #000000;
+    border-radius: 20px;
+    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 15px;
+    z-index: 1;
+    /* El valor por defecto de z-index para las islas */
+}
+
+.island.center {
+    z-index: 3;
+    /* Aseguramos que la isla central tenga el mayor z-index durante la transición */
+}
+
+.island.left,
+.island.right {
+    z-index: 1;
+    /* Menor z-index para islas laterales */
+}
+
+.island img {
+    width: 100%;
+    height: 60%;
+    /* La imagen ocupa el 60% de la isla */
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 40%;
+    /* Controla la altura del contenido */
+    overflow: hidden;
+    /* Evita que el contenido sobresalga */
+    padding: 5px 0;
+    /* Añadir un poco de padding para espaciar los elementos */
+}
+
+.profile-name {
+    font-size: 18px;
+    /* Ajuste el tamaño de la fuente para hacerla un poco más pequeña */
+    font-weight: bold;
+    margin: 25px 0 4px 0;
+    /* Reduce el margen inferior para acercar los elementos */
+    text-overflow: ellipsis;
+    /* Añade puntos suspensivos si el texto es largo */
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+    text-align: center;
+}
+
+.profile-university {
+    font-size: 14px;
+    /* Ajuste el tamaño de la fuente para hacerlo más compacto */
+    color: #ccc;
+    margin: 0 0 4px 0;
+    /* Reduce el margen inferior */
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+    text-align: center;
+}
+
+.profile-description {
+    font-size: 9px;
+    /* Ajuste el tamaño de la fuente para hacerlo más compacto */
+    color: #bbb;
+    line-height: 1.3;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+    text-align: center;
+}
+
+
+/* Flechas para navegar entre las islas */
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    color: white;
+    border: none;
+    font-size: 40px;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 10px 20px;
+}
+
+.left-arrow {
+    left: -60px;
+}
+
+.right-arrow {
+    right: -60px;
+}
+
+
+/* Estilo del botón de añadir */
+
+.add-button {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: #000000;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-button:hover {
+    background-color: white;
+    color: #000000;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Estilo del popup de perfil */
+
+.profile-popup {
+    position: fixed;
+    bottom: -100%;
+    right: 40px;
+    width: 90%;
+    max-width: 450px;
+    height: 500px;
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0px -5px 20px rgba(0, 0, 0, 0.2);
+    transition: bottom 0.5s ease-in-out;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.profile-popup.show {
+    bottom: 50px;
+}
+
+.profile-popup h2 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+    margin: 20px 0;
+    width: 100%;
+}
+
+.close-popup {
+    font-size: 30px;
+    color: #aaa;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.close-popup:hover {
+    color: #333;
+}
+
+.profile-popup input,
+.profile-popup textarea {
+    width: 90%;
+    margin-bottom: 25px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.profile-popup textarea {
+    height: 120px;
+    resize: none;
+}
+
+.profile-popup button {
+    background-color: #000000;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 18px;
+    width: 90%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.profile-popup button:hover {
+    background-color: #333;
+}
+
+
+/*--------------------------------------------------------------------------------------------------------->*/

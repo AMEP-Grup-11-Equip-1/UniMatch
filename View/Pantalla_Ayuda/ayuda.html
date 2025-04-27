@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayuda - Unimatch</title>
+    <link rel="icon" href="../Imagenes/img1.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="ayuda.css">
+    <link rel="stylesheet" href="../Menu/menu.css">
+
+
+</head>
+
+<body>
+
+    <!---------------------------------------- Menu Desplegable-------------------------------------------->
+
+    <span class="menu-icon" onclick="openMenu()">&#9776;</span>
+
+    <div id="sideMenu" class="side-menu">
+        <span class="close-btn" onclick="closeMenu()">&times;</span>
+        <a href="../Pantalla_Inicio/bienvenida.html">Inicio</a>
+        <a href="../Pantalla_Perfil/perfil.php">Perfil</a>
+        <a href="../Pantalla_Chat/chat.html">Chats</a>
+        <a href="../Pantalla_Config/configuracion.html">Configuraciones</a>
+        <a href="../Pantalla_Ayuda/ayuda.html">Ayuda</a>
+        <button class="logout-btn-side" onclick="window.location.href='../Pantalla_de_Bloqueo/Pantalladebloqueo.html'">Cerrar sesión</button>
+        <button class="delete-account-btn" onclick="eliminarCuenta()" style="background-color: red; color: white; border: none; padding: 10px; width: 100%;">
+            Eliminar cuenta
+        </button>
+    </div>
+
+
+    <script>
+        function openMenu() {
+            document.getElementById('sideMenu').style.width = '250px';
+        }
+
+        function closeMenu() {
+            document.getElementById('sideMenu').style.width = '0';
+        }
+    </script>
+
+    <!------------------------------------------------------------------------------------------------------>
+
+
+
+    <!------------------------------------------- Isla Ayuda------------------------------------------------>
+
+    <div class="help-container">
+        <h2 class="help-title">Pide ayuda</h2>
+
+        <!-- Opción para escribir la duda o problema -->
+        <div class="help-option">
+            <label for="mensaje">Escribe tu duda o problema aquí:</label>
+            <textarea class="help-textarea" id="mensaje" placeholder="Escribe tu mensaje aquí..."></textarea>
+        </div>
+
+        <!-- Botón para enviar el mensaje -->
+        <button class="help-button" onclick="enviarMensaje()">Enviar</button>
+
+        <!-- Enlace para volver al menú anterior -->
+        <a href="../Pantalla_Inicio/bienvenida.html" class="back-link">Volver al menú</a>
+    </div>
+
+    <script>
+        // Función para manejar el envío del mensaje
+        function enviarMensaje() {
+            var mensaje = document.getElementById('mensaje').value;
+
+            if (mensaje.trim() === "") {
+                alert("Por favor, escribe un mensaje antes de enviarlo.");
+            } else {
+                alert("Tu mensaje ha sido enviado. Te responderemos lo antes posible.");
+                document.getElementById('mensaje').value = ""; // Limpiar el área de texto
+            }
+        }
+    </script>
+
+<script>
+    function eliminarCuenta() {
+        if (confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.")) {
+            fetch("../../Controller/usercontroller.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.status === "success") {
+                    window.location.href = "../Pantalla_de_Bloqueo/Pantalladebloqueo.html";
+                }
+            })
+            .catch(error => console.error("Error en la solicitud:", error));
+        }
+    }
+</script>
+
+
+
+    <!------------------------------------------------------------------------------------------------------>
+
+</body>
+
+</html>

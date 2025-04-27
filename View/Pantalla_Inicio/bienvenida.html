@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido a Unimatch</title>
+    <link rel="icon" href="../Imagenes/img1.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="bienvenida.css">
+    <link rel="stylesheet" href="../Menu/menu.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script src="bienvenida.js" defer></script>
+    <!-- Vinculamos el archivo de JS -->
+</head>
+
+<body>
+    <h1>UniMatch</h1>
+
+    <div class="carousel-container">
+        <button class="arrow left-arrow" onclick="rotateCarousel(-1)">&lt;</button>
+        <div class="carousel">
+            <div class="island">
+                <img src="" alt="">
+                <div class="profile-info">
+                    <div class="profile-name"></div>
+                    <div class="profile-university"></div>
+                    <div class="profile-description"></div>
+                </div>
+                <span class="like-btn" onclick="toggleLike(this)">
+                    <span class="material-icons">favorite_border</span>
+                </span>
+            </div>
+            <div class="island">
+                <img src="" alt="">
+                <div class="profile-info">
+                    <div class="profile-name"></div>
+                    <div class="profile-university"></div>
+                    <div class="profile-description"></div>
+                </div>
+                <span class="like-btn" onclick="toggleLike(this)">
+                    <span class="material-icons">favorite_border</span>
+                </span>
+            </div>
+            <div class="island">
+                <img src="" alt="">
+                <div class="profile-info">
+                    <div class="profile-name"></div>
+                    <div class="profile-university"></div>
+                    <div class="profile-description"></div>
+                </div>
+                <span class="like-btn" onclick="toggleLike(this)">
+                    <span class="material-icons">favorite_border</span>
+                </span>
+            </div>
+            <div class="island">
+                <img src="" alt="">
+                <div class="profile-info">
+                    <div class="profile-name"></div>
+                    <div class="profile-university"></div>
+                    <div class="profile-description"></div>
+                </div>
+                <span class="like-btn" onclick="toggleLike(this)">
+                    <span class="material-icons">favorite_border</span>
+                </span>
+            </div>
+            <div class="island">
+                <img src="" alt="">
+                <div class="profile-info">
+                    <div class="profile-name"></div>
+                    <div class="profile-university"></div>
+                    <div class="profile-description"></div>
+                </div>
+                <span class="like-btn" onclick="toggleLike(this)">
+                    <span class="material-icons">favorite_border</span>
+                </span>
+            </div>
+        </div>
+        <button class="arrow right-arrow" onclick="rotateCarousel(1)">&gt;</button>
+    </div>
+
+    <button class="add-button" onclick="toggleProfilePopup()">+</button>
+
+    <div class="profile-popup" id="profilePopup">
+        <span class="close-popup" onclick="toggleProfilePopup()">&times;</span>
+        <h2>Crear Historia</h2>
+        <form id="historiaForm" action="../../Controller/guardar_historia.php" method="POST" enctype="multipart/form-data">
+            <input type="file" name="imagen" accept="image/*" required>
+            <input type="text" name="nombre" placeholder="Nombre" required>
+            <input type="text" name="universidad" placeholder="Universidad" required>
+            <textarea name="descripcion" placeholder="Descripción" required></textarea>
+            <button type="submit">Guardar</button>
+        </form>
+    </div>
+
+    <span class="menu-icon" onclick="openMenu()">&#9776;</span>
+
+    <div id="sideMenu" class="side-menu">
+        <span class="close-btn" onclick="closeMenu()">&times;</span>
+        <a href="../Pantalla_Perfil/perfil.php">Perfil</a>
+        <a href="../Pantalla_Chat/chat.html">Chats</a>
+        <a href="../Pantalla_Config/configuracion.html">Configuraciones</a>
+        <a href="../Pantalla_Ayuda/ayuda.html">Ayuda</a>
+        <button class="logout-btn-side" onclick="window.location.href='../Pantalla_de_Bloqueo/Pantalladebloqueo.html'">Cerrar sesión</button>
+        <button class="delete-account-btn" onclick="eliminarCuenta()" style="background-color: red; color: white; border: none; padding: 10px; width: 100%;">Eliminar cuenta</button>
+    </div>
+
+    <!-- Botón de campana -->
+    <button class="notification-button" onclick="toggleNotificationPopup()">
+        🔔
+    </button>
+
+    <!-- Popup de notificaciones -->
+    <div class="notification-popup" id="notificationPopup">
+        <span class="close-popup" onclick="toggleNotificationPopup()">&times;</span>
+        <h2>Notificaciones</h2>
+        <div class="notification-list">
+            <p>No tienes nuevas notificaciones.</p>
+            <!-- Puedes colocar más notificaciones aquí -->
+        </div>
+    </div>
+</body>
+</html>

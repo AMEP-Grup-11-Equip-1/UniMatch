@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración - Unimatch</title>
+    <link rel="icon" href="../Imagenes/img1.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="configuracion.css">
+    <link rel="stylesheet" href="../Menu/menu.css">
+
+</head>
+
+<body>
+
+    <!---------------------------------------- Menu Desplegable-------------------------------------------->
+
+    <span class="menu-icon" onclick="openMenu()">&#9776;</span>
+
+    <div id="sideMenu" class="side-menu">
+        <span class="close-btn" onclick="closeMenu()">&times;</span>
+        <a href="../Pantalla_Inicio/bienvenida.html">Inicio</a>
+        <a href="../Pantalla_Perfil/perfil.php">Perfil</a>
+        <a href="../Pantalla_Chat/chat.html">Chats</a>
+        <a href="../Pantalla_Config/configuracion.html">Configuraciones</a>
+        <a href="../Pantalla_Ayuda/ayuda.html">Ayuda</a>
+        <button class="logout-btn-side" onclick="window.location.href='../Pantalla_de_Bloqueo/Pantalladebloqueo.html'">Cerrar sesión</button>
+        <button class="delete-account-btn" onclick="eliminarCuenta()" style="background-color: red; color: white; border: none; padding: 10px; width: 100%;">
+            Eliminar cuenta
+        </button>
+    </div>
+
+
+    <script>
+        function openMenu() {
+            document.getElementById('sideMenu').style.width = '250px';
+        }
+
+        function closeMenu() {
+            document.getElementById('sideMenu').style.width = '0';
+        }
+    </script>
+
+    <!------------------------------------------------------------------------------------------------------>
+
+
+
+    <!------------------------------------------ Isla Ajustes ---------------------------------------------->
+
+    <div class="config-container">
+        <h2 class="config-title">Ajustes de Cuenta</h2>
+
+        <!-- Opción de mostrar el perfil públicamente -->
+        <div class="config-option">
+            <label for="perfil-publico">Mostrar mi perfil públicamente</label>
+            <div class="switch" id="perfil-publico" onclick="toggleSwitch(this)"></div>
+        </div>
+
+        <!-- Opción para activar notificaciones -->
+        <div class="config-option">
+            <label for="notificaciones">Recibir notificaciones</label>
+            <div class="switch" id="notificaciones" onclick="toggleSwitch(this)"></div>
+        </div>
+
+        <!-- Opción para activar la visibilidad de la ubicación -->
+        <div class="config-option">
+            <label for="ubicacion">Mostrar mi ubicación en el perfil</label>
+            <div class="switch" id="ubicacion" onclick="toggleSwitch(this)"></div>
+        </div>
+
+        <!-- Opción para habilitar los mensajes directos -->
+        <div class="config-option">
+            <label for="mensajes">Permitir mensajes directos</label>
+            <div class="switch" id="mensajes" onclick="toggleSwitch(this)"></div>
+        </div>
+
+        <!-- Opción para activar la verificación del perfil -->
+        <div class="config-option">
+            <label for="verificacion">Activar verificación de perfil</label>
+            <div class="switch" id="verificacion" onclick="toggleSwitch(this)"></div>
+        </div>
+
+        <!-- Botón para guardar los cambios -->
+        <button class="config-button">Guardar Cambios</button>
+
+        <!-- Enlace para volver al menú anterior -->
+        <a href="bienvenida.html" class="back-link">Volver al menú</a>
+    </div>
+
+    <script>
+        // Función para alternar el estado de los cuadrados
+        function toggleSwitch(element) {
+            element.classList.toggle('active');
+        }
+    </script>
+
+<script>
+    function eliminarCuenta() {
+        if (confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.")) {
+            fetch("../../Controller/usercontroller.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.status === "success") {
+                    window.location.href = "../Pantalla_de_Bloqueo/Pantalladebloqueo.html";
+                }
+            })
+            .catch(error => console.error("Error en la solicitud:", error));
+        }
+    }
+</script>
+
+
+
+    <!------------------------------------------------------------------------------------------------------>
+
+</body>
+
+</html>
