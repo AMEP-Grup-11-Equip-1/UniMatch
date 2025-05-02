@@ -40,10 +40,25 @@ class Historia {
             return ["error" => "No se encontraron perfiles"];
         }
     }
-    public function crear($nombre, $universidad, $descripcion, $urlImagen) {
-        $sql = "INSERT INTO historias (nombre, universidad, descripcion, imagen) VALUES (?, ?, ?, ?)";
+    public function obtenerTodas() {
+        $sql = "SELECT id, nombre, universidad, descripcion, imagen FROM historias ORDER BY id DESC";
+        $result = $this->conn->query($sql);
+    
+        $historias = [];
+        if ($result && $result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $historias[] = $row;
+            }
+        }
+    
+        return $historias;
+    }
+    
+    
+    public function crear($nombre, $universidad, $descripcion, $urlImagen, $usuario_id) {
+        $sql = "INSERT INTO historias (nombre, universidad, descripcion, imagen, usuario_id) VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ssss", $nombre, $universidad, $descripcion, $urlImagen);
+        $stmt->bind_param("ssssi", $nombre, $universidad, $descripcion, $urlImagen, $usuario_id);    
 
         if ($stmt->execute()) {
             return true;
