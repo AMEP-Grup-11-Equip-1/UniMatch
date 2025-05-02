@@ -50,12 +50,21 @@ if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === 0) {
     $universidad = $_POST['universidad'];
     $descripcion = $_POST['descripcion'];
 
+    if (strlen($nombre) < 2 || strlen($universidad) < 2 || strlen($descripcion) < 5) {
+        echo "Error: Los campos deben tener contenido válido.";
+        exit();
+    }
+
     // Guardar a la BD via Model
     $db = new ConexionBD();
     $conn = $db->getConexion();
     $historiaModel = new Historia($conn);
 
-    if ($historiaModel->crear($nombre, $universidad, $descripcion, $urlImagen)) {
+    session_start(); // ⚠️ Afegeix això si no hi era abans
+    $usuario_id = $_SESSION['usuarioID']; // Assumeix que l'usuari està loguejat
+    
+    if ($historiaModel->crear($nombre, $universidad, $descripcion, $urlImagen, $usuario_id)) {
+    
         header("Location: ../View/Pantalla_Inicio/bienvenida.html");
         exit();
     } else {
