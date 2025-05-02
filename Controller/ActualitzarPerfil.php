@@ -18,12 +18,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nombre_usuario = trim($_POST['nombre']);
     $email = trim($_POST['email']);
     $password = trim($_POST['contraseña']);
+    $descripcion = trim($_POST['descripcion']);
 
-    $result = $usuarioModel->actualizarPerfil($_SESSION['usuarioID'], $nombre_usuario, $email, $password);
+
+    $result = $usuarioModel->actualizarPerfil($_SESSION['usuarioID'], $nombre_usuario, $email, $password, $descripcion);
 
     if ($result["status"] === "success") {
         $_SESSION['usuario'] = $nombre_usuario;
         $_SESSION['email'] = $email;
+        $_SESSION['descripcion'] = $descripcion;
         if (!empty($password)) {
             $_SESSION['contraseña'] = $password;
         }
