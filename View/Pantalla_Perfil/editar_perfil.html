@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -18,6 +22,7 @@
     <!-- Pestaña lateral -->
     <div id="sideMenu" class="side-menu">
         <span class="close-btn" onclick="closeMenu()">&times;</span>
+        <a href="../Pantalla_Inicio/bienvenida.html">Inicio</a>
         <a href="../Pantalla_Perfil/perfil.php">Perfil</a>
         <a href="../Pantalla_Chat/chat.html">Chats</a>
         <a href="../Pantalla_Config/configuracion.html">Configuraciones</a>
@@ -30,7 +35,7 @@
     <div class="edit-container">
         <h2>Editar Mi Perfil</h2>
 
-        <form id="editProfileForm" method="POST" action="../../Controller/..." enctype="multipart/form-data">
+        <form id="editProfileForm" method="POST" action="../../Controller/ActualitzarPerfil.php" enctype="multipart/form-data">
             <!-- Campo de Nombre de Usuario -->
             <label for="name">Nombre de Usuario</label>
             <input type="text" id="name" name="name" value="<?php echo $_SESSION['usuario']; ?>" placeholder="Nuevo nombre de usuario">
@@ -41,7 +46,7 @@
 
             <!-- Campo de Descripción -->
             <label for="descripcion">Descripción</label>
-            <textarea id="descripcion" name="descripcion" placeholder="Escribe una nueva descripción"><?php echo $_SESSION['descripcion']; ?></textarea>
+            <textarea id="descripcion" name="descripcion" placeholder="Escribe una nueva descripción"><?php echo isset($_SESSION['descripcion']) ? $_SESSION['descripcion'] : ''; ?></textarea>
 
             <!-- Campo de Contraseña -->
             <label for="password">Contraseña</label>
