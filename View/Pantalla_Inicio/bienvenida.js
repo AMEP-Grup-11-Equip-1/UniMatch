@@ -1,36 +1,66 @@
-const islands = document.querySelectorAll('.island');
+
+
+const carouselContainer = document.querySelector('.carousel');
 let currentIndex = 0;
 let isThrottled = false;
+let islands = [];  // ara és dinàmic
+let currentUserId = null;
 
-let currentId = 1;
-const maxId = 9;
+// Obtenir l'ID de l'usuari via AJAX
+fetch('../../Controller/get_session.php')
+    .then(res => res.json())
+    .then(data => {
+        if (data.usuarioID) {
+            currentUserId = data.usuarioID;
+            console.log("Sessió carregada: ID usuari =", currentUserId);
+        } else {
+            console.warn("Usuari no loguejat:", data.error);
+        }
+    });
 
 async function inicializarCarrusel() {
     try {
         const response = await fetch("../../Controller/imprimir_historia.php");
         const perfiles = await response.json();
-        
+
         if (perfiles.error) {
             console.error(perfiles.error);
             return;
         }
 
-        perfiles.forEach((perfil, index) => {
-            if (index < islands.length) {
-                const island = islands[index];
-                island.querySelector('img').src = perfil.imagen;
-                island.querySelector('img').alt = perfil.nombre;
-                island.querySelector('.profile-name').textContent = perfil.nombre;
-                island.querySelector('.profile-university').textContent = perfil.universidad;
-                island.querySelector('.profile-description').textContent = perfil.descripcion;
-            }
+        // Buida el carrusel
+        carouselContainer.innerHTML = "";
+
+        // Crea cada island
+        perfiles.forEach((perfil) => {
+            const island = document.createElement("div");
+            island.className = "island";
+            island.dataset.id = perfil.id;
+
+            island.innerHTML = `
+                <img src="${perfil.imagen}" alt="${perfil.nombre}">
+                <div class="profile-info">
+                    <div class="profile-name">${perfil.nombre}</div>
+                    <div class="profile-university">${perfil.universidad}</div>
+                    <div class="profile-description">${perfil.descripcion}</div>
+                </div>
+                <span class="like-btn" onclick="toggleLike(this)">
+                    <span class="material-icons">favorite_border</span>
+                </span>
+            `;
+
+            carouselContainer.appendChild(island);
         });
+
+        // Reassignem la llista d'islands ja generades
+        islands = document.querySelectorAll('.island');
 
         updateCarousel(true);
     } catch (error) {
-        console.error('Error al cargar los perfiles iniciales:', error);
+        console.error('Error al carregar els perfils:', error);
     }
 }
+
 
 function updateCarousel(instant = false) {
     islands.forEach((island, i) => {
@@ -80,39 +110,15 @@ async function cargarPerfil(id, island) {
 }
 
 function rotateCarousel(direction) {
-    if (isThrottled) return;
+    if (isThrottled || islands.length === 0) return;
 
     isThrottled = true;
     setTimeout(() => isThrottled = false, 900);
 
-    if (direction === 1) {
-        // Cargar el perfil de la isla que va a entrar
-        const islaOculta = islands[(currentIndex - 4 + islands.length) % islands.length];
-
-        // Si llegamos al final, reiniciamos el contador de IDs
-        if (currentId >= maxId) {
-            currentId = 1; // Reiniciar al primer ID
-        } else {
-            currentId = (currentId % maxId) + 1; // Incrementar el ID
-        }
-        cargarPerfil(currentId, islaOculta);
-    } else {
-        // Cargar el perfil de la isla que va a entrar
-        const islaOculta = islands[(currentIndex + 4) % islands.length];
-
-        // Si llegamos al principio, reiniciamos el contador de IDs
-        if (currentId <= 1) {
-            currentId = maxId; // Reiniciar al último ID
-        } else {
-            currentId = (currentId - 2 + maxId) % maxId + 1; // Decrementar el ID
-        }
-        cargarPerfil(currentId, islaOculta);
-    }
-
-    // Actualizamos el índice
     currentIndex = (currentIndex + direction + islands.length) % islands.length;
     updateCarousel();
 }
+
 
 function toggleProfilePopup() {
     const popup = document.getElementById('profilePopup');
@@ -149,20 +155,57 @@ function eliminarCuenta() {
 function toggleNotificationPopup() {
     const popup = document.getElementById('notificationPopup');
     popup.classList.toggle('show');
+    if (popup.classList.contains('show')) {
+        cargarNotificaciones();
+    }
 }
+
 
 function toggleLike(element) {
     const icon = element.querySelector('.material-icons');
     const wasLiked = element.classList.contains('liked');
     element.classList.toggle('liked');
+
+    const island = element.closest('.island');
+    const historiaId = island.dataset.id; // Necessitaràs afegir això al HTML
+
     if (!wasLiked) {
+        if (!currentUserId) {
+            alert("Has d'iniciar sessió per donar like.");
+            return;
+        }
+        
         icon.textContent = 'favorite';
         heartBeatLong(element);
-        launchMiniHearts(element.closest('.island'), element);
-    } else {
-        icon.textContent = 'favorite_border';
+        
+
+        // ⬇️ Enviar like al servidor
+        console.log("Enviant like per historia_id =", historiaId);
+
+        
+        fetch('../../Controller/dar_like.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `historia_id=${historiaId}`
+        })
+        .then(response => response.text())  // <--- Canvia json() per text()
+        .then(text => {
+            console.log("📄 Text rebut:", text);
+            try {
+                const data = JSON.parse(text);
+                console.log("✅ Like enregistrat:", data);
+            } catch (e) {
+                console.error("❌ Error parsejant JSON:", e, "\nResposta original:", text);
+            }
+        
+        })
     }
+
+        
 }
+
 
 // Heartbeat llarg (1,7 segons)
 function heartBeatLong(btn) {
@@ -171,6 +214,28 @@ function heartBeatLong(btn) {
     btn.classList.add('heartbeat');
     setTimeout(() => btn.classList.remove('heartbeat'), 1750);
 }
+
+
+function cargarNotificaciones() {
+    fetch("../../Controller/get_notificaciones.php")
+        .then(response => response.json())
+        .then(data => {
+            const lista = document.querySelector('.notification-list');
+            lista.innerHTML = '';
+
+            if (data.data && data.data.length > 0) {
+                data.data.forEach(n => {
+                    const p = document.createElement('p');
+                    p.textContent = `${n.mensaje} - ${new Date(n.fecha).toLocaleString()}`;
+                    lista.appendChild(p);
+                });
+            } else {
+                lista.innerHTML = "<p>No tens noves notificacions.</p>";
+            }
+        })
+        .catch(error => console.error("Error carregant notificacions:", error));
+}
+
 
 // Llamamos al iniciar
 inicializarCarrusel();
