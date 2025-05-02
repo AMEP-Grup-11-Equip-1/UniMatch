@@ -1,7 +1,8 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-include 'DataBase.php';
+include_once '../Model/DataBase.php';
+
 
 $bd = new ConexionBD();
 $conexion = $bd->getConexion();
