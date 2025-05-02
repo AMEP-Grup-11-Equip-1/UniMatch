@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -21,6 +25,7 @@
 
     <div id="sideMenu" class="side-menu">
         <span class="close-btn" onclick="closeMenu()">&times;</span>
+        <a href="../Pantalla_Inicio/bienvenida.html">Inicio</a>
         <a href="../Pantalla_Perfil/perfil.php">Perfil</a>
         <a href="../Pantalla_Chat/chat.html">Chats</a>
         <a href="../Pantalla_Config/configuracion.html">Configuraciones</a>
@@ -31,15 +36,20 @@
     <!-- Contenido principal del perfil -->
     <div class="perfil-container">
 
-    <button class="edit-btn" onclick="window.location.href='editar_perfil.html'">Editar</button>
+    <button class="edit-btn" onclick="window.location.href='editar_perfil.php'">Editar</button>
 
 
         <h2>Mi Perfil</h2>
 
         <!-- Foto de perfil -->
         <div class="avatar">
-            <img src="../Imagenes/foto_perfil.png" alt="Foto de perfil">
+            <?php if (!empty($_SESSION['imagen'])): ?>
+                <img src="<?php echo $_SESSION['imagen']; ?>" alt="Foto de perfil">
+            <?php else: ?>
+                <img src="../Imagenes/foto_perfil.png" alt="">
+            <?php endif; ?>
         </div>
+
 
         <!-- Nombre y descripción (solo texto) -->
         <div class="info-perfil">
