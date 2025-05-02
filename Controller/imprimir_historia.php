@@ -15,7 +15,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     echo json_encode($perfil);
 } else {
     // Si no hi ha ID, tornem diversos perfils
-    $perfiles = $historiaModel->obtenerMultiples(5);
+    $perfiles = $historiaModel->obtenerTodas();
     echo json_encode($perfiles);
 }
 ?>
