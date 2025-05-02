@@ -17,6 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['usuario'] = $resultado["usuario"]["name"];
         $_SESSION['email'] = $resultado["usuario"]["mail"];
         $_SESSION['usuarioID'] = $resultado["usuario"]["id"];
+        $_SESSION['descripcion'] = $resultado["usuario"]["descripcion"];
         $_SESSION['error'] = "";
 
         header("Location: ../View/Pantalla_Inicio/bienvenida.html");
