@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 class ConexionBD {
     private $servidor = "ubiwan.epsevg.upc.edu";
@@ -58,7 +57,6 @@ class ConexionBD {
 
         $stmt->close();
         return $universities;
-        exit();
     }
 
     public function getGenderJSON(){
@@ -83,7 +81,6 @@ class ConexionBD {
 
         $stmt->close();
         return $generos;
-        exit();
     }
 
 }
