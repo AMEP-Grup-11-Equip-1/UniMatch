@@ -15,7 +15,7 @@ class GrupController {
         $nom = $_POST['nom'];
         $descripcio = $_POST['descripcio'] ?? "";
         $visibilitat = $_POST['visibilitat'] ?? 'privat';
-        $usuari_id = $_SESSION['usuari_id']; // Suposem usuari loguejat
+        $usuari_id = $_SESSION['usuarioID'];
 
         $resultat = $this->grupModel->crearGrup($nom, $descripcio, $visibilitat, $usuari_id);
         return $resultat;
@@ -96,6 +96,7 @@ class GrupController {
         return null;
     }
 }
+
 // Crear grup	    grupController.php?action=crear	                    POST	Inclou nom, descripció...
 // Afegir usuari	grupController.php?action=afegirUsuari	            POST	Nom d’usuari i ID grup
 // Expulsar usuari	grupController.php?action=expulsarUsuari            POST	ID d’usuari i grup
