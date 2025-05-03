@@ -25,7 +25,15 @@
         <button class="arrow right-arrow" onclick="rotateCarousel(1)">&gt;</button>
     </div>
 
-    <button class="add-button" onclick="toggleProfilePopup()">+</button>
+    <!-- Botones superiores -->
+    <!-- Contenedor de botones alineados -->
+    <div class="top-buttons">
+        <button class="circle-icon" onclick="toggleNotificationPopup()">🔔</button>
+        <button class="circle-icon" onclick="toggleProfilePopup()">+</button>
+        <button class="circle-icon" id="openCreateGrup">👥</button>
+    </div>
+  
+    
 
     <div class="profile-popup" id="profilePopup">
         <span class="close-popup" onclick="toggleProfilePopup()">&times;</span>
@@ -52,10 +60,7 @@
         <button class="delete-account-btn" onclick="eliminarCuenta()" style="background-color: red; color: white; border: none; padding: 10px; width: 100%;">Eliminar cuenta</button>
     </div>
 
-    <!-- Botón de campana -->
-    <button class="notification-button" onclick="toggleNotificationPopup()">
-        🔔
-    </button>
+  
 
     <!-- Popup de notificaciones -->
     <div class="notification-popup" id="notificationPopup">
@@ -66,5 +71,24 @@
             <!-- Puedes colocar más notificaciones aquí -->
         </div>
     </div>
+
+    <!-- Popup para crear grupo -->
+    <div class="profile-popup" id="popupCrearGrupo">
+        <span class="close-popup" onclick="toggleCrearGrupo()">&times;</span>
+        <h2>Crear Grupo</h2>
+        <form id="formCrearGrupo">
+          <input type="text" id="grup_nom" placeholder="Nombre del grupo" required />
+          <input type="text" id="grup_visibilitat" placeholder="Visibilidad (público/privado)" required />
+          <textarea id="grup_descripcio" placeholder="Descripción" required></textarea>
+          <button type="submit">Guardar</button>
+        </form>
+    </div>
+      
+  
+  
+    <button onclick="window.location.href='../Pantalla_Grupos/ver_grupos.html'">Ver Grupos</button>
+
+
 </body>
 </html>
+
