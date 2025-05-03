@@ -565,5 +565,86 @@ h1 {
     background-color: #333;
 }
 
+.circle-icon {
+    width: 40px;
+    height: 40px;
+    background-color: black;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    cursor: pointer;
+    margin-left: 12px; /* MISMA separación que los otros íconos */
+    transition: background-color 0.3s;
+  }
+  
+  .circle-icon:hover {
+    background-color: white;
+    color: black;
+  }
+  
+  #openCreateGrup:hover {
+    background-color: white;
+  }
+  
+  .top-buttons {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    display: flex;
+    gap: 12px; /* separación uniforme entre íconos */
+  }
+  
+  .circle-icon {
+    width: 45px;
+    height: 45px;
+    background-color: black;
+    color: white;
+    border-radius: 50%;
+    font-size: 22px;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .circle-icon:hover {
+    background-color: white;
+    color: black;
+  }
+  
+  .oculto {
+    display: none !important;
+  }
+  
+  .profile-popup {
+    position: fixed;
+    bottom: -100%;
+    right: 40px;
+    width: 90%;
+    max-width: 450px;
+    height: 500px;
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0px -5px 20px rgba(0, 0, 0, 0.2);
+    transition: bottom 0.5s ease-in-out;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    z-index: 9999;
+  }
+  
+  .profile-popup.show {
+    bottom: 50px;
+  }
+  
+  
 
 /*--------------------------------------------------------------------------------------------------------->*/
