@@ -1,5 +1,4 @@
 
-
 const carouselContainer = document.querySelector('.carousel');
 let currentIndex = 0;
 let isThrottled = false;
@@ -236,6 +235,51 @@ function cargarNotificaciones() {
         .catch(error => console.error("Error carregant notificacions:", error));
 }
 
+document.getElementById("openCreateGrup").addEventListener("click", () => {
+    document.getElementById("popupCrearGrup").classList.remove("oculto");
+  });
+  
+  function cerrarPopupGrup() {
+    document.getElementById("popupCrearGrup").classList.add("oculto");
+  }
+  
+  function guardarGrup() {
+    const nom = document.getElementById("grup_nom").value;
+    const visibilitat = document.getElementById("grup_visibilitat").value;
+    const descripcio = document.getElementById("grup_descripcio").value;
+  
+    fetch("../../Controller/GrupController.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        accion: "crear_grup",
+        nom,
+        visibilitat,
+        descripcio
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "ok") {
+        alert("Grupo creado correctamente");
+        cerrarPopupGrup();
+      } else {
+        alert("Error al crear grupo");
+      }
+    });
+  }
 
+ // Mostrar u ocultar el popup de crear grupo
+// Mostrar popup de grupo
+document.getElementById("openCreateGrup").addEventListener("click", toggleCrearGrupo);
+
+function toggleCrearGrupo() {
+  const popup = document.getElementById("popupCrearGrupo");
+  popup.classList.toggle("show");
+}
+
+  
 // Llamamos al iniciar
 inicializarCarrusel();
