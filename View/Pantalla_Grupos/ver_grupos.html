@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="ver_grupos.css">
+  <title>Grupos</title>
+</head>
+<body>
+  <div class="container">
+    <button class="back-button" onclick="window.history.back()">← Volver</button>
+    <h1>Grupos creados</h1>
+    <div class="grupo-lista" id="listaGrupos"></div>
+    <div class="no-grupos" id="sinGrupos" style="display:none;">No hay grupos creados todavía.</div>
+  </div>
+
+  <script>
+    fetch("../../Controller/GrupController.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ accion: "obtener_grups" })
+    })
+    .then(res => res.json())
+    .then(data => {
+      const contenedor = document.getElementById("listaGrupos");
+      const vacio = document.getElementById("sinGrupos");
+
+      if (data.length === 0) {
+        vacio.style.display = "block";
+        return;
+      }
+
+      data.forEach(grup => {
+        const div = document.createElement("div");
+        div.classList.add("grupo-item");
+        div.innerHTML = `<h2>${grup.nom}</h2><p>${grup.descripcio}</p>`;
+        contenedor.appendChild(div);
+      });
+    });
+  </script>
+</body>
+</html>
