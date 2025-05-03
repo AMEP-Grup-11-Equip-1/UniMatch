@@ -35,17 +35,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['historia_id']) && iss
         $rAutor = $qAutor->get_result();
         $autor = $rAutor->fetch_assoc();
 
+        // Busquem l'autor del like
+        $qAutorLike = $conn->prepare("SELECT name FROM usuario WHERE id = ?");
+        $qAutorLike->bind_param("i", $usuario_id);
+        $qAutorLike->execute();
+        $rAutorLike = $qAutorLike->get_result();
+        $autorLike = $rAutorLike->fetch_assoc();
+
         if ($autor && $autor['usuario_id'] != $usuario_id) {
             $receptor_id = $autor['usuario_id'];
-            $mensaje = "T'han donat like a una de les teves històries!";
 
-            $noti = $conn->prepare("INSERT INTO notificaciones (usuario_id, mensaje, leida) VALUES (?, ?, 0)");
-            $noti->bind_param("is", $receptor_id, $mensaje);
+            $autor_like_nombre = $autorLike ? $autorLike['name'] : 'Usuari desconegut';
+            $mensaje = "$autor_like_nombre te ha dado like!";
 
+            $noti = $conn->prepare("INSERT INTO notificaciones (usuario_id, mensaje, leida, autorLike) VALUES (?, ?, 0, ?)");
+            $noti->bind_param("iss", $receptor_id, $mensaje, $autor_like_nombre);
             $noti->execute();
 
-            $log("Notificació enviada a l'usuari $receptor_id");
+            $log("Notificació enviada a l'usuari $receptor_id per $autor_like_nombre");
         }
+
 
         echo json_encode(["success" => true, "message" => "Like guardado i notificació enviada"]);
     } else {
