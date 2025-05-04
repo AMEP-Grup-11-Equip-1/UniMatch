@@ -224,6 +224,8 @@ function cargarNotificaciones() {
 
 // Función para aceptar la notificación
 function aceptarNotificacion(id) {
+    console.log(" Has fet clic a ACCEPTAR notificació amb ID:", id);
+
     fetch("../../Controller/aceptar_notificacion.php", {
         method: 'POST',
         body: new URLSearchParams({ id: id }),
@@ -231,16 +233,26 @@ function aceptarNotificacion(id) {
             'Content-Type': 'application/x-www-form-urlencoded',
         }
     })
-        .then(response => response.json())
-        .then(data => {
+    .then(async response => {
+        const text = await response.text();
+        try {
+            const data = JSON.parse(text);
             if (data.status === 'success') {
-                alert('Notificación aceptada');
-                cargarNotificaciones();  // Recargar las notificaciones
+                cargarNotificaciones();
+                if (window.location.href.includes("chat.php")) {
+                    fetch("../../Controller/obtener_matches.php")
+                        .then(r => r.json())
+                        .then(m => console.log(" Matches refrescats:", m));
+                }
             } else {
-                alert('Error al aceptar la notificación');
+                alert('Error al aceptar la notificación: ' + data.message);
             }
-        })
-        .catch(error => console.error('Error al aceptar la notificación:', error));
+        } catch (e) {
+            console.error(" Resposta NO JSON:", text);
+            alert('Error inesperado del servidor. Mira la consola.');
+        }
+    })
+    .catch(error => console.error(' Error al aceptar la notificación (catch):', error));
 }
 
 // Función para rechazar la notificación
