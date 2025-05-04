@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="ADM.css">
     <link rel="icon" href="../Imagenes/img1.png" type="image/x-icon">
 
+    <script src="perfil.js"></script>
+
+    <script src="menu_lateral.js"></script>
+    <link rel="stylesheet" href="../Menu/menu.css">
+
 </head>
 
 <body>
@@ -19,20 +24,18 @@
         <p><strong>Email:</strong> <span id="mail"></span></p>
     </div>
 
-    <script>
-        fetch("../../Controller/ADM_login.php")
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    window.location.href = "login_ADM.html"; // Redirect to login page if not logged in
-                } else {
-                    document.getElementById("id").textContent = data.id;
-                    document.getElementById("name").textContent = data.name;
-                    document.getElementById("mail").textContent = data.mail;
-                }
-            })
-            .catch(error => console.error("Erro ao carregar os dados:", error));
-    </script>
+    <!-- Menú lateral -->
+    <span class="menu-icon" onclick="openMenu()">&#9776;</span>
+    <div id="sideMenu" class="side-menu">
+
+    <span class="close-btn" onclick="closeMenu()">&times;</span>
+    <a href="home.html">Home</a> <!-- Enlace a la página de inicio -->
+    <a href="perfil_ADM.html">Perfil</a> <!-- Enlace al perfil del administrador -->
+    <button class="logout-btn-side" onclick="window.location.href='../php/logout_ADM.php'">Cerrar sesión</button> <!-- Botón para cerrar sesión -->
+</div>
+
+
+
 
 </body>
 

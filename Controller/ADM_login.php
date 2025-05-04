@@ -7,8 +7,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // Incluye la clase de conexión a la base de datos
-include_once '../Model/DataBase.php';
-<link rel="icon" href="../Imagenes/img1.png" type="image/x-icon">
+include '../Model/DataBase.php';
 
 
 class AutenticarADM {
