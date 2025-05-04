@@ -58,7 +58,7 @@ session_start();
 
             <!-- Botón de Guardar -->
             <div class="save-button-container">
-                <button type="submit" id="guardarBtn" onclick="return confirmChanges()">Guardar Cambios</button>
+                <button type="submit" id="guardarBtn">Guardar Cambios</button>
             </div>
         </form>
     </div>
