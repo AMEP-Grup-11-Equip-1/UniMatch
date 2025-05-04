@@ -48,8 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['historia_id']) && iss
             $autor_like_nombre = $autorLike ? $autorLike['name'] : 'Usuari desconegut';
             $mensaje = "$autor_like_nombre te ha dado like!";
 
-            $noti = $conn->prepare("INSERT INTO notificaciones (usuario_id, mensaje, leida, autorLike) VALUES (?, ?, 0, ?)");
-            $noti->bind_param("iss", $receptor_id, $mensaje, $autor_like_nombre);
+            $noti = $conn->prepare("INSERT INTO notificaciones (usuario_id, mensaje, leida, autorLike, autorLikeId) VALUES (?, ?, 0, ?, ?)");
+            $noti->bind_param("issi", $receptor_id, $mensaje, $autor_like_nombre, $usuario_id);
             $noti->execute();
 
             $log("Notificació enviada a l'usuari $receptor_id per $autor_like_nombre");
