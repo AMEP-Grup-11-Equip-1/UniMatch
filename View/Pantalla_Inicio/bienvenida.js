@@ -255,8 +255,9 @@ function aceptarNotificacion(id) {
     .catch(error => console.error(' Error al aceptar la notificación (catch):', error));
 }
 
-// Función para rechazar la notificación
 function rechazarNotificacion(id) {
+    console.log(" Has fet clic a RECHAZAR notificació amb ID:", id);
+
     fetch("../../Controller/rechazar_notificacion.php", {
         method: 'POST',
         body: new URLSearchParams({ id: id }),
@@ -264,17 +265,24 @@ function rechazarNotificacion(id) {
             'Content-Type': 'application/x-www-form-urlencoded',
         }
     })
-        .then(response => response.json())
-        .then(data => {
+    .then(async response => {
+        const text = await response.text();
+        try {
+            const data = JSON.parse(text);
             if (data.status === 'success') {
-                alert('Notificación rechazada');
-                cargarNotificaciones();  // Recargar las notificaciones
+                cargarNotificaciones();
+                
             } else {
-                alert('Error al rechazar la notificación');
+                alert('Error al rechazar la notificación: ' + data.message);
             }
-        })
-        .catch(error => console.error('Error al rechazar la notificación:', error));
+        } catch (e) {
+            console.error(" Resposta NO JSON:", text);
+            alert('Error inesperado del servidor al rechazar. Mira la consola.');
+        }
+    })
+    .catch(error => console.error(' Error al rechazar la notificación (catch):', error));
 }
+
 
 
 // Función para abrir/cerrar el popup de Crear Grupo
