@@ -6,23 +6,33 @@ class Grup {
         $this->conn = $connexio;
     }
 
-    // Crear un nou grup
-    public function crearGrup($nom, $descripcio, $visibilitat, $propietari_id, $enllac_invitacio = null) {
-        $sql = "INSERT INTO grups (nom, descripcio, visibilitat, propietari_id, enllac_invitacio) 
-                VALUES (?, ?, ?, ?, ?)";
+
+    
+    public function crearGrup($nom, $descripcio, $visibilitat, $usuario_id) {
+        // Preparamos la consulta SQL sin el campo enllac_invitacio
+        $sql = "INSERT INTO grups (nom, descripcio, visibilitat, propietari_id) VALUES (?, ?, ?, ?)";
+
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("sssiss", $nom, $descripcio, $visibilitat, $propietari_id, $enllac_invitacio);
-        
-        if ($stmt->execute()) {
-            $grup_id = $this->conn->insert_id;
 
-            // Afegir el propietari al grup amb rol 'propietari'
-            $this->afegirUsuariAlGrup($grup_id, $propietari_id, "propietari");
-
-            return ["status" => "success", "grup_id" => $grup_id];
+        // Verificar si la preparación fue exitosa
+        if ($stmt === false) {
+            error_log("Error al preparar la consulta: " . $this->conn->error);
+            return false;
         }
-        return ["status" => "error", "message" => "Error creant el grup"];
+
+        // Vincular los parámetros
+        $stmt->bind_param("sssi", $nom, $descripcio, $visibilitat, $usuario_id);
+
+        // Ejecutar la consulta
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            // Mostrar error si la ejecución falla
+            error_log("Error en la ejecución de la consulta: " . $stmt->error);
+            return false;
+        }
     }
+    
 
     // Afegir un usuari al grup
     public function afegirUsuariAlGrup($grup_id, $usuari_id, $rol = "integrant") {
@@ -94,15 +104,4 @@ class Grup {
         return $stmt->get_result()->num_rows > 0;
     }
 }
-// Funcionalidades:
-// crearGrup	Crea un grup i afegeix el propietari amb rol
-// afegirUsuariAlGrup	Afegeix un usuari com a integrant o propietari
-// expulsarUsuari	Elimina un usuari del grup
-// assignarRol	Canvia el rol d’un membre del grup
-// editarGrup	Permet modificar nom, descripció i visibilitat
-// dissoldreGrup	Esborra el grup completament
-// afegirActivitat	Afegeix una activitat al calendari del grup
-// obtenirMembres	Retorna els membres del grup amb els seus rols
-// esPropietari	Comprova si l’usuari és el propietari del grup 
 ?>
-
