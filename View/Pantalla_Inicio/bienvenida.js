@@ -1,8 +1,7 @@
-
 const carouselContainer = document.querySelector('.carousel');
 let currentIndex = 0;
 let isThrottled = false;
-let islands = [];  // ara és dinàmic
+let islands = [];
 let currentUserId = null;
 
 // Obtenir l'ID de l'usuari via AJAX
@@ -27,10 +26,8 @@ async function inicializarCarrusel() {
             return;
         }
 
-        // Buida el carrusel
         carouselContainer.innerHTML = "";
 
-        // Crea cada island
         perfiles.forEach((perfil) => {
             const island = document.createElement("div");
             island.className = "island";
@@ -51,15 +48,12 @@ async function inicializarCarrusel() {
             carouselContainer.appendChild(island);
         });
 
-        // Reassignem la llista d'islands ja generades
         islands = document.querySelectorAll('.island');
-
         updateCarousel(true);
     } catch (error) {
         console.error('Error al carregar els perfils:', error);
     }
 }
-
 
 function updateCarousel(instant = false) {
     islands.forEach((island, i) => {
@@ -88,26 +82,6 @@ function updateCarousel(instant = false) {
     });
 }
 
-async function cargarPerfil(id, island) {
-    try {
-        const response = await fetch(`../../Controller/imprimir_historia.php?id=${id}`);
-        const perfil = await response.json();
-
-        if (perfil.error) {
-            console.error(perfil.error);
-            return;
-        }
-
-        island.querySelector('img').src = perfil.imagen;
-        island.querySelector('img').alt = perfil.nombre;
-        island.querySelector('.profile-name').textContent = perfil.nombre;
-        island.querySelector('.profile-university').textContent = perfil.universidad;
-        island.querySelector('.profile-description').textContent = perfil.descripcion;
-    } catch (error) {
-        console.error('Error al cargar el perfil:', error);
-    }
-}
-
 function rotateCarousel(direction) {
     if (isThrottled || islands.length === 0) return;
 
@@ -117,7 +91,6 @@ function rotateCarousel(direction) {
     currentIndex = (currentIndex + direction + islands.length) % islands.length;
     updateCarousel();
 }
-
 
 function toggleProfilePopup() {
     const popup = document.getElementById('profilePopup');
@@ -135,19 +108,19 @@ function closeMenu() {
 function eliminarCuenta() {
     if (confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.")) {
         fetch("../../Controller/usercontroller.php", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message);
-                if (data.status === "success") {
-                    window.location.href = "../Pantalla_de_Bloqueo/Pantalladebloqueo.html";
-                }
-            })
-            .catch(error => console.error("Error en la solicitud:", error));
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            if (data.status === "success") {
+                window.location.href = "../Pantalla_de_Bloqueo/Pantalladebloqueo.html";
+            }
+        })
+        .catch(error => console.error("Error en la solicitud:", error));
     }
 }
 
@@ -159,29 +132,23 @@ function toggleNotificationPopup() {
     }
 }
 
-
 function toggleLike(element) {
     const icon = element.querySelector('.material-icons');
     const wasLiked = element.classList.contains('liked');
     element.classList.toggle('liked');
 
     const island = element.closest('.island');
-    const historiaId = island.dataset.id; // Necessitaràs afegir això al HTML
+    const historiaId = island.dataset.id;
 
     if (!wasLiked) {
         if (!currentUserId) {
             alert("Has d'iniciar sessió per donar like.");
             return;
         }
-        
+
         icon.textContent = 'favorite';
         heartBeatLong(element);
-        
 
-        // ⬇️ Enviar like al servidor
-        console.log("Enviant like per historia_id =", historiaId);
-
-        
         fetch('../../Controller/dar_like.php', {
             method: 'POST',
             headers: {
@@ -189,7 +156,7 @@ function toggleLike(element) {
             },
             body: `historia_id=${historiaId}`
         })
-        .then(response => response.text())  // <--- Canvia json() per text()
+        .then(response => response.text())
         .then(text => {
             console.log("📄 Text rebut:", text);
             try {
@@ -198,15 +165,10 @@ function toggleLike(element) {
             } catch (e) {
                 console.error("❌ Error parsejant JSON:", e, "\nResposta original:", text);
             }
-        
-        })
+        });
     }
-
-        
 }
 
-
-// Heartbeat llarg (1,7 segons)
 function heartBeatLong(btn) {
     btn.classList.remove('heartbeat');
     void btn.offsetWidth;
@@ -214,72 +176,96 @@ function heartBeatLong(btn) {
     setTimeout(() => btn.classList.remove('heartbeat'), 1750);
 }
 
-
 function cargarNotificaciones() {
     fetch("../../Controller/get_notificaciones.php")
         .then(response => response.json())
         .then(data => {
             const lista = document.querySelector('.notification-list');
-            lista.innerHTML = '';
+            lista.innerHTML = ''; // Limpiamos cualquier contenido previo.
 
             if (data.data && data.data.length > 0) {
                 data.data.forEach(n => {
-                    const p = document.createElement('p');
-                    p.textContent = `${n.mensaje} - ${new Date(n.fecha).toLocaleString()}`;
-                    lista.appendChild(p);
+                    // Crear el contenedor de la notificación
+                    const notificationContainer = document.createElement('div');
+                    notificationContainer.classList.add('notification-container');
+                    notificationContainer.setAttribute('data-id', n.id);  // Agregar el ID de la notificación
+
+                    // Contenido de la notificación (mensaje y fecha en el mismo contenedor)
+                    const notificationContent = document.createElement('div');
+                    notificationContent.classList.add('notification-content');
+                    notificationContent.innerHTML = `
+                    <p><strong>${n.mensaje}</strong></p>
+                    <p style="color: #777;">${new Date(n.fecha).toLocaleString()}</p>
+                `;
+                
+
+
+                    // Botones para aceptar o rechazar (centrados y ocupando toda la isla)
+                    const notificationActions = document.createElement('div');
+                    notificationActions.classList.add('notification-actions');
+                    notificationActions.innerHTML = `
+                        <button class="accept-btn" onclick="aceptarNotificacion(${n.id})">Aceptar</button>
+                        <button class="reject-btn" onclick="rechazarNotificacion(${n.id})">Rechazar</button>
+                    `;
+
+                    // Agregar el contenido y los botones al contenedor de la notificación
+                    notificationContainer.appendChild(notificationContent);
+                    notificationContainer.appendChild(notificationActions);
+
+                    // Añadir la notificación al listado
+                    lista.appendChild(notificationContainer);
                 });
             } else {
-                lista.innerHTML = "<p>No tens noves notificacions.</p>";
+                lista.innerHTML = "<p>No tienes nuevas notificaciones.</p>";
             }
         })
-        .catch(error => console.error("Error carregant notificacions:", error));
+        .catch(error => console.error("Error al cargar notificaciones:", error));
 }
 
-document.getElementById("openCreateGrup").addEventListener("click", () => {
-    document.getElementById("popupCrearGrup").classList.remove("oculto");
-  });
-  
-  function cerrarPopupGrup() {
-    document.getElementById("popupCrearGrup").classList.add("oculto");
-  }
-  
-  function guardarGrup() {
-    const nom = document.getElementById("grup_nom").value;
-    const visibilitat = document.getElementById("grup_visibilitat").value;
-    const descripcio = document.getElementById("grup_descripcio").value;
-  
-    fetch("../../Controller/GrupController.php", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        accion: "crear_grup",
-        nom,
-        visibilitat,
-        descripcio
-      })
+// Función para aceptar la notificación
+function aceptarNotificacion(id) {
+    fetch("../../Controller/aceptar_notificacion.php", {
+        method: 'POST',
+        body: new URLSearchParams({ id: id }),
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
     })
-    .then(res => res.json())
-    .then(data => {
-      if (data.status === "ok") {
-        alert("Grupo creado correctamente");
-        cerrarPopupGrup();
-      } else {
-        alert("Error al crear grupo");
-      }
-    });
-  }
-
- // Mostrar u ocultar el popup de crear grupo
-// Mostrar popup de grupo
-document.getElementById("openCreateGrup").addEventListener("click", toggleCrearGrupo);
-
-function toggleCrearGrupo() {
-  const popup = document.getElementById("popupCrearGrupo");
-  popup.classList.toggle("show");
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert('Notificación aceptada');
+                cargarNotificaciones();  // Recargar las notificaciones
+            } else {
+                alert('Error al aceptar la notificación');
+            }
+        })
+        .catch(error => console.error('Error al aceptar la notificación:', error));
 }
 
-  
-// Llamamos al iniciar
+// Función para rechazar la notificación
+function rechazarNotificacion(id) {
+    fetch("../../Controller/rechazar_notificacion.php", {
+        method: 'POST',
+        body: new URLSearchParams({ id: id }),
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert('Notificación rechazada');
+                cargarNotificaciones();  // Recargar las notificaciones
+            } else {
+                alert('Error al rechazar la notificación');
+            }
+        })
+        .catch(error => console.error('Error al rechazar la notificación:', error));
+}
+
+
+
+
+// Inicializar carrusel al cargar
 inicializarCarrusel();
