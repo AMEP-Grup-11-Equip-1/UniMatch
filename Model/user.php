@@ -7,7 +7,7 @@ class Usuario {
     }
 
     public function eliminar($id) {
-        $query = "DELETE FROM usuarios WHERE id = ?";
+        $query = "DELETE FROM usuario WHERE id = ?";
         $stmt = $this->conn->prepare($query);
         if (!$stmt) {
             return ["status" => "error", "message" => "Error en la preparación de la consulta"];
@@ -25,7 +25,7 @@ class Usuario {
             return ["status" => "error", "message" => "¡El usuario o correo ya están registrados!"];
         }
 
-        $sql = "UPDATE usuarios SET nom_usuari = ?, correu_electronic = ?, password = ? WHERE id = ?";
+        $sql = "UPDATE usuario SET nom_usuari = ?, correu_electronic = ?, password = ? WHERE id = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("sssi", $nombre_usuario, $email, $password, $id);
 
@@ -37,7 +37,7 @@ class Usuario {
     }
 
     private function usuarioOCorreoExistente($nombre_usuario, $email, $usuarioID) {
-        $sql = "SELECT * FROM usuarios WHERE (nom_usuari = ? OR correu_electronic = ?) AND id != ?";
+        $sql = "SELECT * FROM usuario WHERE (nom_usuari = ? OR correu_electronic = ?) AND id != ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ssi", $nombre_usuario, $email, $usuarioID);
         $stmt->execute();
