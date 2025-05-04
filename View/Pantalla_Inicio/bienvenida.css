@@ -97,10 +97,12 @@ body::after {
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
 }
 
+/*------------------------------------------------ Notificación ---------------------------------------------------->*/
+
 .notification-popup {
     position: fixed;
     bottom: -100%;
-    right: 110px;
+    right: 40px;
     width: 90%;
     max-width: 450px;
     height: 500px;
@@ -121,6 +123,15 @@ body::after {
     bottom: 50px;
 }
 
+.notification-content {
+    width: 90%;
+    max-width: 450px; /* Ajusta el tamaño máximo del contenido */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra el contenido dentro del contenedor */
+    justify-content: center;
+}
+
 .notification-popup h2 {
     text-align: center;
     color: #333;
@@ -129,16 +140,72 @@ body::after {
     width: 100%;
 }
 
-.notification-list p {
-    color: #444;
-    font-size: 16px;
-    background: #eee;
-    padding: 12px;
-    border-radius: 10px;
-    margin: 10px 0;
+.notification-list {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espaciado entre notificaciones */
+    padding: 10px;
+    align-items: center;
+}
+
+.notification-container {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.notification-content p {
+    font-size: 16px;
+    color: #333;
+    margin: 5px 0;
     text-align: center;
 }
+
+.notification-content p strong {
+    font-weight: 600;
+    color: #000;
+}
+
+.notification-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 12px;
+    width: 100%;
+}
+
+.accept-btn, .reject-btn {
+    flex: 1;
+    padding: 10px 0;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.accept-btn {
+    background-color: #4CAF50;
+}
+
+.reject-btn {
+    background-color: #f44336;
+}
+
+.accept-btn:hover, .reject-btn:hover {
+    opacity: 0.8;
+}
+
+
+/*-------------------------------
 
 
 /*---------------------------------------- Subir Histoiria (+) --------------------------------------------->*/
@@ -648,3 +715,4 @@ h1 {
   
 
 /*--------------------------------------------------------------------------------------------------------->*/
+
