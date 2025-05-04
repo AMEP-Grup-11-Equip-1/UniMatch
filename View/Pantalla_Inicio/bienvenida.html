@@ -63,28 +63,47 @@
   
 
     <!-- Popup de notificaciones -->
-    <div class="notification-popup" id="notificationPopup">
-        <span class="close-popup" onclick="toggleNotificationPopup()">&times;</span>
-        <h2>Notificaciones</h2>
-        <div class="notification-list">
-            <p>No tienes nuevas notificaciones.</p>
-            <!-- Puedes colocar más notificaciones aquí -->
+    <!-- Popup de notificaciones -->
+<div class="notification-popup" id="notificationPopup">
+    <span class="close-popup" onclick="toggleNotificationPopup()">&times;</span>
+    <h2>Notificaciones</h2>
+    <div class="notification-list" id="notificationList">
+        <!-- Ejemplo de notificación con botones -->
+        <div class="notification-item" data-id="1">
+            <p>Juan te ha enviado una solicitud de grupo.</p>
+            <div class="notification-actions">
+                <button onclick="aceptarNotificacion(1)">Aceptar</button>
+                <button onclick="rechazarNotificacion(1)">Rechazar</button>
+            </div>
         </div>
+        <!-- Puedes duplicar bloques como este para más notificaciones -->
     </div>
+</div>
+
 
     <!-- Popup para crear grupo -->
     <div class="profile-popup" id="popupCrearGrupo">
         <span class="close-popup" onclick="toggleCrearGrupo()">&times;</span>
         <h2>Crear Grupo</h2>
-        <form id="formCrearGrupo">
-          <input type="text" id="grup_nom" placeholder="Nombre del grupo" required />
-          <input type="text" id="grup_visibilitat" placeholder="Visibilidad (público/privado)" required />
-          <textarea id="grup_descripcio" placeholder="Descripción" required></textarea>
-          <button type="submit">Guardar</button>
+        <form id="formCrearGrupo" action="../../Controller/crear_grup.php" method="POST">
+            <!-- Nombre del grupo -->
+            <input type="text" id="grup_nom" name="nom" placeholder="Nombre del grupo" required />
+    
+            <!-- Visibilidad: debe ser public o privat -->
+            <select id="grup_visibilitat" name="visibilitat" required>
+                <option value="">-- Selecciona visibilidad --</option>
+                <option value="public">Público</option>
+                <option value="privat">Privado</option>
+            </select>
+    
+            <!-- Descripción -->
+            <textarea id="grup_descripcio" name="descripcio" placeholder="Descripción" required></textarea>
+    
+            <!-- Botón de envío -->
+            <button type="submit">Guardar</button>
         </form>
     </div>
-      
-  
+    
   
     <button onclick="window.location.href='../Pantalla_Grupos/ver_grupos.html'">Ver Grupos</button>
 
