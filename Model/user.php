@@ -7,7 +7,7 @@ class Usuario {
     }
 
     public function eliminar($id) {
-        $query = "DELETE FROM usuario WHERE id = ?";
+        $query = "DELETE FROM usuarios WHERE id = ?";
         $stmt = $this->conn->prepare($query);
         if (!$stmt) {
             return ["status" => "error", "message" => "Error en la preparación de la consulta"];
@@ -20,26 +20,31 @@ class Usuario {
             return ["status" => "error", "message" => "Error al ejecutar la consulta"];
         }
     }
-    public function actualizarPerfil($id, $nombre_usuario, $email, $password) {
-        if ($this->usuarioOCorreoExistente($nombre_usuario, $email, $id)) {
-            return ["status" => "error", "message" => "¡El usuario o correo ya están registrados!"];
-        }
 
-        $sql = "UPDATE usuario SET nom_usuari = ?, correu_electronic = ?, password = ? WHERE id = ?";
+    public function actualizarPerfilSinUniversidad($usuario_id, $nombre, $email, $descripcion, $urlImagen) {
+        $sql = "UPDATE usuario SET name = ?, mail = ?, descripcion = ?, imagen = ? WHERE id = ?";
+    
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("sssi", $nombre_usuario, $email, $password, $id);
-
+    
+        if ($stmt === false) {
+            error_log("Error al preparar la consulta: " . $this->conn->error);
+            return ['status' => 'error', 'message' => 'Error al preparar la consulta'];
+        }
+    
+        $stmt->bind_param("ssssi", $nombre, $email, $descripcion, $urlImagen, $usuario_id);
+    
         if ($stmt->execute()) {
-            return ["status" => "success"];
+            return ['status' => 'success', 'message' => 'Perfil actualizado correctamente'];
         } else {
-            return ["status" => "error", "message" => "Error al actualizar los datos del usuario."];
+            error_log("Error en la ejecución de la consulta: " . $stmt->error);
+            return ['status' => 'error', 'message' => 'Error al actualizar el perfil'];
         }
     }
 
-    private function usuarioOCorreoExistente($nombre_usuario, $email, $usuarioID) {
-        $sql = "SELECT * FROM usuario WHERE (nom_usuari = ? OR correu_electronic = ?) AND id != ?";
+    private function usuarioOCorreoExistente($name, $email, $usuarioID) {
+        $sql = "SELECT * FROM usuario WHERE (name = ? OR mail = ?) AND id != ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ssi", $nombre_usuario, $email, $usuarioID);
+        $stmt->bind_param("ssi", $name, $email, $usuarioID);
         $stmt->execute();
         $resultado = $stmt->get_result();
 
@@ -76,5 +81,40 @@ class Usuario {
             return ["status" => "error", "message" => "¡Usuario no encontrado!"];
         }
     }
+
+
+
+    public function obtenerUsuarioPorID($id) {
+        // Consulta SQL para obtener la información del usuario por su ID
+        $sql = "SELECT id, name, mail, descripcion, imagen FROM usuario WHERE id = ?";
+        
+        // Preparamos la consulta
+        $stmt = $this->conn->prepare($sql);
+
+        if (!$stmt) {
+            // Si ocurre un error al preparar la consulta, devolvemos un error
+            return ["status" => "error", "message" => "Error al preparar la consulta SQL"];
+        }
+
+        // Enlazamos el parámetro ID en la consulta
+        $stmt->bind_param("i", $id);
+        
+        // Ejecutamos la consulta
+        $stmt->execute();
+        
+        // Obtenemos el resultado de la consulta
+        $resultado = $stmt->get_result();
+
+        // Verificamos si el usuario fue encontrado
+        if ($resultado->num_rows > 0) {
+            // Si se encuentra un usuario, devolvemos los datos
+            $usuario = $resultado->fetch_assoc();
+            return ["status" => "success", "usuario" => $usuario];
+        } else {
+            // Si no se encuentra el usuario, devolvemos un error
+            return ["status" => "error", "message" => "Usuario no encontrado"];
+        }
+    }
 }
+
 ?>
