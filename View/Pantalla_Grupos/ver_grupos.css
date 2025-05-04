@@ -110,3 +110,31 @@ body {
     100% { opacity: 0; transform: translateY(20px); }
   }
   
+  .tabs-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #333;
+  }
+  
+  .tab {
+    background: none;
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    font-size: 16px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: border-color 0.3s, font-weight 0.3s;
+    margin: 0 10px;
+  }
+  
+  .tab:hover {
+    border-color: #555;
+  }
+  
+  .tab.active {
+    border-color: #28a745; /* Verde para la activa */
+    font-weight: bold;
+  }
+  
