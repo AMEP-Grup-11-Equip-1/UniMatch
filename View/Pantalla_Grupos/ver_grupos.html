@@ -8,11 +8,18 @@
 <body>
   <div class="container">
     <button class="back-button" onclick="window.history.back()">← Volver</button>
-    <h1>Grupos Disponibles</h1>
+  
+    <div class="tabs-container">
+      <button class="tab active" id="tab-disponibles">Grupos Disponibles</button>
+      <button class="tab" id="tab-misgrupos">Mis Grupos</button>
+    </div>
+  
     <div class="grupo-lista" id="listaGrupos"></div>
+    <div class="grupo-lista" id="misGrupos" style="display: none;"></div>
+  
     <div class="no-grupos" id="sinGrupos" style="display:none;">No hay grupos creados todavía.</div>
   </div>
-
+  
   <script>
     fetch("../../Controller/obtener_grupos.php", {
       method: "POST",
@@ -93,6 +100,8 @@
 
 </body>
 </html>
+
+
 
 
 
