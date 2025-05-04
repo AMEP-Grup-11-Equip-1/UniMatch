@@ -80,11 +80,11 @@
                         matchList.appendChild(div);
                     });
                 } else {
-                    console.warn(" Error obtinguent matches:", data.message || "Resposta no esperada");
+                    console.warn("⚠️ Error obtinguent matches:", data.message || "Resposta no esperada");
                 }
             })
-            .catch(err => console.error(" Error carregant matches:", err));
-        }
+            .catch(err => console.error("❌ Error carregant matches:", err));
+    }
 
 
         function carregarMissatges() {
