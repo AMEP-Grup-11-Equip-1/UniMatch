@@ -265,6 +265,19 @@ function rechazarNotificacion(id) {
 }
 
 
+// Función para abrir/cerrar el popup de Crear Grupo
+function toggleCrearGrupo() {
+    const popup = document.getElementById('popupCrearGrupo');
+    popup.classList.toggle('show');
+}
+
+// Asignar el evento al botón "Crear Grupo" al cargar la página
+document.addEventListener('DOMContentLoaded', () => {
+    const btnCrearGrupo = document.getElementById('openCreateGrup');
+    if (btnCrearGrupo) {
+        btnCrearGrupo.addEventListener('click', toggleCrearGrupo);
+    }
+});
 
 
 // Inicializar carrusel al cargar
