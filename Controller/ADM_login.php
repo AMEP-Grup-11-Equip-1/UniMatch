@@ -1,6 +1,15 @@
 <?php
 session_start();
-include 'DataBase.php';
+
+// Mostrar errores (solo en desarrollo)
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+// Incluye la clase de conexión a la base de datos
+include_once '../Model/DataBase.php';
+<link rel="icon" href="../Imagenes/img1.png" type="image/x-icon">
+
 
 class AutenticarADM {
     private $conn;

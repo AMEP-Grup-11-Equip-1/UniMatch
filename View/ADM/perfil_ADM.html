@@ -6,12 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unimatch - ADM</title>
     <link rel="stylesheet" href="ADM.css">
+    <link rel="icon" href="../Imagenes/img1.png" type="image/x-icon">
+
 </head>
 
 <body>
 
     <div class="info-box">
-        <h2>Perfil do Administrador</h2>
+        <h2>ADM profile</h2>
         <p><strong>ID:</strong> <span id="id"></span></p>
         <p><strong>Nome:</strong> <span id="name"></span></p>
         <p><strong>Email:</strong> <span id="mail"></span></p>
@@ -22,7 +24,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
-                    window.location.href = "login_ADM.html"; // Redireciona se não estiver logado
+                    window.location.href = "login_ADM.html"; // Redirect to login page if not logged in
                 } else {
                     document.getElementById("id").textContent = data.id;
                     document.getElementById("name").textContent = data.name;
@@ -35,3 +37,4 @@
 </body>
 
 </html>
+
