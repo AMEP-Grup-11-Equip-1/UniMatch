@@ -7,9 +7,11 @@
     <title>Unimatch - ADM</title>
     <link rel="stylesheet" href="ADM.css">
     <link rel="icon" href="../Imagenes/img1.png" type="image/x-icon">
-    
+
     <script src="menu_lateral.js"></script>
     <link rel="stylesheet" href="../Menu/menu.css">
+
+    <script src="gestio_verf.js"></script>
     <style>
 
     </style>
@@ -19,8 +21,6 @@
 
     <h1>UniMatch</h1>
     </body>
-
-
         <!-- Menú lateral -->
         <span class="menu-icon" onclick="openMenu()">&#9776;</span>
         <div id="sideMenu" class="side-menu">
@@ -30,7 +30,15 @@
         <a href="perfil_ADM.html">Perfil</a> <!-- Enlace al perfil del administrador -->
         <button class="logout-btn-side" onclick="window.location.href='../php/logout_ADM.php'">Cerrar sesión</button> <!-- Botón para cerrar sesión -->
     </div>
-    
 
-
+    <table class="table">
+        <tr>
+            <td>Nombre</td>
+            <td>Status</td>
+            <td>Denuncia</td>
+        </tr>
+       <tbody id="tabla-datos"> <!-- A tabela será preenchida aqui -->
+        <!-- Dados serão inseridos dinamicamente -->
+    </tbody>
+</table> 
 </html>
