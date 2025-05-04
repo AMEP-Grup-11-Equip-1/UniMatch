@@ -8,7 +8,7 @@
 <body>
   <div class="container">
     <button class="back-button" onclick="window.history.back()">← Volver</button>
-    <h1>Grupos creados</h1>
+    <h1>Grupos Disponibles</h1>
     <div class="grupo-lista" id="listaGrupos"></div>
     <div class="no-grupos" id="sinGrupos" style="display:none;">No hay grupos creados todavía.</div>
   </div>
@@ -30,16 +30,44 @@
       }
 
       data.forEach(grup => {
-          const div = document.createElement("div");
-          div.classList.add("grupo-item");
-          div.innerHTML = `
-              <h2>${grup.nom}</h2>
-              <p>${grup.descripcio}</p>
-              <p><strong>Visibilidad:</strong> ${grup.visibilitat}</p>
-              <p><strong>Propietario ID:</strong> ${grup.propietari_id}</p>`;  // Muestra el propietario_id
+    const div = document.createElement("div");
+    div.classList.add("grupo-item");
 
-          contenedor.appendChild(div);
-      });
+    const esPublico = grup.visibilitat.toLowerCase() === "public";
+    const textoBoton = esPublico ? "Unirse" : "Solicitar unirse";
+
+    div.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h2>${grup.nom}</h2>
+                <p>${grup.descripcio}</p>
+                <p><strong>Visibilidad:</strong> ${grup.visibilitat}</p>
+                <p><strong>Propietario ID:</strong> ${grup.propietari_id}</p>
+            </div>
+            <button class="join-button">${textoBoton}</button>
+        </div>
+    `;
+
+    const boton = div.querySelector(".join-button");
+    boton.addEventListener("click", () => {
+        if (boton.classList.contains("success")) return;
+
+        // Mensaje personalizado según visibilidad
+        const mensaje = esPublico
+            ? "¡Te has unido correctamente al grupo!"
+            : "¡Has enviado la solicitud correctamente!";
+
+        mostrarPopup(mensaje);
+
+        boton.textContent = esPublico ? "Ya te has unido" : "Solicitud enviada";
+        boton.classList.add("success");
+        boton.disabled = true;
+    });
+
+    contenedor.appendChild(div);
+});
+
+
   })
   .catch(error => {
       console.error("Hubo un error al cargar los grupos:", error);
@@ -47,8 +75,24 @@
       vacio.style.display = "block";  // Muestra el mensaje de no grupos si hay error
   });
 
+  function mostrarPopup(mensaje) {
+  const popup = document.getElementById("popupNotificacion");
+  popup.textContent = mensaje;
+  popup.style.display = "block";
+
+  setTimeout(() => {
+    popup.style.display = "none";
+  }, 3000); // 3 segundos
+}
 
   </script>
+
+<div id="popupNotificacion" style="display:none;" class="popup-notificacion">
+  Te has unido correctamente al grupo.
+</div>
+
 </body>
 </html>
+
+
 
