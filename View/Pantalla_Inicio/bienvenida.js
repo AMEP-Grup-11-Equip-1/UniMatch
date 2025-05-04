@@ -222,7 +222,6 @@ function cargarNotificaciones() {
         .catch(error => console.error("Error al cargar notificaciones:", error));
 }
 
-// Función para aceptar la notificación
 function aceptarNotificacion(id) {
     console.log(" Has fet clic a ACCEPTAR notificació amb ID:", id);
 
@@ -239,11 +238,9 @@ function aceptarNotificacion(id) {
             const data = JSON.parse(text);
             if (data.status === 'success') {
                 cargarNotificaciones();
-                if (window.location.href.includes("chat.php")) {
-                    fetch("../../Controller/obtener_matches.php")
-                        .then(r => r.json())
-                        .then(m => console.log(" Matches refrescats:", m));
-                }
+            
+                // Redirigeix al xat perquè es vegi el nou match
+                window.location.href = "../Pantalla_Chat/chat.php";
             } else {
                 alert('Error al aceptar la notificación: ' + data.message);
             }
