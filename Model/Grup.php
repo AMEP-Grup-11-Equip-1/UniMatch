@@ -103,5 +103,25 @@ class Grup {
         $stmt->execute();
         return $stmt->get_result()->num_rows > 0;
     }
+
+ // Obtener todos los grupos con el propietario_id
+    public function obtenirTotsElsGrups() {
+        $sql = "SELECT id, nom, descripcio, visibilitat, propietari_id FROM grups";  // Incluimos el campo propietari_id
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $grups = [];
+        
+        while ($row = $result->fetch_assoc()) {
+            $grups[] = $row;
+        }
+        
+        return $grups;
+    }
+
+    
+}
+?>
+
 }
 ?>
