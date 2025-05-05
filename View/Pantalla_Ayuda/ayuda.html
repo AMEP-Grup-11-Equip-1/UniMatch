@@ -3,20 +3,20 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ayuda - Unimatch</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../Imagenes/img1.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="ayuda.css">
     <link rel="stylesheet" href="../Menu/menu.css">
-
-
+    
+    <!-- Scripts -->
+    <script src="ayuda.js"></script>
 </head>
 
 <body>
-
-    <!---------------------------------------- Menu Desplegable-------------------------------------------->
-
+    <!-- Menu lateral -->
     <span class="menu-icon" onclick="openMenu()">&#9776;</span>
 
     <div id="sideMenu" class="side-menu">
@@ -27,80 +27,112 @@
         <a href="../Pantalla_Config/configuracion.html">Configuraciones</a>
         <a href="../Pantalla_Ayuda/ayuda.html">Ayuda</a>
         <button class="logout-btn-side" onclick="window.location.href='../Pantalla_de_Bloqueo/Pantalladebloqueo.html'">Cerrar sesión</button>
-        <button class="delete-account-btn" onclick="eliminarCuenta()" style="background-color: red; color: white; border: none; padding: 10px; width: 100%;">
-            Eliminar cuenta
-        </button>
+        <button class="delete-account-btn" onclick="eliminarCuenta()" style="background-color: red; color: white; border: none; padding: 10px; width: 100%;">Eliminar cuenta</button>
     </div>
 
-
-    <script>
-        function openMenu() {
-            document.getElementById('sideMenu').style.width = '250px';
-        }
-
-        function closeMenu() {
-            document.getElementById('sideMenu').style.width = '0';
-        }
-    </script>
-
-    <!------------------------------------------------------------------------------------------------------>
-
-
-
-    <!------------------------------------------- Isla Ayuda------------------------------------------------>
-
+    <!-- Contenido principal -->
     <div class="help-container">
-        <h2 class="help-title">Pide ayuda</h2>
+        <div class="faq-container">
+            <h2 class="help-title">Preguntas Frecuentes</h2>
 
-        <!-- Opción para escribir la duda o problema -->
-        <div class="help-option">
-            <label for="mensaje">Escribe tu duda o problema aquí:</label>
-            <textarea class="help-textarea" id="mensaje" placeholder="Escribe tu mensaje aquí..."></textarea>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">¿Cómo elimino mi cuenta?</button>
+                <div class="faq-answer">Ve al menú lateral, haz clic en "Eliminar cuenta" y confirma la acción.</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">¿Cómo borro una historia?</button>
+                <div class="faq-answer">Dirígete a tu perfil, selecciona la historia y pulsa "Eliminar".</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">¿Cómo contacto con soporte técnico?</button>
+                <div class="faq-answer">Usa el formulario inferior para escribirnos tu problema o duda.</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">¿Dónde envío sugerencias?</button>
+                <div class="faq-answer">Indica "sugerencia" en el mensaje y lo consideraremos en próximas versiones.</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">¿Cómo valoro la asistencia?</button>
+                <div class="faq-answer">Tras recibir respuesta, te aparecerá un campo de valoración por email.</div>
+            </div>
+
+            <!-- Pregunta personalizada -->
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">¿Hacer una pregunta?</button>
+                <div class="faq-answer">
+                    <label for="mensaje">Escribe tu duda o problema aquí:</label>
+                    <textarea class="help-textarea" id="mensaje" placeholder="Escribe tu mensaje aquí..."></textarea>
+                    <button class="help-button" onclick="enviarMensaje()">Enviar</button>
+                    <p id="confirmacion" style="display:none; margin-top:10px; color:green; font-weight:600;"></p>
+                </div>
+            </div>
         </div>
 
-        <!-- Botón para enviar el mensaje -->
-        <button class="help-button" onclick="enviarMensaje()">Enviar</button>
+        <p style="margin-top: 10px;">¿Cómo valorarías esta ayuda?</p>
+        <div class="rating" id="rating">
+            <span class="star" data-value="1">&#9733;</span>
+            <span class="star" data-value="2">&#9733;</span>
+            <span class="star" data-value="3">&#9733;</span>
+            <span class="star" data-value="4">&#9733;</span>
+            <span class="star" data-value="5">&#9733;</span>
+        </div>
 
-        <!-- Enlace para volver al menú anterior -->
         <a href="../Pantalla_Inicio/bienvenida.html" class="back-link">Volver al menú</a>
     </div>
 
-    <script>
-        // Función para manejar el envío del mensaje
-        function enviarMensaje() {
-            var mensaje = document.getElementById('mensaje').value;
+    <!-- Botón flotante de sugerencias -->
+    <button class="sugerencia-btn" onclick="toggleSugerenciaPopup()">
+        <span class="material-icons sugerencia-icon">markunread</span>
+        Sugerencias
+    </button>
 
-            if (mensaje.trim() === "") {
-                alert("Por favor, escribe un mensaje antes de enviarlo.");
-            } else {
-                alert("Tu mensaje ha sido enviado. Te responderemos lo antes posible.");
-                document.getElementById('mensaje').value = ""; // Limpiar el área de texto
-            }
-        }
-    </script>
+    <!-- Popup de sugerencia -->
+    <div class="sugerencia-popup" id="sugerenciaPopup">
+        <div class="popup-content">
+            <span class="close-popup" onclick="toggleSugerenciaPopup()">&times;</span>
+            <h3>Enviar sugerencia</h3>
+            <textarea id="sugerenciaTexto" placeholder="Escribe tu sugerencia aquí..."></textarea>
+            <button onclick="enviarSugerencia()">Enviar</button>
+            <p id="sugerenciaConfirmacion" style="display:none; color:green; margin-top:10px;"></p>
+        </div>
+    </div>
+<!-- Botón flotante de guía -->
+<button class="guia-btn" onclick="toggleGuiaPopup()">
+    <span class="material-icons guia-icon">map</span>
+    Guía
+</button>
 
-<script>
-    function eliminarCuenta() {
-        if (confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.")) {
-            fetch("../../Controller/usercontroller.php", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" }
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message);
-                if (data.status === "success") {
-                    window.location.href = "../Pantalla_de_Bloqueo/Pantalladebloqueo.html";
-                }
-            })
-            .catch(error => console.error("Error en la solicitud:", error));
-        }
-    }
-</script>
-
-
-
-    <!------------------------------------------------------------------------------------------------------>
+<!-- Popup de Guía -->
+<div class="guia-popup" id="guiaPopup">
+    <div class="popup-content">
+        <span class="close-popup" onclick="toggleGuiaPopup()">&times;</span>
+        <h3>Guía de uso de Unimatch</h3>
+        <ul>
+            <li>
+                <strong>Subir historias:</strong> Accede a tu perfil y selecciona la opción "Subir historia" para compartir tus experiencias con otros usuarios.
+            </li>
+            <li>
+                <strong>Modificar tu nombre:</strong> Entra en el apartado de configuración para actualizar tu información personal, incluyendo el nombre visible para los demás.
+            </li>
+            <li>
+                <strong>Correo electrónico:</strong> Por razones de seguridad, la dirección de correo electrónico no puede ser modificada una vez registrada.
+            </li>
+            <li>
+                <strong>Acceder a los chats:</strong> Dirígete a la sección "Chats" desde el menú principal para iniciar conversaciones con otros usuarios.
+            </li>
+            <li>
+                <strong>Dar me gusta a una historia:</strong> Pulsa el ícono de corazón en la historia que desees valorar positivamente.
+            </li>
+            <li>
+                <strong>Cerrar sesión:</strong> Usa el botón "Cerrar sesión" disponible en el menú lateral para salir de tu cuenta de forma segura.
+            </li>
+        </ul>
+    </div>
+</div>
 
 </body>
 
