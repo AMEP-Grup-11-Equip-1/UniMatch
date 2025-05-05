@@ -222,6 +222,7 @@ function cargarNotificaciones() {
         .catch(error => console.error("Error al cargar notificaciones:", error));
 }
 
+// Función para aceptar la notificación
 function aceptarNotificacion(id) {
     console.log(" Has fet clic a ACCEPTAR notificació amb ID:", id);
 
@@ -279,6 +280,7 @@ function rechazarNotificacion(id) {
     })
     .catch(error => console.error(' Error al rechazar la notificación (catch):', error));
 }
+
 
 
 
