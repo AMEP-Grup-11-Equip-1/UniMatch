@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido a Unimatch</title>
+    <link rel="icon" href="../Imagenes/img1.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="bienvenida.css">
+    <link rel="stylesheet" href="../Menu/menu.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script src="bienvenida.js" defer></script>
+    <!-- Vinculamos el archivo de JS -->
+</head>
+
+<body>
+    <h1>UniMatch</h1>
+
+    <div class="carousel-container">
+        <button class="arrow left-arrow" onclick="rotateCarousel(-1)">&lt;</button>
+
+        <div class="carousel"></div>
+        <button class="arrow right-arrow" onclick="rotateCarousel(1)">&gt;</button>
+    </div>
+
+    <!-- Botones superiores -->
+    <!-- Contenedor de botones alineados -->
+    <div class="top-buttons">
+        <button class="circle-icon" onclick="toggleNotificationPopup()">🔔</button>
+        <button class="circle-icon" onclick="toggleProfilePopup()">+</button>
+        <button class="circle-icon" id="openCreateGrup">👥</button>
+    </div>
+  
+    
+
+    <div class="profile-popup" id="profilePopup">
+        <span class="close-popup" onclick="toggleProfilePopup()">&times;</span>
+        <h2>Crear Historia</h2>
+        <form id="historiaForm" action="../../Controller/guardar_historia.php" method="POST" enctype="multipart/form-data">
+            <input type="file" name="imagen" accept="image/*" required>
+            <input type="text" name="nombre" placeholder="Nombre" required>
+            <input type="text" name="universidad" placeholder="Universidad" required>
+            <textarea name="descripcion" placeholder="Descripción" required></textarea>
+            <button type="submit">Guardar</button>
+        </form>
+    </div>
+
+    <span class="menu-icon" onclick="openMenu()">&#9776;</span>
+
+    <div id="sideMenu" class="side-menu">
+        <span class="close-btn" onclick="closeMenu()">&times;</span>
+        <a href="../Pantalla_Inicio/bienvenida.html">Inicio</a>
+        <a href="../Pantalla_Perfil/perfil.php">Perfil</a>
+        <a href="../Pantalla_Chat/chat.html">Chats</a>
+        <a href="../Pantalla_Config/configuracion.html">Configuraciones</a>
+        <a href="../Pantalla_Ayuda/ayuda.html">Ayuda</a>
+        <button class="logout-btn-side" onclick="window.location.href='../Pantalla_de_Bloqueo/Pantalladebloqueo.html'">Cerrar sesión</button>
+        <button class="delete-account-btn" onclick="eliminarCuenta()" style="background-color: red; color: white; border: none; padding: 10px; width: 100%;">Eliminar cuenta</button>
+    </div>
+
+  
+
+    <!-- Popup de notificaciones -->
+    <!-- Popup de notificaciones -->
+<div class="notification-popup" id="notificationPopup">
+    <span class="close-popup" onclick="toggleNotificationPopup()">&times;</span>
+    <h2>Notificaciones</h2>
+    <div class="notification-list" id="notificationList">
+        <!-- Ejemplo de notificación con botones -->
+        <div class="notification-item" data-id="1">
+            <p>Juan te ha enviado una solicitud de grupo.</p>
+            <div class="notification-actions">
+                <button onclick="aceptarNotificacion(1)">Aceptar</button>
+                <button onclick="rechazarNotificacion(1)">Rechazar</button>
+            </div>
+        </div>
+        <!-- Puedes duplicar bloques como este para más notificaciones -->
+    </div>
+</div>
+
+
+    <!-- Popup para crear grupo -->
+    <div class="profile-popup" id="popupCrearGrupo">
+        <span class="close-popup" onclick="toggleCrearGrupo()">&times;</span>
+        <h2>Crear Grupo</h2>
+        <form id="formCrearGrupo" action="../../Controller/crear_grup.php" method="POST">
+            <!-- Nombre del grupo -->
+            <input type="text" id="grup_nom" name="nom" placeholder="Nombre del grupo" required />
+    
+            <!-- Visibilidad: debe ser public o privat -->
+            <select id="grup_visibilitat" name="visibilitat" required>
+                <option value="">-- Selecciona visibilidad --</option>
+                <option value="public">Público</option>
+                <option value="privat">Privado</option>
+            </select>
+    
+            <!-- Descripción -->
+            <textarea id="grup_descripcio" name="descripcio" placeholder="Descripción" required></textarea>
+    
+            <!-- Botón de envío -->
+            <button type="submit">Guardar</button>
+        </form>
+    </div>
+    
+  
+    <button onclick="window.location.href='../Pantalla_Grupos/ver_grupos.html'">Ver Grupos</button>
+
+
+</body>
+</html>
+
