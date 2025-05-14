@@ -7,10 +7,10 @@ $conexion = new ConexionBD();
 $conn = $conexion->getConexion();
 
 
-$sql = "SELECT u.name, v.pending, v.report_id
+$sql = "SELECT u.id, u.name, v.ok
         FROM verifications v
         JOIN usuario u ON v.user = u.id
-        WHERE v.pending = TRUE";
+        WHERE v.ok IS NULL";
 
 $resultado = mysqli_query($conn, $sql);
 
@@ -20,11 +20,8 @@ if (!$resultado) {
 }
 
 while ($linha = mysqli_fetch_assoc($resultado)) {
-    echo "<tr>";
-    // AQUI HAY QUE AÑADIR UN ENELACE AL PERFIL DEL USUARIO EN MODO ADMIN
-    echo "<td>" . htmlspecialchars($linha['name'] ?? '') . "</td>";
-    echo "<td>" . htmlspecialchars($linha['pending'] ?? '') . "</td>";
-    echo "<td>" . htmlspecialchars($linha['report_id'] ?? 'N/D') . "</td>";
+echo "<tr>";
+    echo "<td><a href='user.html?id=" . urlencode($linha['id']) . "' style='display:block; width:100%; height:100%; text-decoration:none; color:inherit;'>" . htmlspecialchars($linha['name'] ?? '') . "</a></td>";
     echo "</tr>";
 }
 ?>

@@ -183,3 +183,179 @@ body::after {
     margin-top: 10px;
     font-weight: bold;
 }
+
+/* Estilos da tabela - Versão melhorada */
+:root {
+  --table-primary: #2a2a2a;
+  --table-header-bg: #ff4f7b;
+  --table-header-text: #ffffff;
+  --table-row-hover: #3a3a3a;
+  --table-border: #444;
+  --table-zebra: #333;
+  --table-text: #ffffff;
+  --table-text-secondary: #cccccc;
+}
+
+/* Estilo da legenda/título */
+.table caption {
+  font-size: 1.2em;
+  font-weight: bold;
+  padding: 12px;
+  text-align: center;
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
+  border-radius: 5px 5px 0 0; /* Arredonda apenas os cantos superiores */
+}
+
+/* Container da tabela para melhor controle */
+.table-container {
+  width: 90%;
+  max-width: 1000px;
+  margin: 30px auto;
+  overflow-x: auto;
+  background-color: var(--table-primary);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(255, 79, 123, 0.2);
+}
+
+/* Estilos gerais da tabela */
+.table {
+  width: 75%;
+  border-collapse: collapse;
+  font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  color: var(--table-text);
+  background-color: var(--table-primary);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Cabeçalho da tabela */
+.table thead th {
+  background-color: var(--table-header-bg);
+  color: var(--table-header-text);
+  font-weight: 600;
+  font-size: 1.05em;
+  padding: 16px 20px;
+  text-align: left;
+  letter-spacing: 0.5px;
+  position: sticky;
+  top: 0;
+}
+
+/* Corpo da tabela */
+.table tbody tr {
+  transition: all 0.2s ease;
+  border-bottom: 1px solid var(--table-border);
+}
+
+/* Células da tabela */
+.table td {
+  padding: 14px 20px;
+  vertical-align: middle;
+}
+
+/* Efeito zebrado */
+.table tbody tr:nth-child(even) {
+  background-color: var(--table-zebra);
+}
+
+/* Efeito hover */
+.table tbody tr:hover {
+  background-color: var(--table-row-hover);
+}
+
+/* Estilo para texto secundário */
+.table .secondary-text {
+  color: var(--table-text-secondary);
+  font-size: 0.9em;
+}
+
+/* Borda arredondada para a primeira e última célula */
+.table thead th:first-child {
+  border-top-left-radius: 12px;
+}
+
+.table thead th:last-child {
+  border-top-right-radius: 12px;
+}
+
+.table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 12px;
+}
+
+.table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 12px;
+}
+
+/* Botões na tabela */
+.table .btn-table {
+  padding: 8px 16px;
+  background-color: var(--table-header-bg);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.85em;
+}
+
+.table .btn-table:hover {
+  background-color: #e429fd;
+  transform: translateY(-2px);
+}
+
+/* Estilo responsivo */
+@media (max-width: 768px) {
+  .table-container {
+    width: 95%;
+    margin: 20px auto;
+  }
+  
+  .table thead th {
+    padding: 12px 15px;
+    font-size: 0.95em;
+  }
+  
+  .table td {
+    padding: 10px 15px;
+    font-size: 0.92em;
+  }
+}
+
+@media (max-width: 480px) {
+  .table thead {
+    display: none;
+  }
+  
+  .table, .table tbody, .table tr, .table td {
+    display: block;
+    width: 100%;
+  }
+  
+  .table tr {
+    margin-bottom: 15px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .table td {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+    border-bottom: 1px solid var(--table-border);
+  }
+  
+  .table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 20px;
+    width: calc(50% - 20px);
+    padding-right: 10px;
+    font-weight: bold;
+    text-align: left;
+  }
+  
+  .table td:last-child {
+    border-bottom: none;
+  }
+}
