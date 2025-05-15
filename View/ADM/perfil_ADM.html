@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unimatch - ADM</title>
     <link rel="stylesheet" href="ADM.css">
-    <link rel="icon" href="../Imagenes/img1.png" type="image/x-icon">
+    <link rel="icon" href="../../Imagenes/img1.png" type="image/x-icon">
 
-    <script src="perfil.js"></script>
 
     <script src="menu_lateral.js"></script>
+    <script src="gestion_session.js"></script>
     <link rel="stylesheet" href="../Menu/menu.css">
 
 </head>
@@ -19,7 +19,6 @@
 
     <div class="info-box">
         <h2>ADM profile</h2>
-        <p><strong>ID:</strong> <span id="id"></span></p>
         <p><strong>Nome:</strong> <span id="name"></span></p>
         <p><strong>Email:</strong> <span id="mail"></span></p>
     </div>
@@ -29,13 +28,10 @@
     <div id="sideMenu" class="side-menu">
 
     <span class="close-btn" onclick="closeMenu()">&times;</span>
-    <a href="home.html">Home</a> <!-- Enlace a la página de inicio -->
     <a href="perfil_ADM.html">Perfil</a> <!-- Enlace al perfil del administrador -->
-    <button class="logout-btn-side" onclick="window.location.href='../php/logout_ADM.php'">Cerrar sesión</button> <!-- Botón para cerrar sesión -->
+    <a href="home.html">Home</a> <!-- Enlace a la página de inicio -->
+    <button class="logout-btn-side" onclick="window.location.href='../../Controller/logout.php'">Cerrar sesión</button> <!-- Botón para cerrar sesión -->
 </div>
-
-
-
 
 </body>
 
