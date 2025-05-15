@@ -1,43 +1,45 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unimatch - ADM</title>
-    <link rel="stylesheet" href="ADM.css">
-    <link rel="icon" href="../../Imagenes/img1.png" type="image/x-icon">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UniMatch - ADM</title>
+    <link rel="stylesheet" href="ADM.css?v=2.0" />
+    <link rel="stylesheet" href="../Menu/menu.css" />
+    <link rel="icon" href="../Imagenes/img1.png" type="image/x-icon" />
 
-    <script src="menu_lateral.js"></script>
-    <link rel="stylesheet" href="../Menu/menu.css">
-
-    <script src="gestion_session.js"></script>
-
-    <script src="gestio_verf.js"></script>
-    <style>
-
-    </style>
+    <script src="menu_lateral.js" defer></script>
+    <script src="gestio_verf.js" defer></script>
 </head>
-
 <body>
 
-    <h1>UniMatch</h1>
-    </body>
-        <!-- Menú lateral -->
-        <span class="menu-icon" onclick="openMenu()">&#9776;</span>
-        <div id="sideMenu" class="side-menu">
-    
+    <!-- Icono para abrir menú lateral -->
+    <span class="menu-icon" onclick="openMenu()">&#9776;</span>
+
+    <!-- Menú lateral -->
+    <div id="sideMenu" class="side-menu">
         <span class="close-btn" onclick="closeMenu()">&times;</span>
-        <a href="perfil_ADM.html">Perfil</a> <!-- Enlace al perfil del administrador -->
-        <a href="home.html">Home</a> <!-- Enlace a la página de inicio -->
-        <button class="logout-btn-side" onclick="window.location.href='../../Controller/logout.php'">Cerrar sesión</button> <!-- Botón para cerrar sesión -->
+        <a href="home.html">Home</a>
+        <a href="perfil_ADM.html">Perfil</a>
+        <button class="logout-btn-side" onclick="window.location.href='../../Controller/logout.php'">
+            Cerrar sesión
+        </button>
     </div>
 
-    <table class="table">
-        <caption>Nuevos Usuarios</caption>
-        </tr>
-       <tbody id="tabla-datos"> <!-- A tabela será preenchida aqui -->
-        <!-- Dados serão inseridos dinamicamente -->
-    </tbody>
-</table> 
+    <!-- Contenedor tabla -->
+    <main class="table-container">
+        <h1 class="section-title">USUARIOS NUEVOS</h1>
+
+        <table class="table">
+            <thead>
+                <tr>
+                </tr>
+            </thead>
+            <tbody id="tabla-datos">
+                <!-- Se cargan dinámicamente -->
+            </tbody>
+        </table>
+    </main>
+
+</body>
 </html>
