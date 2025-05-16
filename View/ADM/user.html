@@ -1,73 +1,57 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Perfil Usuario - UniMatch</title>
     <link rel="stylesheet" href="ADM.css?v=1.1" />
     <link rel="stylesheet" href="../Menu/menu.css" />
     <link rel="icon" href="../Imagenes/img1.png" type="image/x-icon" />
-    <script src="menu_lateral.js" defer></script>
-</head>
-<body>
 
+    <script src="gestion_session.js"></script>
+    <script src="user.js" defer></script>
+    <script src="menu_lateral.js" defer></script>
+  </head>
+  <body>
     <!-- Icono men� lateral -->
     <span class="menu-icon" onclick="openMenu()">&#9776;</span>
 
     <!-- Men� lateral -->
     <div id="sideMenu" class="side-menu">
-        <span class="close-btn" onclick="closeMenu()">&times;</span>
-        <a href="home.html">Home</a>
-        <a href="perfil_ADM.html">Perfil</a>
-        <button class="logout-btn-side" onclick="window.location.href='../../Controller/logout.php'">
-            Cerrar sesi�n
-        </button>
+      <span class="close-btn" onclick="closeMenu()">&times;</span>
+      <a href="home.html">Home</a>
+      <a href="perfil_ADM.html">Perfil</a>
+      <button
+        class="logout-btn-side"
+        onclick="window.location.href='../../Controller/logout.php'"
+      >
+        Cerrar sesión
+      </button>
     </div>
 
     <!-- Isla flotante centrada -->
-    <main class="perfil-box" style="max-width: 450px; margin: auto; top: 50%; left: 50%; position: fixed; transform: translate(-50%, -50%);">
-        <h1>UniMatch</h1>
-        <h1>Perfil del Usuario</h1>
+    <main
+      class="perfil-box"
+      style="
+        max-width: 450px;
+        margin: auto;
+        top: 50%;
+        left: 50%;
+        position: fixed;
+        transform: translate(-50%, -50%);
+      "
+    >
+      <h1>UniMatch</h1>
+      <h1>Perfil del Usuario</h1>
 
-        <p><strong>Nom:</strong> <span id="user-name">Cargando...</span></p>
-        <p><strong>Email:</strong> <span id="user-email">Cargando...</span></p>
+      <p><strong>Nom:</strong> <span id="user-name">Cargando...</span></p>
+      <p><strong>Email:</strong> <span id="user-email">Cargando...</span></p>
+      <p><strong>Status:</strong> <span id="user-status">Cargando...</span></p>
 
-        <div class="user-actions">
-            <button id="approve-button">Aprobar</button>
-            <button id="reject-button">Rechazar</button>
-        </div>
+      <div class="user-actions">
+        <button onclick="enviarEstado(1)">Aprobar</button>
+        <button onclick="enviarEstado(0)">Rechazar</button>
+      </div>
     </main>
-
-    <script>
-        function getQueryParam(param) {
-            const params = new URLSearchParams(window.location.search);
-            return params.get(param);
-        }
-
-        const userId = getQueryParam('id');
-
-        if (!userId) {
-            alert('No se especific� el usuario.');
-            document.getElementById('user-name').textContent = 'Error';
-            document.getElementById('user-email').textContent = '';
-        } else {
-            fetch(`../../Controller/usuari_per_id.php?id=${userId}`)
-                .then(res => {
-                    if (!res.ok) throw new Error('Usuario no encontrado');
-                    return res.json();
-                })
-                .then(data => {
-                    document.getElementById('user-name').textContent = data.nombre || 'Sin nombre';
-                    document.getElementById('user-email').textContent = data.email || 'Sin email';
-                })
-                .catch(err => {
-                    console.error(err);
-                    alert(err.message);
-                    document.getElementById('user-name').textContent = 'Error al cargar usuario';
-                    document.getElementById('user-email').textContent = '';
-                });
-        }
-    </script>
-
-</body>
+  </body>
 </html>
