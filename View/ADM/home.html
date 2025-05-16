@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>UniMatch - ADM</title>
@@ -11,37 +11,48 @@
     <script src="menu_lateral.js" defer></script>
     <script src="gestio_verf.js" defer></script>
     <script src="gestion_session.js"></script>
-</head>
-<body>
-
+  </head>
+  <body>
     <!-- Icono para abrir menú lateral -->
     <span class="menu-icon" onclick="openMenu()">&#9776;</span>
 
     <!-- Menú lateral -->
     <div id="sideMenu" class="side-menu">
-        <span class="close-btn" onclick="closeMenu()">&times;</span>
-        <a href="perfil_ADM.html">Perfil</a>
-        <a href="home.html">Home</a>
-        
-        <button class="logout-btn-side" onclick="window.location.href='../../Controller/logout.php'">
-            Cerrar sesión
-        </button>
+      <span class="close-btn" onclick="closeMenu()">&times;</span>
+      <a href="perfil_ADM.html">Perfil</a>
+      <a href="home.html">Home</a>
+
+      <button
+        class="logout-btn-side"
+        onclick="window.location.href='../../Controller/logout.php'"
+      >
+        Cerrar sesión
+      </button>
     </div>
 
     <!-- Contenedor tabla -->
     <main class="table-container">
-        <h1 class="section-title">USUARIOS NUEVOS</h1>
-
-        <table class="table">
-            <thead>
-                <tr>
-                </tr>
-            </thead>
-            <tbody id="tabla-datos">
-                <!-- Se cargan dinámicamente -->
-            </tbody>
-        </table>
+      <h1 class="section-title">NUEVOS USUARIOS</h1>
+      <table class="table">
+        <thead>
+          <tr></tr>
+        </thead>
+        <tbody id="tabla-datos">
+          <!-- Se cargan dinámicamente -->
+        </tbody>
+      </table>
     </main>
 
-</body>
+    <main class="table-container">
+      <h1 class="section-title">USUARIOS DENUNCIADOS</h1>
+      <table class="table">
+        <thead>
+          <tr></tr>
+        </thead>
+        <tbody id="tabla-denun">
+          <!-- Se cargan dinámicamente -->
+        </tbody>
+      </table>
+    </main>
+  </body>
 </html>

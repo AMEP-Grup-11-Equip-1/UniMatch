@@ -7,10 +7,10 @@ $conexion = new ConexionBD();
 $conn = $conexion->getConexion();
 
 
-$sql = "SELECT v.id, u.name, v.ok
+$sql = "SELECT u.id, u.name, v.report_id
         FROM verifications v
         JOIN usuario u ON v.user = u.id
-        WHERE v.ok IS NULL";
+        WHERE v.report_id IS NOT NULL";
 
 $resultado = mysqli_query($conn, $sql);
 
