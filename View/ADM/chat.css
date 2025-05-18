@@ -73,26 +73,31 @@ body::after {
 .chat-item {
     display: flex;
     align-items: center;
-    padding: 10px;
-    margin-bottom: 8px;
-    background: #f3f3f3;
+    gap: 12px;
+    padding: 12px 18px;
+    margin-bottom: 10px;
+    background: #fff;
     border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     cursor: pointer;
-    transition: 0.3s;
-  }
-  
-  .chat-item:hover {
+    transition: background 0.2s, box-shadow 0.2s;
+    border: 1px solid #eee;
+}
+
+.chat-item:hover {
     background: #ffe6f0;
-  }
-  
-  .chat-item img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 12px;
-  }
-  
-/*------------------------------------- CHAT- -------------------------------------->*/
+    box-shadow: 0 4px 16px rgba(255,79,123,0.08);
+}
+
+.chat-item .protocolo {
+    font-weight: bold;
+    color: #ff4f7b;
+    margin-right: 8px;
+}
+
+.chat-item .usuario {
+    color: #333;
+}
 
 .chat-container {
     display: flex;
@@ -160,9 +165,9 @@ body::after {
     /* Espacio para el scroll */
 }
 
-.message {
+.message-user, .message-admin {
     padding: 10px;
-    background-color: #f0f0f0;
+    background-color: black;
     border-radius: 10px;
     width: fit-content;
     max-width: 80%;
@@ -172,13 +177,20 @@ body::after {
     align-items: center;
 }
 
-.message.user {
+.message-user {
     background-color: #000000;
     color: white;
     margin-left: 0;
 }
 
-.message img {
+.message-admin {
+    background-color: #f1f1f1;
+    color: black;
+    margin-right: 0;
+    text-align: right;
+}
+
+.message-user img {
     border-radius: 50%;
     width: 30px;
     height: 30px;

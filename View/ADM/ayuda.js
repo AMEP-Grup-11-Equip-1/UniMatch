@@ -40,8 +40,33 @@ function carregarDados() {
 
 // Función para cargar el chat (a implementar)
 function loadChat(protocolo) {
-  console.log("Cargando chat para protocolo:", protocolo);
-  // Aquí implementarías la carga de los mensajes del chat
+//  console.log("Cargando chat para protocolo:", protocolo);
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", "../../Controller/ayuda.php?protocolo=" + protocolo, true);
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      const response = JSON.parse(xhr.responseText);
+      const messagesContainer = document.getElementById("messagesContainer");
+      messagesContainer.innerHTML = ""; // Limpiar mensajes anteriores
+      response.messages.forEach(msg => {
+        const messageDiv = document.createElement("div");
+       // messageDiv.classList.add("message");
+
+        // Adiciona classe diferente para admin e usuário
+        if (msg.isAdmin) {
+          messageDiv.classList.add("message-admin");
+        } else {
+          messageDiv.classList.add("message-user");
+        }
+// Só mostra a imagem se não for admin
+        const imageHtml = msg.isAdmin ? '' : `<img src="${msg.userImage}" alt="User Image">`;
+        messageDiv.innerHTML = `${imageHtml}<div class="message-content">${msg.text}</div>`;
+        
+        messagesContainer.appendChild(messageDiv);
+      });
+    }
+  };
+  xhr.send();
 }
 
 window.onload = carregarDados;
