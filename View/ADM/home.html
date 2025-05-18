@@ -4,25 +4,28 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>UniMatch - ADM</title>
+    <!-- Enlaces a hojas de estilo -->
     <link rel="stylesheet" href="ADM.css?v=2.0" />
     <link rel="stylesheet" href="../Menu/menu.css" />
-    <link rel="icon" href="../Imagenes/img1.png" type="image/x-icon" />
+    <link rel="icon" href="../../Imagenes/img1.png" type="image/x-icon">
 
+    <!-- Scripts para funcionalidades de menú y carga de datos -->
     <script src="menu_lateral.js" defer></script>
     <script src="gestio_verf.js" defer></script>
     <script src="gestion_session.js"></script>
   </head>
   <body>
-    <!-- Icono para abrir menú lateral -->
+    <!-- Icono para abrir el menú lateral -->
     <span class="menu-icon" onclick="openMenu()">&#9776;</span>
 
-    <!-- Menú lateral -->
+    <!-- Menú lateral de navegación -->
     <div id="sideMenu" class="side-menu">
       <span class="close-btn" onclick="closeMenu()">&times;</span>
       <a href="perfil_ADM.html">Perfil</a>
       <a href="home.html">Home</a>
-          <a href="denuncias.html">Denuncias</a>
-
+      <a href="denuncias.html">Denuncias</a>
+      <a href="ayuda.html">Ayuda</a>
+      <!-- Botón para cerrar sesión -->
       <button
         class="logout-btn-side"
         onclick="window.location.href='../../Controller/logout.php'"
@@ -31,27 +34,28 @@
       </button>
     </div>
 
-    <!-- Contenedor tabla -->
+    <!-- Contenedor de la tabla de nuevos usuarios -->
     <main class="table-container">
       <h1 class="section-title">NUEVOS USUARIOS</h1>
       <table class="table">
         <thead>
-          <tr></tr>
+          <tr></tr> <!-- Encabezado vacío, se puede completar dinámicamente -->
         </thead>
         <tbody id="tabla-datos">
-          <!-- Se cargan dinámicamente -->
+          <!-- Los datos de usuarios se cargan dinámicamente aquí -->
         </tbody>
       </table>
     </main>
 
+    <!-- Contenedor de la tabla de denuncias abiertas -->
     <main class="table-container">
       <h1 class="section-title">DENUNCIAS ABIERTAS</h1>
       <table class="table">
         <thead>
-          <tr></tr>
+          <tr></tr> <!-- Encabezado vacío, se puede completar dinámicamente -->
         </thead>
         <tbody id="tabla-denun">
-          <!-- Se cargan dinámicamente -->
+          <!-- Las denuncias se cargan dinámicamente aquí -->
         </tbody>
       </table>
     </main>

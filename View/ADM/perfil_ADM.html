@@ -1,3 +1,7 @@
+<!--
+FALTA CSS
+--->
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -23,16 +27,23 @@
         <p><strong>Email:</strong> <span id="mail"></span></p>
     </div>
 
-    <!-- Menú lateral -->
+        <!-- Icono para abrir menú lateral -->
     <span class="menu-icon" onclick="openMenu()">&#9776;</span>
-    <div id="sideMenu" class="side-menu">
 
-    <span class="close-btn" onclick="closeMenu()">&times;</span>
-    <a href="perfil_ADM.html">Perfil</a> <!-- Enlace al perfil del administrador -->
-    <a href="home.html">Home</a> <!-- Enlace a la página de inicio -->
-        <a href="denuncias.html">Denuncias</a>
-    <button class="logout-btn-side" onclick="window.location.href='../../Controller/logout.php'">Cerrar sesión</button> <!-- Botón para cerrar sesión -->
-</div>
+    <!-- Menú lateral -->
+    <div id="sideMenu" class="side-menu">
+      <span class="close-btn" onclick="closeMenu()">&times;</span>
+      <a href="perfil_ADM.html">Perfil</a>
+      <a href="home.html">Home</a>
+      <a href="denuncias.html">Denuncias</a>
+      <a href="ayuda.html">Ayuda</a>
+      <button
+        class="logout-btn-side"
+        onclick="window.location.href='../../Controller/logout.php'"
+      >
+        Cerrar sesión
+      </button>
+    </div>
 
 </body>
 
