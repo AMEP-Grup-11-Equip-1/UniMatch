@@ -15,12 +15,15 @@ Hay que crear un chat para contestar.
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>UniMatch - ADM</title>
-    <link rel="stylesheet" href="ADM.css?v=2.0" />
+    <link rel="stylesheet" href="ADM.css" />
     <link rel="stylesheet" href="../Menu/menu.css" />
-    <link rel="icon" href="../../Imagenes/img1.png" type="image/x-icon">
+    <link rel="stylesheet" href="chat.css" />
 
+    <link rel="icon" href="../../Imagenes/img1.png" type="image/x-icon">
+    
     <script src="menu_lateral.js" defer></script>
     <script src="gestion_session.js"></script>
+    <script src="ayuda.js" defer></script>
   </head>
   <body>
     <!-- Icono para abrir menú lateral -->
@@ -40,4 +43,41 @@ Hay que crear un chat para contestar.
         Cerrar sesión
       </button>
     </div>
+
+        <!-- Contenedor de la tabla de consultas-->
+    <main class="table-container">
+      <h1 class="section-title">CONSULTAS NUEVAS</h1>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Protocolo</th>
+            <th>Usuario</th>
+            <th>Mensaje</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-new">
+          <!-- Los datos de usuarios se cargan dinámicamente aquí -->
+        </tbody>
+      </table>
+    </main>
+
+     <div class="chat-container">
+        <div class="chat-list">
+            <div class="section-title">Consultas Abiertas</div>
+            <!-- Aquí podrías cargar dinámicamente los contactos -->
+        </div>
+
+        <div class="chat-box">
+            <h2>Conversación</h2>
+            <div class="messages" id="messagesContainer"></div>
+            <div class="message-input">
+                <input type="text" id="message" placeholder="Escribe un mensaje...">
+                <button onclick="sendMessage()">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+
+    
   </body>
