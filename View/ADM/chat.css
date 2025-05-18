@@ -154,6 +154,12 @@ body::after {
     justify-content: space-between;
 }
 
+.sender-name {
+    font-weight: bold;
+    color: #ff4f7b;
+    margin-right: 8px;
+}
+
 .messages {
     flex: 1;
     overflow-y: auto;

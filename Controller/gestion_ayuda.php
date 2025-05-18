@@ -80,7 +80,9 @@ if (!$resultado_abiertos) {
     echo "<div class='error'>Error al cargar consultas abiertas</div>";
 } else {
     while ($linha = mysqli_fetch_assoc($resultado_abiertos)) {
-        echo "<div class='chat-item' onclick='loadChat(" . htmlspecialchars($linha['numero_protocolo']) . ")'>";
+        echo "<div class='chat-item' onclick='loadChat(" 
+            . htmlspecialchars($linha['numero_protocolo']) . ", \"" 
+            . htmlspecialchars(addslashes($linha['nombre_usuario'])) . "\")'>";
         echo "<span class='protocolo'>" . htmlspecialchars($linha['numero_protocolo']) . "</span>";
         echo "<span class='usuario'>" . htmlspecialchars($linha['nombre_usuario']) . "</span>";
         echo "</div>";

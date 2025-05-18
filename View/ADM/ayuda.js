@@ -38,9 +38,11 @@ function carregarDados() {
   xhr.send();
 }
 
-// Función para cargar el chat (a implementar)
-function loadChat(protocolo) {
-//  console.log("Cargando chat para protocolo:", protocolo);
+// Función para cargar el chat
+function loadChat(protocolo, usuario) {
+  // Atualiza o título do chat com nome e protocolo
+  document.getElementById("chatUserInfo").textContent = `(${usuario} - Protocolo #${protocolo})`;
+
   const xhr = new XMLHttpRequest();
   xhr.open("GET", "../../Controller/ayuda.php?protocolo=" + protocolo, true);
   xhr.onload = function() {
@@ -48,25 +50,38 @@ function loadChat(protocolo) {
       const response = JSON.parse(xhr.responseText);
       const messagesContainer = document.getElementById("messagesContainer");
       messagesContainer.innerHTML = ""; // Limpiar mensajes anteriores
+      
       response.messages.forEach(msg => {
         const messageDiv = document.createElement("div");
-       // messageDiv.classList.add("message");
-
-        // Adiciona classe diferente para admin e usuário
+        
         if (msg.isAdmin) {
+          // Use msg.usuario which will be "TU" if it's the current admin
+          messageDiv.innerHTML = `<div class="sender-name">${msg.usuario}</div><div class="message-content">${msg.text}</div>`;
           messageDiv.classList.add("message-admin");
+          
+          // Add additional class if it's the current user's message
+          if (msg.isCurrentUser) {
+            messageDiv.classList.add("message-current-user");
+          }
         } else {
+          const imageHtml = msg.userImage ? `<img src="${msg.userImage}" alt="User Image">` : '';
+          messageDiv.innerHTML = `${imageHtml}<div class="message-content">${msg.text}</div>`;
           messageDiv.classList.add("message-user");
         }
-// Só mostra a imagem se não for admin
-        const imageHtml = msg.isAdmin ? '' : `<img src="${msg.userImage}" alt="User Image">`;
-        messageDiv.innerHTML = `${imageHtml}<div class="message-content">${msg.text}</div>`;
         
         messagesContainer.appendChild(messageDiv);
       });
+      
+      // Scroll to bottom of chat
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
   };
   xhr.send();
 }
+
+function sendMessage() {
+ console.log("POR IMPLEMENTAR");
+}
+
 
 window.onload = carregarDados;
