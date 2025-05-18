@@ -39,7 +39,6 @@ body {
   .grupo-lista {
     display: flex;
     flex-direction: column;
-    gap: 20px;
   }
   
   .grupo-item {
@@ -50,6 +49,14 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   }
   
+  .grupo-lista .grupo-item {
+    margin-bottom: 20px;
+  }
+
+  .grupo-lista .grupo-item:last-child {
+    margin-bottom: 0;
+  }
+
   .grupo-item h2 {
     margin: 0 0 10px 0;
     font-size: 20px;
@@ -137,4 +144,6 @@ body {
     border-color: #28a745; /* Verde para la activa */
     font-weight: bold;
   }
+  
+
   
