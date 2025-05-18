@@ -12,10 +12,12 @@
         <div class="tabs-container">
             <button class="tab active" id="tab-disponibles">Grupos Disponibles</button>
             <button class="tab" id="tab-misgrupos">Mis Grupos</button>
+            <button class="tab" id="tab-unidos">Grupos Unidos</button>
         </div>
 
         <div class="grupo-lista" id="listaGrupos"></div>
         <div class="grupo-lista" id="misGrupos" style="display: none;"></div>
+        <div class="grupo-lista" id="gruposUnidos" style="display: none;"></div>
         <div class="no-grupos" id="sinGrupos" style="display:none;">No hay grupos creados todavía.</div>
     </div>
 
@@ -31,6 +33,7 @@
                 if (data.usuarioID) {
                     usuarioID = parseInt(data.usuarioID);
                     cargarGrupos(); // Si hay sesión, cargar grupos
+                    cargarGruposUnidos();
                 } else {
                     document.getElementById("sinGrupos").textContent = "Debes iniciar sesión para ver los grupos.";
                     document.getElementById("sinGrupos").style.display = "block";
@@ -66,20 +69,42 @@
                         div.classList.add("grupo-item");
 
                         const esPublico = grup.visibilitat.toLowerCase() === "public";
-                        const textoBoton = esPublico ? "Unirse" : "Solicitar unirse";
+                        let textoBoton;
+                        let botonClaseExtra = "";
+                        if (esPropio) {
+                            textoBoton = "Gestionar grupo";
+                            botonClaseExtra = "success"; // esto aplica el estilo verde
+                        } else {
+                            textoBoton = esPublico ? "Unirse" : "Solicitar unirse";
+                        }
+
 
                         div.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <div>
-                    <h2>${grup.nom}</h2>
-                    <p>${grup.descripcio}</p>
-                    <p><strong>Visibilidad:</strong> ${grup.visibilitat}</p>
-                  </div>
-                  <button class="join-button">${textoBoton}</button>
-                </div>
-              `;
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h2>${grup.nom}</h2>
+                                <p>${grup.descripcio}</p>
+                                <p><strong>Visibilidad:</strong> ${grup.visibilitat}</p>
+                            </div>
+                            <button class="join-button ${botonClaseExtra}">${textoBoton}</button>
+                            </div>
+                        `;
+
 
                         const boton = div.querySelector(".join-button");
+                        
+                        if (esPropio) {
+                            propios.appendChild(div);
+                        } else {
+                            disponibles.appendChild(div);
+                        }
+
+                        if (esPropio) {
+                            boton.classList.add("success");
+                            boton.disabled = false;
+                            return; // aún no hacemos nada al clickear en "Gestionar grupo"
+                        }
+
                         boton.addEventListener("click", () => {
                             if (boton.classList.contains("success")) return;
                             const mensaje = esPublico ? "¡Te has unido correctamente al grupo!" : "¡Has enviado la solicitud correctamente!";
@@ -88,12 +113,6 @@
                             boton.classList.add("success");
                             boton.disabled = true;
                         });
-
-                        if (esPropio) {
-                            propios.appendChild(div);
-                        } else {
-                            disponibles.appendChild(div);
-                        }
 
                         tieneGrupos = true;
                     });
@@ -106,6 +125,41 @@
                 });
         }
 
+
+        function cargarGruposUnidos() {
+    fetch("../../Controller/obtener_grupos_unidos.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" }
+    })
+    .then(res => res.json())
+    .then(data => {
+        const lista = document.getElementById("gruposUnidos");
+
+        if (!Array.isArray(data) || data.length === 0) return;
+
+        data.forEach(grup => {
+            const div = document.createElement("div");
+            div.classList.add("grupo-item");
+
+            div.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h2>${grup.nom}</h2>
+                        <p>${grup.descripcio}</p>
+                        <p><strong>Visibilidad:</strong> ${grup.visibilitat}</p>
+                    </div>
+                    <button class="join-button success" disabled>Miembro</button>
+                </div>
+            `;
+
+            lista.appendChild(div);
+        });
+    })
+    .catch(err => {
+        console.error("Error al cargar grupos unidos:", err);
+    });
+}
+
         // 3. Cambiar pestañas
         document.getElementById("tab-disponibles").addEventListener("click", () => {
             activarPestanya("listaGrupos", "tab-disponibles");
@@ -113,6 +167,10 @@
 
         document.getElementById("tab-misgrupos").addEventListener("click", () => {
             activarPestanya("misGrupos", "tab-misgrupos");
+        });
+
+        document.getElementById("tab-unidos").addEventListener("click", () => {
+            activarPestanya("gruposUnidos", "tab-unidos");
         });
 
         function activarPestanya(listaID, tabID) {
