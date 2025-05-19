@@ -31,6 +31,25 @@ $sql_nuevos = "SELECT
 $resultado_nuevos = mysqli_query($conn, $sql_nuevos);
 
 // Consulta para protocolos abiertos (protocolos con más de un mensaje)
+/*
+    Esta consulta selecciona los protocolos que tienen más de un mensaje en la tabla mensajes_adm.
+
+    1. Se hace un JOIN entre mensajes_adm (ma) y ayuda (a) usando ma.protocolo = a.id
+       Esto es posible porque la columna "protocolo" en mensajes_adm es una clave foránea que referencia 
+       la columna "id" de la tabla ayuda. Así, cada mensaje administrativo está asociado a una solicitud de ayuda.
+
+    2. Luego, se hace otro JOIN con la tabla usuario (u) usando a.usuario_id = u.id
+       Esto permite obtener el nombre del usuario que creó la solicitud.
+
+    3. El filtro WHERE asegura que solo se incluyan los protocolos que tienen más de un mensaje
+       (usando una subconsulta con GROUP BY y HAVING COUNT(*) > 1).
+
+    4. SELECT DISTINCT evita resultados duplicados, mostrando un protocolo y su respectivo usuario una sola vez.
+
+    5. Finalmente, los resultados se ordenan por número de protocolo.
+
+    Resultado: una lista de protocolos que tienen múltiples mensajes, junto con el nombre del usuario que los creó.
+*/
 $sql_abiertos = "SELECT 
                     DISTINCT ma.protocolo AS numero_protocolo,
                     u.name AS nombre_usuario
@@ -60,7 +79,9 @@ if (!$resultado_nuevos) {
     echo "<tr><td colspan='4'>Error en la consulta de nuevos mensajes</td></tr>";
 } else {
     while ($linha = mysqli_fetch_assoc($resultado_nuevos)) {
-        echo "<tr>";
+        echo "<tr onclick='loadChat(" 
+            . htmlspecialchars($linha['numero_protocolo']) . ", \"" 
+            . htmlspecialchars(addslashes($linha['nombre_usuario'])) . "\")' style='cursor:pointer'>";
         echo "<td>" . htmlspecialchars($linha['numero_protocolo']) . "</td>";
         echo "<td>" . htmlspecialchars($linha['nombre_usuario']) . "</td>";
         echo "<td>" . htmlspecialchars($linha['mensaje']) . "</td>";
