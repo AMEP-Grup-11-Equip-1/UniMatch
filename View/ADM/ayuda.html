@@ -1,32 +1,26 @@
-<!--
-NADA HECHO
-FALTA CSS
-MIRAR TABLA ayuda
-    usuario_id
-    mensaje
-
-Hay que crear un chat para contestar.
-    O encontrar una forma de contestar por mail
--->
-
 <!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>UniMatch - ADM</title>
-    <link rel="stylesheet" href="ADM.css?v=2.0" />
+    <!-- Estilos principales del panel de administrador -->
+    <link rel="stylesheet" href="ADM.css" />
     <link rel="stylesheet" href="../Menu/menu.css" />
-    <link rel="icon" href="../../Imagenes/img1.png" type="image/x-icon">
+    <link rel="stylesheet" href="chat.css" />
 
+    <link rel="icon" href="../../Imagenes/img1.png" type="image/x-icon">
+    
+    <!-- Scripts para funcionalidades del menú y sesión -->
     <script src="menu_lateral.js" defer></script>
     <script src="gestion_session.js"></script>
+    <script src="gestion_ayuda.js" defer></script>
   </head>
   <body>
     <!-- Icono para abrir menú lateral -->
     <span class="menu-icon" onclick="openMenu()">&#9776;</span>
 
-    <!-- Menú lateral -->
+    <!-- Menú lateral de navegación -->
     <div id="sideMenu" class="side-menu">
       <span class="close-btn" onclick="closeMenu()">&times;</span>
       <a href="perfil_ADM.html">Perfil</a>
@@ -40,4 +34,49 @@ Hay que crear un chat para contestar.
         Cerrar sesión
       </button>
     </div>
+
+    <!-- Contenedor de la tabla de consultas nuevas -->
+    <main class="table-container">
+      <h1 class="section-title">CONSULTAS NUEVAS</h1>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Protocolo</th>
+            <th>Usuario</th>
+            <th>Mensaje</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-new">
+          <!-- Los datos de usuarios se cargan dinámicamente aquí -->
+        </tbody>
+      </table>
+    </main>
+
+    <!-- Contenedor principal del chat -->
+    <div class="chat-container">
+      <!-- Lista de chats/consultas abiertas -->
+      <div class="chat-list">
+        <div class="section-title">Consultas Abiertas</div>
+        <!-- Las consultas abiertas se insertan aquí dinámicamente -->
+      </div>
+
+      <!-- Caja del chat seleccionada -->
+      <div class="chat-box">
+        <h2>
+          Chat
+          <span id="chatUserInfo"></span>
+        </h2>
+        <!-- Protocolo actual del chat, oculto -->
+        <div hidden id="ProtocoloId"></div>
+        <!-- Contenedor de mensajes del chat -->
+        <div class="messages" id="messagesContainer"></div>
+        <!-- Input para enviar mensajes -->
+        <div class="message-input">
+          <input type="text" id="message" placeholder="Escribe un mensaje...">
+          <button onclick="sendMessage()">Enviar</button>
+        </div>
+      </div>
+    </div>
   </body>
+</html>

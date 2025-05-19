@@ -1,5 +1,3 @@
-console.log("Script carregado!");
-
 // Función para cargar los datos de verificación y denuncias
 function carregarDados() {
   // 1. Cargar datos de verificación
@@ -11,12 +9,12 @@ function carregarDados() {
       document.getElementById("tabla-datos").innerHTML = xhr1.responseText;
     } else {
       // Si hay error en la solicitud, mostrar mensaje en consola
-      console.error("Erro na solicitação 1:", xhr1.status, xhr1.statusText);
+      console.error("Error en la solicitud 1:", xhr1.status, xhr1.statusText);
     }
   };
   // Si ocurre un error de conexión, mostrar mensaje en consola
   xhr1.onerror = function() {
-    console.error("Falha na conexão (solicitação 1)");
+    console.error("Fallo en la conexión (solicitud 1)");
   };
 
   // 2. Cargar datos de denuncias
@@ -28,12 +26,12 @@ function carregarDados() {
       document.getElementById("tabla-denun").innerHTML = xhr2.responseText;
     } else {
       // Si hay error en la solicitud, mostrar mensaje en consola
-      console.error("Erro na solicitação 2:", xhr2.status, xhr2.statusText);
+      console.error("Error en la solicitud 2:", xhr2.status, xhr2.statusText);
     }
   };
   // Si ocurre un error de conexión, mostrar mensaje en consola
   xhr2.onerror = function() {
-    console.error("Falha na conexão (solicitação 2)");
+    console.error("Fallo en la conexión (solicitud 2)");
   };
 
   // Enviar ambas solicitudes
