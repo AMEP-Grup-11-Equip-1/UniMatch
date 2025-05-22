@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unimatch - Registro Exitoso</title>
     <link rel="stylesheet" href="registro_exitos.css">
+    <link rel="icon" href="../../Imagenes/img1.png" type="image/x-icon">
+
 </head>
 
 <body>
@@ -16,8 +18,26 @@
     </div>
     <div class="buttons">
         <a href="../Pantalla_de_Bloqueo/Pantalladebloqueo.html" class="btn">Volver al inicio</a>
-        <a href="../Pantalla_Inicio/bienvenida.html" class="btn">Ver perfil</a>
+        <a href="../Pantalla_Inicio/bienvenida.html" class="btn" id="perfil">Ver perfil</a>
     </div>
 </body>
+
+<script>
+// si error es 1 en URL, mostrar mensaje de error
+const urlParams = new URLSearchParams(window.location.search);
+const error = urlParams.get('error');
+if (error === '1') {
+    const messageBox = document.getElementById('message-box');
+    document.getElementById('perfil').classList.add('disabled'); // exemplo para link
+}
+</script>
+
+<style>
+    a.disabled {
+        pointer-events: none;
+        opacity: 0.5;
+    }
+
+</style>
 
 </html>

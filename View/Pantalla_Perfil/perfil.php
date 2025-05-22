@@ -14,7 +14,7 @@ if (!isset($_SESSION['usuarioID'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil - Unimatch</title>
-    <link rel="icon" href="../Imagenes/img1.png" type="image/x-icon">
+    <link rel="icon" href="../../Imagenes/img1.png" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../Menu/menu.css">
     <link rel="stylesheet" href="perfil.css">
@@ -33,8 +33,12 @@ if (!isset($_SESSION['usuarioID'])) {
         <a href="../Pantalla_Chat/chat.html">Chats</a>
         <a href="../Pantalla_Config/configuracion.html">Configuraciones</a>
         <a href="../Pantalla_Ayuda/ayuda.html">Ayuda</a>
-        <button class="logout-btn-side" onclick="window.location.href='../Pantalla_de_Bloqueo/Pantalladebloqueo.html'">Cerrar sesión</button>
-        <button class="delete-account-btn" onclick="eliminarCuenta()" style="background-color: red; color: white; border: none; padding: 10px; width: 100%;">Eliminar cuenta</button>
+<button
+        class="logout-btn-side"
+        onclick="window.location.href='../../Controller/logout.php'"
+      >
+        Cerrar sesión
+      </button>        <button class="delete-account-btn" onclick="eliminarCuenta()" style="background-color: red; color: white; border: none; padding: 10px; width: 100%;">Eliminar cuenta</button>
     </div>
 
     <!-- Contenido principal del perfil -->
