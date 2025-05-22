@@ -1,40 +1,62 @@
 <?php
 session_start();
 header('Content-Type: application/json');
-include_once '../Model/DataBase.php';
-
-$response = ['success' => false, 'matches' => []];
+require_once("../Model/DataBase.php");
 
 if (!isset($_SESSION['usuarioID'])) {
-    $response['message'] = 'No loguejat';
-    echo json_encode($response);
-    exit();
+    echo json_encode([
+        "success" => false,
+        "message" => "Usuario no autenticado"
+    ]);
+    exit;
 }
 
-$usuario_id = $_SESSION['usuarioID'];
+$idUsuario = $_SESSION['usuarioID'];
 
-try {
-    $bd = new ConexionBD();
-    $conn = $bd->getConexion();
+// Crear instancia y obtener conexión MySQLi
+$db = new ConexionBD();
+$conn = $db->getConexion();
 
-    $sql = "SELECT u.id, u.name AS nombre
-            FROM matches m
-            JOIN usuario u ON u.id = IF(m.usuario1_id = ?, m.usuario2_id, m.usuario1_id)
-            WHERE (m.usuario1_id = ? OR m.usuario2_id = ?) AND m.aceptado = 1";
-
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("iii", $usuario_id, $usuario_id, $usuario_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    while ($row = $result->fetch_assoc()) {
-        $response['matches'][] = $row;
-    }
-
-    $response['success'] = true;
-    echo json_encode($response);
-
-} catch (Exception $e) {
-    $response['message'] = 'Error: ' . $e->getMessage();
-    echo json_encode($response);
+if ($conn->connect_error) {
+    echo json_encode([
+        "success" => false,
+        "message" => "Error de conexión: " . $conn->connect_error
+    ]);
+    exit;
 }
+
+$sql = "
+    SELECT u.id, u.name, u.imagen
+    FROM matches m
+    JOIN usuario u ON (
+        (m.usuario1_id = ? AND m.usuario2_id = u.id) OR 
+        (m.usuario2_id = ? AND m.usuario1_id = u.id)
+    )
+    WHERE m.aceptado = 1
+";
+
+$stmt = $conn->prepare($sql);
+if (!$stmt) {
+    echo json_encode([
+        "success" => false,
+        "message" => "Error al preparar la consulta: " . $conn->error
+    ]);
+    exit;
+}
+
+$stmt->bind_param("ii", $idUsuario, $idUsuario);
+$stmt->execute();
+
+$result = $stmt->get_result();
+
+$matches = [];
+while ($row = $result->fetch_assoc()) {
+    $matches[] = $row;
+}
+
+$stmt->close();
+
+echo json_encode([
+    "success" => true,
+    "matches" => $matches
+]);
