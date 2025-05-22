@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conexion = $bd->getConexion();
 
     $usuarioModel = new Usuario($conexion);
-    $email = trim($_POST['username']);
+    $email = trim($_POST['email_full']);
     $password = trim($_POST['password']);
 
     $resultado = $usuarioModel->autenticar($email, $password);

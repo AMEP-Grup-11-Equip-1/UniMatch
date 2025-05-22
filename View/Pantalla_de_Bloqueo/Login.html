@@ -1,43 +1,65 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Unimatch - En Desarrollo</title>
-    <link rel="icon" href="../Imagenes/img1.png" type="image/x-icon">
-    <link rel="stylesheet" href="Pantalladebloqueo.css">
+    <link rel="icon" href="../../Imagenes/img1.png" type="image/x-icon" />
+    <link rel="stylesheet" href="Pantalladebloqueo.css" />
+    <script src="cargarUnis.js"></script>
     <style>
-        .form-box {
-            display: block;
-        }
+      .form-box {
+        display: block;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!------------------------------------ Inicio de Sesión --------------------------------------->
     <div class="form-box" id="login-form">
-        <a href="Pantalladebloqueo.html" class="back-btn">←</a>
-        <h2>Iniciar Sesión</h2>
-        <form action="../../Controller/login.php" method="POST">
-            <label id="lbl_error" style="color: red; padding: 5px;"></label>
-            <input type="text" id="username" name="username" placeholder="Correo universitario" required>
-            <input type="password" id="password" name="password" placeholder="Contraseña" required>
-            <button type="submit">Acceder</button>
-        </form>
+      <a href="Pantalladebloqueo.html" class="back-btn">←</a>
+      <h2>Iniciar Sesión</h2>
+      <form action="../../Controller/login.php" method="POST">
+        <label id="lbl_error" style="color: red; padding: 5px"></label>
+        <label id="lbl_mail"></label>
+
+        <!-- Container para email + select -->
+        <div class="input-row">
+          <input
+            type="text"
+            id="txt_email"
+            name="txt_email"
+            placeholder="Correo universitário"
+            required
+          />
+          <input type="hidden" id="hidden_email" name="email_full" />
+          <select id="SelectUni" name="uni_id"></select>
+        </div>
+
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Contraseña"
+          required
+        />
+        <button type="submit">Acceder</button>
+      </form>
     </div>
 
     <!---------------------------------------- Scripts ------------------------------------------->
     <script>
-        function getErrorFromURL() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const error = urlParams.get('error');
-            if (error) {
-                document.getElementById('lbl_error').textContent = decodeURIComponent(error);
-            }
+      function getErrorFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get("error");
+        if (error) {
+          document.getElementById("lbl_error").textContent =
+            decodeURIComponent(error);
         }
+      }
 
-        window.onload = function() {
-            getErrorFromURL();
-        };
+      window.onload = function () {
+        getErrorFromURL();
+      };
     </script>
-</body>
+  </body>
 </html>
