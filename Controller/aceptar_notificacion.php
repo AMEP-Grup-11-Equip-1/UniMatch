@@ -8,7 +8,7 @@ include_once '../Model/DataBase.php';
 // Log útil
 error_log("🧪 POST ID: " . ($_POST['id'] ?? 'NO ID'));
 error_log("🧪 SESSION ID: " . ($_SESSION['usuarioID'] ?? 'NO SESSION'));
-file_put_contents("debug.log", "POST: " . print_r($_POST, true) . "\nSESSION: " . print_r($_SESSION, true), FILE_APPEND);
+//file_put_contents("debug.log", "POST: " . print_r($_POST, true) . "\nSESSION: " . print_r($_SESSION, true), FILE_APPEND);
 
 // Comprovació de dades
 if (!isset($_SESSION['usuarioID']) || !isset($_POST['id'])) {
