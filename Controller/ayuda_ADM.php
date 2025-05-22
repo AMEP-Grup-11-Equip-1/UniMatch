@@ -1,4 +1,5 @@
 <?php
+// Inicia la sesión para acceder a los datos del admin logueado
 session_start();
 require_once("../Model/DataBase.php");
 
@@ -6,7 +7,7 @@ require_once("../Model/DataBase.php");
 
 // Si la petición es GET y viene con un protocolo, devuelve los mensajes del chat
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['protocolo'])) {
-    $protocolo = intval($_GET['protocolo']);
+    $protocolo = intval($_GET['protocolo']); // Obtiene el protocolo recibido por GET
     $db = new ConexionBD();
     $conn = $db->getConexion();
 
@@ -19,30 +20,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['protocolo'])) {
             WHERE ma.protocolo = ?
             ORDER BY ma.fecha ASC";
     
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $protocolo);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    $stmt = $conn->prepare($sql); // Prepara la consulta SQL
+    $stmt->bind_param("i", $protocolo); // Asocia el parámetro del protocolo
+    $stmt->execute(); // Ejecuta la consulta
+    $result = $stmt->get_result(); // Obtiene el resultado
 
     $messages = [];
     // Recorre todos los mensajes y arma el array de respuesta
     while ($row = $result->fetch_assoc()) {
-        $isAdmin = !is_null($row['id_adm']);
-        
-        // Verifica si el mensaje es del admin logueado actualmente
+        $isAdmin = !is_null($row['id_adm']); // Verifica si el mensaje es de un admin
+        // Verifica si el mensaje es del admin actualmente logueado
         $isCurrentAdmin = $isAdmin && isset($_SESSION['admin']['id']) && intval($row['id_adm']) == intval($_SESSION['admin']['id']);
-        
         // Determina el nombre del remitente
         $senderName = $isAdmin ? 
                      ($isCurrentAdmin ? "TU" : $row['admin_name']) : 
                      $row['usuario'];
-        
+
+        // Formatea la fecha para mostrar solo hora y minutos (HH:mm)
+        $fechaFormatada = date('H:i', strtotime($row['fecha']));
+
+        // Agrega el mensaje al array de respuesta
         $messages[] = [
             "text" => htmlspecialchars($row['mensaje']),
-            // Si es admin no muestra imagen, si es usuario genera avatar
             "userImage" => $isAdmin ? "" : "https://ui-avatars.com/api/?name=" . urlencode($row['usuario']),
             "usuario" => $senderName,
-            "fecha" => $row['fecha'],
+            "fecha" => $fechaFormatada, // Solo muestra HH:mm
             "isAdmin" => $isAdmin,
             "isCurrentUser" => $isCurrentAdmin,  // Bandera para el frontend
             "original_sender" => $isAdmin ? "admin_".$row['id_adm'] : "user_".$row['usuario_id']
@@ -58,14 +60,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['protocolo'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verifica que lleguen los datos necesarios y que el admin esté logueado
     if (isset($_POST['protocolo'], $_POST['mensaje']) && isset($_SESSION['admin']['id'])) {
-        $protocolo = intval($_POST['protocolo']);
-        $mensaje = trim($_POST['mensaje']);
-        $id_adm = intval($_SESSION['admin']['id']);
+        $protocolo = intval($_POST['protocolo']); // Obtiene el protocolo
+        $mensaje = trim($_POST['mensaje']); // Obtiene el mensaje
+        $id_adm = intval($_SESSION['admin']['id']); // Obtiene el ID del admin
 
         $db = new ConexionBD();
         $conn = $db->getConexion();
 
-        // Inserta el mensaje en la base de datos
+        // Inserta el mensaje en la base de datos con la fecha actual
         $sql = "INSERT INTO mensajes_adm (protocolo, id_adm, mensaje, fecha) VALUES (?, ?, ?, NOW())";
         $stmt = $conn->prepare($sql);
         if ($stmt) {

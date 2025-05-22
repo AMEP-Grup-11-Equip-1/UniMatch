@@ -203,6 +203,12 @@ body::after {
     text-align: right;
 }
 
+.message-time {
+    font-size: 12px;
+    color: #999;
+    margin-top: 5px;
+}
+
 .message-user img {
     border-radius: 50%;
     width: 30px;

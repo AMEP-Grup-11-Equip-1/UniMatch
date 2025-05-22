@@ -100,6 +100,7 @@ async function fetchMessages() {
       return `<div class="${classes}">
                 <div class="sender-name">${msg.usuario}</div>
                 <div class="message-content">${msg.text}</div>
+                <div class="message-time">${msg.fecha}</div>
               </div>`;
     } else {
       // Mensaje del usuario, puede incluir imagen
@@ -107,6 +108,7 @@ async function fetchMessages() {
       return `<div class="message-user">
                 ${imageHtml}
                 <div class="message-content">${msg.text}</div>
+                <div class="message-time">${msg.fecha}</div>
               </div>`;
     }
   }).join("");
