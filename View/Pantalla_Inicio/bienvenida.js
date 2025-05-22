@@ -13,6 +13,7 @@ fetch('../../Controller/get_session.php')
             console.log("Sessió carregada: ID usuari =", currentUserId);
         } else {
             console.warn("Usuari no loguejat:", data.error);
+            window.location.href = "../Pantalla_de_Bloqueo/Pantalladebloqueo.html";
         }
     });
 

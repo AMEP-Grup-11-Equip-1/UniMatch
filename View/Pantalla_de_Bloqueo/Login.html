@@ -48,6 +48,14 @@
 
     <!---------------------------------------- Scripts ------------------------------------------->
     <script>
+      fetch("../../Controller/get_session.php")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.usuarioID) {
+            window.location.href = "../Pantalla_Inicio/bienvenida.html";
+          } // else tienes que iniciar sesión
+        });
+
       function getErrorFromURL() {
         const urlParams = new URLSearchParams(window.location.search);
         const error = urlParams.get("error");

@@ -41,6 +41,8 @@
             })
             .catch(err => {
                 console.error("Error al obtener la sesión:", err);
+                window.location.href = "../Pantalla_de_Bloqueo/Pantalladebloqueo.html";
+
             });
 
         // 2. Obtener grupos y dividir en dos listas

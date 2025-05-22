@@ -8,6 +8,7 @@ fetch('../../Controller/get_session.php')
       usuario_id = data.usuarioID;
     } else {
       console.warn("Sesión no encontrada.");
+      window.location.href = "../Pantalla_de_Bloqueo/Pantalladebloqueo.html";
     }
   });
 
