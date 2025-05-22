@@ -32,8 +32,8 @@
         <button class="circle-icon" onclick="toggleProfilePopup()">+</button>
         <button class="circle-icon" id="openCreateGrup">👥</button>
     </div>
-  
-    
+
+
 
     <div class="profile-popup" id="profilePopup">
         <span class="close-popup" onclick="toggleProfilePopup()">&times;</span>
@@ -57,28 +57,28 @@
         <a href="../Pantalla_Config/configuracion.html">Configuraciones</a>
         <a href="../Pantalla_Ayuda/ayuda.html">Ayuda</a>
         <button class="logout-btn-side" onclick="window.location.href='../Pantalla_de_Bloqueo/Pantalladebloqueo.html'">Cerrar sesión</button>
-        <button class="delete-account-btn" onclick="eliminarCuenta()" style="background-color: red; color: white; border: none; padding: 10px; width: 100%;">Eliminar cuenta</button>
+        <button class="delete-account-btn" onclick="eliminarCuenta()" style="background-color: red; margin-bottom: 0px; color: white; border: none; padding: 10px; width: 100%;">Eliminar cuenta</button>
     </div>
 
-  
+
 
     <!-- Popup de notificaciones -->
     <!-- Popup de notificaciones -->
-<div class="notification-popup" id="notificationPopup">
-    <span class="close-popup" onclick="toggleNotificationPopup()">&times;</span>
-    <h2>Notificaciones</h2>
-    <div class="notification-list" id="notificationList">
-        <!-- Ejemplo de notificación con botones -->
-        <div class="notification-item" data-id="1">
-            <p>Juan te ha enviado una solicitud de grupo.</p>
-            <div class="notification-actions">
-                <button onclick="aceptarNotificacion(1)">Aceptar</button>
-                <button onclick="rechazarNotificacion(1)">Rechazar</button>
+    <div class="notification-popup" id="notificationPopup">
+        <span class="close-popup" onclick="toggleNotificationPopup()">&times;</span>
+        <h2>Notificaciones</h2>
+        <div class="notification-list" id="notificationList">
+            <!-- Ejemplo de notificación con botones -->
+            <div class="notification-item" data-id="1">
+                <p>Juan te ha enviado una solicitud de grupo.</p>
+                <div class="notification-actions">
+                    <button onclick="aceptarNotificacion(1)">Aceptar</button>
+                    <button onclick="rechazarNotificacion(1)">Rechazar</button>
+                </div>
             </div>
+            <!-- Puedes duplicar bloques como este para más notificaciones -->
         </div>
-        <!-- Puedes duplicar bloques como este para más notificaciones -->
     </div>
-</div>
 
 
     <!-- Popup para crear grupo -->
@@ -88,26 +88,29 @@
         <form id="formCrearGrupo" action="../../Controller/crear_grup.php" method="POST">
             <!-- Nombre del grupo -->
             <input type="text" id="grup_nom" name="nom" placeholder="Nombre del grupo" required />
-    
+
             <!-- Visibilidad: debe ser public o privat -->
             <select id="grup_visibilitat" name="visibilitat" required>
                 <option value="">-- Selecciona visibilidad --</option>
                 <option value="public">Público</option>
                 <option value="privat">Privado</option>
             </select>
-    
+
             <!-- Descripción -->
             <textarea id="grup_descripcio" name="descripcio" placeholder="Descripción" required></textarea>
-    
+
             <!-- Botón de envío -->
             <button type="submit">Guardar</button>
         </form>
     </div>
-    
-  
-    <button onclick="window.location.href='../Pantalla_Grupos/ver_grupos.html'">Ver Grupos</button>
+
+
+    <button class="grupo-button" onclick="window.location.href='../Pantalla_Grupos/ver_grupos.html'">
+        Grupos
+    </button>
+
 
 
 </body>
-</html>
 
+</html>
