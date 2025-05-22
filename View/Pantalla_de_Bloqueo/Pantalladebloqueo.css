@@ -218,3 +218,25 @@ option {
     background-color: #000000;
     color: white;
 }
+
+.input-row {
+    display: flex;
+    gap: 10px; /* Espaço entre os elementos */
+    align-items: center;
+    width: 97%;
+    margin: 10px 8px;
+}
+
+.input-row input[type="text"] {
+    flex: 1; /* Ocupa o espaço disponível */
+    margin: 0; /* Remove as margens anteriores */
+    width: auto; /* Sobrescreve a largura de 90% */
+}
+
+.input-row select {
+    width: auto; /* Largura automática baseada no conteúdo */
+    min-width: 150px; /* Largura mínima */
+    margin: 0; /* Remove margens padrão */
+}
+
+/* Mantenha os outros estilos do seu CSS */

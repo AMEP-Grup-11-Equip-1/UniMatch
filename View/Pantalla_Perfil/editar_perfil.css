@@ -1,12 +1,13 @@
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(to bottom, #000000, #000000);
+    background: linear-gradient(to bottom, #0f0f0f, #000);
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    overflow: hidden;
 }
 
 body::before,
@@ -17,8 +18,8 @@ body::after,
     content: "";
     position: fixed;
     border-radius: 50%;
-    opacity: 0.4;
-    filter: blur(200px);
+    opacity: 0.3;
+    filter: blur(180px);
     z-index: -1;
 }
 
@@ -26,58 +27,76 @@ body::before {
     width: 450px;
     height: 600px;
     background: #ff4f7b;
-    top: 20%;
-    left: 45%;
+    top: 15%;
+    left: 40%;
 }
 
 body::after {
     width: 450px;
     height: 550px;
-    background: #e429fd;
-    bottom: 20%;
-    right: 45%;
+    background: #c236ff;
+    bottom: 10%;
+    right: 35%;
 }
 
 .glow-1 {
-    width: 300px;
-    height: 300px;
+    width: 250px;
+    height: 250px;
     background: #ff69b4;
-    top: 55%;
-    left: 15%;
+    top: 60%;
+    left: 10%;
 }
 
 .glow-2 {
-    width: 280px;
-    height: 280px;
+    width: 220px;
+    height: 220px;
     background: #ff1493;
-    bottom: 45%;
-    right: 15%;
+    bottom: 50%;
+    right: 10%;
 }
 
 .glow-3 {
-    width: 350px;
-    height: 350px;
+    width: 300px;
+    height: 300px;
     background: #ff85a2;
-    top: 25%;
-    right: 25%;
+    top: 20%;
+    right: 20%;
 }
+
 .edit-container {
-    background-color: white;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
     width: 500px;
-    padding: 40px;
-    border-radius: 25px;
-    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.25);
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0px 12px 40px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 1;
+    animation: fadeIn 0.8s ease-in-out;
 }
 
-
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
 h2 {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 35px;
+    color: #1a1a1a;
+    font-weight: 600;
+    font-size: 24px;
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    position: relative;
 }
 
 label {
@@ -90,11 +109,19 @@ label {
 input,
 textarea {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 8px;
     font-size: 16px;
     box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+    border-color: #ff4f7b;
+    box-shadow: 0 0 0 3px rgba(255, 79, 123, 0.2);
 }
 
 textarea {
@@ -105,15 +132,37 @@ textarea {
 .btn-save {
     width: 100%;
     padding: 12px;
-    background-color: #000;
+    background-color: #ff4f7b;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     font-size: 16px;
+    font-weight: 500;
     cursor: pointer;
     transition: background 0.3s ease;
 }
 
 .btn-save:hover {
-    background-color: #333;
+    background-color: #e13a6e;
+}
+
+.btn-edit {
+    background-color: transparent;
+    border: 1px solid #ff4f7b;
+    color: #ff4f7b;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-edit:hover {
+    background-color: #ff4f7b;
+    color: white;
+}
+
+.save-button-container {
+    margin-top: 30px;
 }

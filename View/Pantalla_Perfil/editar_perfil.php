@@ -45,12 +45,18 @@ session_start();
             <input type="email" id="email" name="email" value="<?php echo $_SESSION['email']; ?>" placeholder="Nuevo correo electrónico">
 
             <!-- Campo de Descripción -->
+
+
+
             <label for="descripcion">Descripción</label>
-            <textarea id="descripcion" name="descripcion" placeholder="Escribe una nueva descripción"><?php echo isset($_SESSION['descripcion']) ? $_SESSION['descripcion'] : ''; ?></textarea>
+           <textarea id="descripcion" name="descripcion" placeholder="Escribe una nueva descripción"><?php echo htmlspecialchars($_SESSION['descripcion'] ?? ''); ?></textarea>
+
 
             <!-- Campo de Contraseña -->
             <label for="password">Contraseña</label>
-            <input type="password" id="password" name="password" placeholder="Nueva contraseña">
+           <input type="text" id="password" name="password" value="<?php echo isset($_SESSION['password']) ? htmlspecialchars($_SESSION['password']) : ''; ?>" placeholder="Nueva contraseña">
+
+
 
             <!-- Campo de Foto de Perfil -->
             <label for="imagen">Foto de Perfil</label>

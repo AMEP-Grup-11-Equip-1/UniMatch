@@ -2,71 +2,292 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chats - Unimatch</title>
-    <link rel="icon" href="img1.png" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="chats.css">
-    <link rel="stylesheet" href="../Menu/menu.css">
-</head>
+    <link rel="icon" href="img1.png" type="image/x-icon" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="chats.css" />
+    <link rel="stylesheet" href="../Menu/menu.css" />
 
-<body>
-    <span class="menu-icon" onclick="openMenu()">&#9776;</span>
-    <div id="sideMenu" class="side-menu">
-        <span class="close-btn" onclick="closeMenu()">&times;</span>
-        <a href="../Pantalla_Inicio/bienvenida.html">Inicio</a>
-        <a href="../Pantalla_Perfil/perfil.php">Perfil</a>
-        <a href="../Pantalla_Chat/chat.html">Chats</a>
-        <a href="../Pantalla_Config/configuracion.html">Configuraciones</a>
-        <a href="../Pantalla_Ayuda/ayuda.html">Ayuda</a>
-        <button class="logout-btn-side" onclick="window.location.href='../Pantalla_de_Bloqueo/Pantalladebloqueo.html'">Cerrar sesión</button>
-    </div>
 
-    <div class="chat-container">
-        <div class="chat-list">
-            <div class="section-title">Matchs</div>
-            <!-- Aquí podrías cargar dinámicamente los contactos -->
+    <body>
+
+
+        <span class="menu-icon" onclick="openMenu()">&#9776;</span>
+
+        <div id="sideMenu" class="side-menu">
+            <span class="close-btn" onclick="closeMenu()">&times;</span>
+            <a href="../Pantalla_Inicio/bienvenida.html">Inicio</a>
+            <a href="../Pantalla_Perfil/perfil.php">Perfil</a>
+            <a href="../Pantalla_Chat/chat.html">Chats</a>
+            <a href="../Pantalla_Config/configuracion.html">Configuraciones</a>
+            <a href="../Pantalla_Ayuda/ayuda.html">Ayuda</a>
+            <button class="logout-btn-side" onclick="window.location.href='../Pantalla_de_Bloqueo/Pantalladebloqueo.html'">Cerrar sesión</button>
+            <button class="delete-account-btn" onclick="eliminarCuenta()" style="background-color: red; color: white; border: none; padding: 10px; width: 100%;">
+            Eliminar cuenta
+        </button>
         </div>
 
-        <div class="chat-box">
-            <h2>Conversación</h2>
-            <div class="messages" id="messagesContainer"></div>
-            <div class="message-input">
-                <input type="text" id="message" placeholder="Escribe un mensaje...">
-                <button onclick="sendMessage()">Enviar</button>
+        <div class="chat-container">
+            <div class="chat-list">
+                <div class="tab-container">
+                    <button class="tab active" id="tab-matches">Matches</button>
+                    <button class="tab" id="tab-groups">Grupos</button>
+                </div>
+
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Buscar..." />
+                </div>
+
+                <div class="tab-underline"></div>
+
+                <!-- Aquí tus listas -->
+                <div id="matchList"></div>
+                <div id="groupList" style="display:none;"></div>
+
+            </div>
+
+            <div class="chat-box">
+                <h2>Conversación</h2>
+                <div class="messages" id="messagesContainer"></div>
+                <div class="message-input">
+                    <input type="text" id="message" placeholder="Escribe un mensaje..." />
+                    <button onclick="enviarMensaje()">Enviar</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <script>
-        function openMenu() {
-            document.getElementById('sideMenu').style.width = '250px';
-        }
-
-        function closeMenu() {
-            document.getElementById('sideMenu').style.width = '0';
-        }
-
-        const ws = new WebSocket("ws://localhost:8080");
-        const messagesContainer = document.getElementById("messagesContainer");
-        const messageInput = document.getElementById("message");
-
-        ws.onmessage = function(event) {
-            const messageElement = document.createElement("p");
-            messageElement.textContent = event.data;
-            messagesContainer.appendChild(messageElement);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        };
-
-        function sendMessage() {
-            const message = messageInput.value.trim();
-            if (message) {
-                ws.send(message);
-                messageInput.value = "";
+        <script>
+            function openMenu() {
+                document.getElementById('sideMenu').style.width = '250px';
             }
-        }
-    </script>
-</body>
+
+            function closeMenu() {
+                document.getElementById('sideMenu').style.width = '0';
+            }
+            // Puedes obtener este ID del login y guardarlo en localStorage
+
+            let userId = 0; // por defecto 0 o null
+
+            fetch('../../Controller/get_session.php') // Cambia la ruta a la real
+                .then(res => res.json())
+                .then(data => {
+                    if (data.usuarioID) {
+                        userId = data.usuarioID;
+                        console.log('Usuario logueado con ID:', userId);
+                        // Aquí puedes llamar a cargarMatches(), cargarMensajes() o lo que sea, 
+                        // para cargar la conversación con el userId ya disponible
+                    } else {
+                        console.warn('Usuario no logueado:', data.error);
+                    }
+                })
+                .catch(err => console.error('Error al obtener sesión:', err));
+
+
+
+
+            let receptor_id = null;
+            const matchList = document.getElementById("matchList");
+            const messagesContainer = document.getElementById("messagesContainer");
+            const messageInput = document.getElementById("message");
+
+            function cargarMatches() {
+                console.log("cargando matches...");
+                fetch("../../Controller/obtener_matches.php")
+                    .then((res) => {
+                        console.log("Response status:", res.status);
+                        return res.json();
+                    })
+                    .then((data) => {
+                        console.log("Datos recibidos:", data);
+                        if (data.success) {
+                            matchList.innerHTML = "";
+                            data.matches.forEach((match) => {
+                                const avatar = match.imagen && match.imagen.trim() !== "" ?
+                                    match.imagen :
+                                    "../../Imagenes/img2.png"; // ← pon aquí la ruta a tu imagen
+
+                                const div = document.createElement("div");
+                                div.className = "chat-item";
+                                div.innerHTML = `
+                                <div style="display:flex;align-items:center;">
+                                    <img src="${avatar}"
+                                        style="width:40px;height:40px;border-radius:50%;margin-right:10px;" />
+                                    <div>
+                            <strong>${match.name}</strong><br />
+                            <small>Haz clic para chatear</small>
+                          </div>
+                        </div>
+                    `;
+                                div.onclick = () => abrirChat(match.id, match.name);
+                                matchList.appendChild(div);
+                            });
+                        } else {
+                            console.error("Error al obtener matches:", data.message);
+                            matchList.innerHTML = "<p>No se encontraron matches.</p>";
+                        }
+                    })
+                    .catch((err) => {
+                        console.error("Error cargando matches:", err);
+                        matchList.innerHTML = "<p>Error cargando matches.</p>";
+                    });
+            }
+            // Filtrar matches en tiempo real
+            document.getElementById("searchInput").addEventListener("input", function() {
+                const filtro = this.value.toLowerCase();
+                const items = matchList.querySelectorAll(".chat-item");
+
+                items.forEach((item) => {
+                    const nombre = item.querySelector("strong").textContent.toLowerCase();
+                    if (nombre.includes(filtro)) {
+                        item.style.display = "flex"; // mostrar si coincide
+                    } else {
+                        item.style.display = "none"; // ocultar si no coincide
+                    }
+                });
+            });
+
+
+
+            function abrirChat(id, name) {
+                receptor_id = id;
+                document.querySelector(".chat-box h2").textContent = "Conversación con " + name;
+                cargarMensajes();
+            }
+
+            function cargarMensajes() {
+                if (!receptor_id) return;
+                fetch(`../../Controller/obtener_mensajes.php?receptor_id=${receptor_id}`)
+                    .then((res) => res.json())
+                    .then((data) => {
+                        if (data.success) {
+                            messagesContainer.innerHTML = "";
+                            data.mensajes.forEach((msg) => {
+                                console.log("userId:", userId, typeof userId);
+                                console.log("msg.emisor:", msg.emisor, typeof msg.emisor);
+
+                                const messageDiv = document.createElement("div");
+                                messageDiv.className = (String(msg.emisor) === String(userId)) ? "message message-sent" : "message message-received  ";
+
+                                const textDiv = document.createElement("div");
+                                textDiv.className = "message-text";
+                                textDiv.textContent = msg.mensaje;
+
+                                const timeDiv = document.createElement("div");
+                                timeDiv.className = "message-time";
+                                const fecha = new Date(msg.fecha);
+                                timeDiv.textContent = fecha.toLocaleTimeString([], {
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                });
+
+                                messageDiv.appendChild(textDiv);
+                                messageDiv.appendChild(timeDiv);
+
+                                messagesContainer.appendChild(messageDiv);
+                            });
+
+                            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                        }
+                    })
+                    .catch((err) => console.error("Error cargando mensajes:", err));
+            }
+
+
+            function enviarMensaje() {
+                const text = messageInput.value.trim();
+                if (!text || !receptor_id) return;
+
+                const formData = new FormData();
+                formData.append("receptor_id", receptor_id);
+                formData.append("mensaje", text);
+
+                fetch("../../Controller/enviar_mensaje.php", {
+                        method: "POST",
+                        body: formData,
+                    })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        if (data.success) {
+                            messageInput.value = "";
+                            cargarMensajes();
+                        } else {
+                            alert("No se pudo enviar el mensaje");
+                        }
+                    })
+                    .catch((err) => console.error("Error al enviar mensaje:", err));
+            }
+
+            window.onload = () => {
+                cargarMatches();
+                setInterval(() => {
+                    if (receptor_id) cargarMensajes();
+                }, 3000);
+            };
+
+            const tabMatches = document.getElementById("tab-matches");
+            const tabGroups = document.getElementById("tab-groups");
+            const matchListDiv = document.getElementById("matchList");
+            const groupListDiv = document.getElementById("groupList");
+
+            tabMatches.addEventListener("click", () => {
+                tabMatches.classList.add("active");
+                tabGroups.classList.remove("active");
+                matchListDiv.style.display = "block";
+                groupListDiv.style.display = "none";
+                cargarMatches();
+            });
+
+            tabGroups.addEventListener("click", () => {
+                tabGroups.classList.add("active");
+                tabMatches.classList.remove("active");
+                matchListDiv.style.display = "none";
+                groupListDiv.style.display = "block";
+                cargarGrupos(); // función que tienes que crear para cargar grupos
+            });
+
+            // Ejemplo básico de función cargarGrupos (debes adaptar según tu backend)
+            function cargarGrupos() {
+                console.log("cargando grupos...");
+                fetch("../../Controller/obtener_grupos_unidos.php")
+                    .then((res) => {
+                        console.log("Response status:", res.status);
+                        return res.json();
+                    })
+                    .then((data) => {
+                        console.log("Datos recibidos:", data);
+                        if (data.success) {
+                            groupListDiv.innerHTML = "";
+                            data.grupos.forEach((grupo) => {
+                                // Si tienes imagen para grupo, aquí la puedes manejar igual que en matches
+                                // Por ahora asumimos solo nombre
+                                const div = document.createElement("div");
+                                div.className = "section-item";
+                                div.innerHTML = `
+                        <div style="display:flex;align-items:center;">
+                            <div>
+                                <strong>${grupo.nombre}</strong><br />
+                                <small>Haz clic para ver grupo</small>
+                            </div>
+                        </div>
+                    `;
+                                // Puedes agregar evento click aquí si quieres abrir el grupo
+                                // div.onclick = () => abrirGrupo(grupo.id, grupo.nombre);
+
+                                groupListDiv.appendChild(div);
+                            });
+                        } else {
+                            console.error("Error al obtener grupos:", data.message);
+                            groupListDiv.innerHTML = "<p>No se encontraron grupos.</p>";
+                        }
+                    })
+                    .catch((err) => {
+                        console.error("Error cargando grupos:", err);
+                        groupListDiv.innerHTML = "<p>Error cargando grupos.</p>";
+                    });
+            }
+        </script>
+    </body>
 
 </html>

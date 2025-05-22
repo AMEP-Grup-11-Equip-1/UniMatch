@@ -76,7 +76,8 @@ body::after {
 .notification-button {
     position: absolute;
     top: 15px;
-    right: 80px; /* Separado del botón "+" */
+    right: 80px;
+    /* Separado del botón "+" */
     width: 50px;
     height: 50px;
     background-color: #000000;
@@ -96,6 +97,7 @@ body::after {
     color: #000000;
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
 }
+
 
 /*------------------------------------------------ Notificación ---------------------------------------------------->*/
 
@@ -125,10 +127,12 @@ body::after {
 
 .notification-content {
     width: 90%;
-    max-width: 450px; /* Ajusta el tamaño máximo del contenido */
+    max-width: 450px;
+    /* Ajusta el tamaño máximo del contenido */
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centra el contenido dentro del contenedor */
+    align-items: center;
+    /* Centra el contenido dentro del contenedor */
     justify-content: center;
 }
 
@@ -144,7 +148,8 @@ body::after {
     width: 90%;
     display: flex;
     flex-direction: column;
-    gap: 20px; /* Espaciado entre notificaciones */
+    gap: 20px;
+    /* Espaciado entre notificaciones */
     padding: 10px;
     align-items: center;
 }
@@ -180,7 +185,8 @@ body::after {
     width: 100%;
 }
 
-.accept-btn, .reject-btn {
+.accept-btn,
+.reject-btn {
     flex: 1;
     padding: 10px 0;
     border: none;
@@ -200,7 +206,8 @@ body::after {
     background-color: #f44336;
 }
 
-.accept-btn:hover, .reject-btn:hover {
+.accept-btn:hover,
+.reject-btn:hover {
     opacity: 0.8;
 }
 
@@ -314,6 +321,7 @@ body::after {
 
 
 /*--------------------------------------------Botó Like------------------------------------------------------------->*/
+
 .like-btn {
     position: absolute;
     left: 50%;
@@ -327,7 +335,7 @@ body::after {
     align-items: center;
     justify-content: center;
     z-index: 10;
-    transition: transform 0.15s cubic-bezier(.2,1.2,.3,1), filter 0.3s;
+    transition: transform 0.15s cubic-bezier(.2, 1.2, .3, 1), filter 0.3s;
 }
 
 .like-btn .material-icons {
@@ -342,33 +350,62 @@ body::after {
     text-shadow: 0 0 26px #ff4f7bcc, 0 2px 30px #e429fdcc;
 }
 
+
 /* POP al passar el mouse per sobre */
+
 .like-btn:hover .material-icons {
     transform: scale(1.25);
     filter: brightness(1.15);
 }
 
+
 /* Heartbeat llarg quan fas like */
+
 .like-btn.heartbeat .material-icons {
-    animation: heartBeatLong 1.7s cubic-bezier(.3,1.8,.52,1.13);
+    animation: heartBeatLong 1.7s cubic-bezier(.3, 1.8, .52, 1.13);
 }
+
 @keyframes heartBeatLong {
-    0%   { transform: scale(1);}
-    9%   { transform: scale(1.13);}
-    16%  { transform: scale(1.36);}
-    22%  { transform: scale(1.05);}
-    28%  { transform: scale(1.21);}
-    36%  { transform: scale(1);}
-    46%  { transform: scale(1.23);}
-    56%  { transform: scale(0.97);}
-    63%  { transform: scale(1.14);}
-    74%  { transform: scale(1);}
-    81%  { transform: scale(1.08);}
-    88%  { transform: scale(1);}
-    100% { transform: scale(1);}
+    0% {
+        transform: scale(1);
+    }
+    9% {
+        transform: scale(1.13);
+    }
+    16% {
+        transform: scale(1.36);
+    }
+    22% {
+        transform: scale(1.05);
+    }
+    28% {
+        transform: scale(1.21);
+    }
+    36% {
+        transform: scale(1);
+    }
+    46% {
+        transform: scale(1.23);
+    }
+    56% {
+        transform: scale(0.97);
+    }
+    63% {
+        transform: scale(1.14);
+    }
+    74% {
+        transform: scale(1);
+    }
+    81% {
+        transform: scale(1.08);
+    }
+    88% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
-
-
 
 
 /*-------------------------------------------- Islas Centro------------------------------------------------>*/
@@ -643,28 +680,30 @@ h1 {
     align-items: center;
     font-size: 22px;
     cursor: pointer;
-    margin-left: 12px; /* MISMA separación que los otros íconos */
+    margin-left: 12px;
+    /* MISMA separación que los otros íconos */
     transition: background-color 0.3s;
-  }
-  
-  .circle-icon:hover {
+}
+
+.circle-icon:hover {
     background-color: white;
     color: black;
-  }
-  
-  #openCreateGrup:hover {
+}
+
+#openCreateGrup:hover {
     background-color: white;
-  }
-  
-  .top-buttons {
+}
+
+.top-buttons {
     position: absolute;
     top: 15px;
     right: 20px;
     display: flex;
-    gap: 12px; /* separación uniforme entre íconos */
-  }
-  
-  .circle-icon {
+    gap: 12px;
+    /* separación uniforme entre íconos */
+}
+
+.circle-icon {
     width: 45px;
     height: 45px;
     background-color: black;
@@ -677,18 +716,18 @@ h1 {
     align-items: center;
     cursor: pointer;
     transition: background-color 0.3s ease;
-  }
-  
-  .circle-icon:hover {
+}
+
+.circle-icon:hover {
     background-color: white;
     color: black;
-  }
-  
-  .oculto {
+}
+
+.oculto {
     display: none !important;
-  }
-  
-  .profile-popup {
+}
+
+.profile-popup {
     position: fixed;
     bottom: -100%;
     right: 40px;
@@ -706,13 +745,65 @@ h1 {
     justify-content: flex-start;
     align-items: center;
     z-index: 9999;
-  }
-  
-  .profile-popup.show {
+}
+
+.profile-popup.show {
     bottom: 50px;
-  }
-  
-  
+}
+
+.fun-button {
+    background: linear-gradient(45deg, #ff6ec4, #7873f5);
+    border: none;
+    border-radius: 30px;
+    color: white;
+    font-size: 1.2rem;
+    font-family: 'Poppins', sans-serif;
+    padding: 12px 24px;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.3s;
+    animation: pulse 2s infinite;
+}
+
+.fun-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.04);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.grupo-button {
+    background-color: #260325;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    /* Negrita */
+    padding: 12px 26px;
+    border: none;
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.grupo-button:hover {
+    background-color: white;
+    color: #000;
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
 
 /*--------------------------------------------------------------------------------------------------------->*/
-
