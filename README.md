@@ -14,11 +14,11 @@ Toomatch es mucho más que una simple app de matching. Aquí no solo se trata de
 
 ## ⚙️ Tech Stack
 Este repositorio contiene el código backend y frontend de la app, desarrollada con:
-- **React Native** para la app móvil.
-- **Node.js + Express** para el backend.
-- **MongoDB** para la base de datos.
-- **Socket.IO** para la magia del chat en tiempo real.
-- **Firebase** para notificaciones push.
+- **React Native** para la app móvil
+- **Node.js + Express** para el backend
+- **MongoDB** para la base de datos
+- **Socket.IO** para la magia del chat en tiempo real
+- **Firebase** para notificaciones push
 
 ## 🔑 ¿Cómo empezar?
 ```bash
