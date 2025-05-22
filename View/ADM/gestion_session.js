@@ -13,9 +13,7 @@ function IsOpenSession() {
                 const data = JSON.parse(text);
                 if (!data || !data.id) {
                     window.location.href = "login_ADM.html";
-                } else {
-                    // sesión activa
-                }
+                } // else sesión activa   
             } catch (e) {
                 window.location.href = "login_ADM.html";
             }

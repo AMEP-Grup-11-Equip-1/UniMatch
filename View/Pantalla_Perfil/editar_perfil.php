@@ -74,6 +74,25 @@ session_start();
     </div>
 
     <script>
+
+
+fetch('../../Controller/get_session.php') // Cambia la ruta a la real
+                .then(res => res.json())
+                .then(data => {
+                    if (data.usuarioID) {
+                        userId = data.usuarioID;
+                        console.log('Usuario logueado con ID:', userId);
+                        // Aquí puedes llamar a cargarMatches(), cargarMensajes() o lo que sea, 
+                        // para cargar la conversación con el userId ya disponible
+                    } else {
+                        console.warn('Usuario no logueado:', data.error);
+                        window.location.href = "../Pantalla_de_Bloqueo/Pantalladebloqueo.html";
+
+                    }
+                })
+                .catch(err => console.error('Error al obtener sesión:', err));
+
+                
         // Función para confirmar si el usuario quiere guardar los cambios
         function confirmChanges() {
             return confirm("¿Estás seguro de que deseas guardar estos cambios?");

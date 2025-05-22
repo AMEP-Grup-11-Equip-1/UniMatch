@@ -84,6 +84,8 @@
                         // para cargar la conversación con el userId ya disponible
                     } else {
                         console.warn('Usuario no logueado:', data.error);
+                        window.location.href = "../Pantalla_de_Bloqueo/Pantalladebloqueo.html";
+
                     }
                 })
                 .catch(err => console.error('Error al obtener sesión:', err));
