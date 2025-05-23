@@ -55,13 +55,13 @@
     </div>
 
     <!-- Caja del chat seleccionada -->
-    <div class="chat-box">
-      <h2 class="chat-header">
+    <div class="chat-box" id="chat-box" style="display: none">
+        <h2 class="chat-header">
         <span>
           Chat
           <span id="chatUserInfo"></span>
         </span>
-        <button onclick="closeChat()" class="close-chat-btn">Cerrar</button>
+        <button id="closeChatBtn" onclick="closeChat()" class="close-chat-btn">Cerrar</button>
       </h2>
       <!-- Protocolo actual del chat, oculto -->
       <div hidden id="ProtocoloId"></div>

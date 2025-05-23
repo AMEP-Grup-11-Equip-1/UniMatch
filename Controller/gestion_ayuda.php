@@ -112,3 +112,4 @@ echo json_encode([
     'tabla_new' => $output_tabla,
     'consultas_abiertas' => $output_abiertos
 ]);
+?>

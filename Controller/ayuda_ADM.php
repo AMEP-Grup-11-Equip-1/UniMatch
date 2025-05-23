@@ -63,29 +63,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['protocolo'])) {
 
 // Si la petición es POST, intenta guardar un nuevo mensaje del admin
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Verifica que lleguen los datos necesarios y que el admin esté logueado
     if (isset($_POST['protocolo'], $_POST['mensaje']) && isset($_SESSION['admin']['id'])) {
-        $protocolo = intval($_POST['protocolo']); // Obtiene el protocolo
-        $mensaje = trim($_POST['mensaje']); // Obtiene el mensaje
-        $id_adm = intval($_SESSION['admin']['id']); // Obtiene el ID del admin
+        $protocolo = intval($_POST['protocolo']);
+        $mensaje = trim($_POST['mensaje']);
+        $id_adm = intval($_SESSION['admin']['id']);
 
         $db = new ConexionBD();
         $conn = $db->getConexion();
 
-        // Inserta el mensaje en la base de datos con la fecha actual
         $sql = "INSERT INTO mensajes_adm (protocolo, id_adm, mensaje, fecha) VALUES (?, ?, ?, NOW())";
         $stmt = $conn->prepare($sql);
         if ($stmt) {
             $stmt->bind_param("iis", $protocolo, $id_adm, $mensaje);
             $stmt->execute();
             $stmt->close();
-            http_response_code(200); // Éxito
+
+            // 🔧 Adiciona esta linha:
+            echo json_encode(["success" => true]);
+            http_response_code(200);
         } else {
-            http_response_code(500); // Error en la base de datos
+            http_response_code(500);
+            echo json_encode(["success" => false, "error" => "DB error"]);
         }
         exit;
     } else {
-        http_response_code(400); // Datos incompletos o sesión no válida
+        http_response_code(400);
+        echo json_encode(["success" => false, "error" => "Missing data or session"]);
         exit;
     }
 }
