@@ -12,12 +12,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['protocolo'])) {
     $conn = $db->getConexion();
 
     // Consulta para obtener los mensajes del chat, junto con información del usuario y del admin
-    $sql = "SELECT ma.mensaje, ma.fecha, u.name AS usuario, ma.id_adm, adm.name AS admin_name
+    $sql = "SELECT
+                  ma.mensaje,
+                  ma.fecha,
+                u.name AS usuario,
+                ma.id_adm,
+                adm.name AS admin_name
             FROM mensajes_adm ma
-            JOIN ayuda a ON ma.protocolo = a.id
-            JOIN usuario u ON a.usuario_id = u.id
-            LEFT JOIN ADM adm ON ma.id_adm = adm.id
-            WHERE ma.protocolo = ?
+                JOIN ayuda a ON ma.protocolo = a.id
+                JOIN usuario u ON a.usuario_id = u.id
+                    LEFT JOIN ADM adm ON ma.id_adm = adm.id
+                WHERE ma.protocolo = ?
             ORDER BY ma.fecha ASC";
     
     $stmt = $conn->prepare($sql); // Prepara la consulta SQL

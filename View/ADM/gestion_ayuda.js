@@ -44,23 +44,28 @@ async function loadData() {
   const response = await makeRequest("../../Controller/gestion_ayuda.php");
   if (!response) return;
 
-  // Actualiza la tabla de nuevos mensajes si existe en la respuesta
+  // Atualiza a tabela de novos
   if (response.tabla_new) {
-    document.getElementById("tabla-new").innerHTML = response.tabla_new;
+    document.getElementById("NewList").innerHTML = response.tabla_new;
   }
-  
-  // Actualiza la lista de consultas abiertas en el panel lateral
-  const chatList = document.querySelector(".chat-list");
-  if (response.consultas_abiertas && chatList) {
-    const title = chatList.querySelector(".section-title");
-    if (title) {
-      // Elimina elementos antiguos (excepto el título)
-      const oldElements = [...chatList.children].filter(child => child !== title);
-      oldElements.forEach(el => el.remove());
-      
-      // Inserta las nuevas consultas abiertas después del título
-      title.insertAdjacentHTML("afterend", response.consultas_abiertas);
-    }
+
+  // Limpa as listas antes de preencher
+  OpenListDiv.innerHTML = "";
+  ClosedListDiv.innerHTML = "";
+
+  // Preenche OpenListDiv e ClosedListDiv conforme data-cerrado
+  if (response.consultas_abiertas) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = response.consultas_abiertas;
+
+    Array.from(tempDiv.children).forEach(child => {
+      const cerrado = child.getAttribute('data-cerrado');
+      if (cerrado === "0") {
+        OpenListDiv.appendChild(child);
+      } else if (cerrado === "1") {
+        ClosedListDiv.appendChild(child);
+      }
+    });
   }
 }
 
@@ -167,6 +172,64 @@ window.addEventListener('beforeunload', () => {
   stopPolling();
   stopDataPolling();
 });
+
+
+//POR IMPLEMTENAR
+function closeChat() {
+  // popup de confirmación
+  const opcion = confirm("¿Estás seguro de que deseas cerrar el chat?");
+  if (opcion) {
+    // O usuário escolheu OK
+    const chatContainer = document.getElementById("chatContainer");
+    if (chatContainer) {
+      chatContainer.style.display = "none";
+    }
+    stopPolling();
+  } else {
+    // O usuário escolheu Cancelar
+    console.log("El usuario canceló el cierre del chat.");
+  }
+}
+
+const tabNew = document.getElementById("tab-new");
+const tabOpen = document.getElementById("tab-open");
+const tabClosed = document.getElementById("tab-closed");
+
+const NewListDiv = document.getElementById("NewList");
+const OpenListDiv = document.getElementById("OpenList");
+const ClosedListDiv = document.getElementById("ClosedList");
+
+// Cambia la pestaña activa y carga los datos correspondientes
+tabNew.addEventListener("click", () => {
+  tabNew.classList.add("active");
+  tabOpen.classList.remove("active");
+  tabClosed.classList.remove("active");
+  NewListDiv.style.display = "block";
+  OpenListDiv.style.display = "none";
+  ClosedListDiv.style.display = "none"
+  loadData();
+});
+
+tabOpen.addEventListener("click", () => {
+  tabNew.classList.remove("active");
+  tabOpen.classList.add("active");
+  tabClosed.classList.remove("active");
+  NewListDiv.style.display = "none";
+  OpenListDiv.style.display = "block";
+  ClosedListDiv.style.display = "none"
+  loadData();
+});
+
+tabClosed.addEventListener("click", () => {
+  tabNew.classList.remove("active");
+  tabOpen.classList.remove("active");
+  tabClosed.classList.add("active");
+  NewListDiv.style.display = "none";
+  OpenListDiv.style.display = "none";
+  ClosedListDiv.style.display = "block"
+  loadData();
+});
+
 
 // Hace la función sendMessage accesible globalmente (por ejemplo, desde el HTML)
 window.sendMessage = sendMessage;

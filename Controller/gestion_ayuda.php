@@ -61,7 +61,8 @@ $resultado_nuevos = mysqli_query($conn, $sql_nuevos);
 $sql_abiertos = "SELECT 
                     ma.protocolo AS numero_protocolo,
                     u.name AS nombre_usuario,
-                    ultima.fecha_mais_recente
+                    ultima.fecha_mais_recente,
+                    cerrado
                 FROM 
                     (
                         SELECT 
@@ -95,14 +96,16 @@ if (!$resultado_nuevos) {
     echo "<tr><td colspan='4'>Error en la consulta de nuevos mensajes</td></tr>";
 } else {
     while ($linha = mysqli_fetch_assoc($resultado_nuevos)) {
-        echo "<tr onclick='loadChat("
+                $data_formatada = date('H:i d/m', strtotime($linha['fecha']));
+
+         echo "<div class='chat-item' data-cerrado='" . "' onclick='loadChat("
             . htmlspecialchars($linha['numero_protocolo']) . ", \""
-            . htmlspecialchars(addslashes($linha['nombre_usuario'])) . "\")' style='cursor:pointer'>";
-        echo "<td>" . htmlspecialchars($linha['numero_protocolo']) . "</td>";
-        echo "<td>" . htmlspecialchars($linha['nombre_usuario']) . "</td>";
-        echo "<td>" . htmlspecialchars($linha['mensaje']) . "</td>";
-        echo "<td>" . htmlspecialchars($linha['fecha']) . "</td>";
-        echo "</tr>";
+            . htmlspecialchars(addslashes($linha['nombre_usuario'])) . "\")'>";
+        echo "<span class='protocolo'>" . htmlspecialchars($linha['numero_protocolo']) . "</span>";
+        echo "<span class='usuario'>" . htmlspecialchars($linha['nombre_usuario']) . "</span>";
+        echo "<span class='mensaje'>" . htmlspecialchars($linha['mensaje']) . "</span>";
+        echo "<span class='fecha'>" . htmlspecialchars($data_formatada) . "</span>";
+        echo "</div>";
     }
 }
 
@@ -118,12 +121,12 @@ if (!$resultado_abiertos) {
 } else {
     while ($linha = mysqli_fetch_assoc($resultado_abiertos)) {
         $data_formatada = date('H:i d/m', strtotime($linha['fecha_mais_recente']));
-        echo "<div class='chat-item' onclick='loadChat("
+        echo "<div class='chat-item' data-cerrado='" . intval($linha['cerrado']) . "' onclick='loadChat("
             . htmlspecialchars($linha['numero_protocolo']) . ", \""
             . htmlspecialchars(addslashes($linha['nombre_usuario'])) . "\")'>";
         echo "<span class='protocolo'>" . htmlspecialchars($linha['numero_protocolo']) . "</span>";
         echo "<span class='usuario'>" . htmlspecialchars($linha['nombre_usuario']) . "</span>";
-        echo "<span class='fecha'>" . htmlspecialchars($data_formatada) . "</span>"; // formato hh:mm dd/mm
+        echo "<span class='fecha'>" . htmlspecialchars($data_formatada) . "</span>";
         echo "</div>";
     }
 }
