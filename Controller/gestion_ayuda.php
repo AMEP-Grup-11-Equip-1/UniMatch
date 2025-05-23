@@ -31,33 +31,6 @@ $sql_nuevos = "SELECT
 $resultado_nuevos = mysqli_query($conn, $sql_nuevos);
 
 // Consulta para protocolos abiertos (protocolos con más de un mensaje)
-/*
-    Esta consulta selecciona los protocolos que tienen más de un mensaje en la tabla mensajes_adm
-    y los ordena según la fecha más reciente de sus mensajes.
-
-    1. Se crea una subconsulta (llamada "ultima") que agrupa los registros de la tabla mensajes_adm por protocolo,
-       seleccionando solo aquellos que tienen más de un mensaje (HAVING COUNT(*) > 1).
-       Además, se obtiene la fecha más reciente (MAX(fecha)) para cada protocolo.
-
-    2. Luego, se hace un JOIN entre la subconsulta "ultima" y la tabla mensajes_adm (ma),
-       para mantener el enlace con las otras tablas necesarias.
-
-    3. Se hace un JOIN con la tabla ayuda (a) usando ma.protocolo = a.id,
-       ya que "protocolo" en mensajes_adm es una clave foránea que referencia "id" en ayuda.
-       Esto permite conectar cada mensaje administrativo con la solicitud de ayuda correspondiente.
-
-    4. Después, se hace otro JOIN con la tabla usuario (u) usando a.usuario_id = u.id,
-       lo que permite obtener el nombre del usuario que creó la solicitud.
-
-    5. Se usa GROUP BY para agrupar por protocolo y nombre de usuario (y también por fecha_mais_recente),
-       asegurando que cada fila del resultado sea única por protocolo.
-
-    6. Finalmente, se ordena el resultado por la fecha más reciente de mensaje para cada protocolo,
-       de forma descendente (es decir, del más nuevo al más antiguo).
-
-    Resultado: una lista de protocolos que tienen múltiples mensajes, junto con el nombre del usuario que los creó,
-    ordenada por la fecha del mensaje más reciente de cada protocolo.
-*/
 $sql_abiertos = "SELECT 
                     ma.protocolo AS numero_protocolo,
                     u.name AS nombre_usuario,

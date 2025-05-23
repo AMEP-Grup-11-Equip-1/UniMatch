@@ -176,20 +176,28 @@ window.addEventListener('beforeunload', () => {
 
 //POR IMPLEMTENAR
 function closeChat() {
-  // popup de confirmación
   const opcion = confirm("¿Estás seguro de que deseas cerrar el chat?");
   if (opcion) {
-    // O usuário escolheu OK
-    const chatContainer = document.getElementById("chatContainer");
-    if (chatContainer) {
-      chatContainer.style.display = "none";
-    }
-    stopPolling();
+      makeRequest("../../Controller/cerrar_chat.php", "POST", {
+          protocolo: currentProtocol
+      }).then(data => {
+          if (data && data.success) {
+              console.log("Chat cerrado exitosamente.");
+              // Update UI as needed
+              loadData(); // Refresh the lists
+              stopPolling(); // Stop polling for this chat
+          } else {
+              console.error("Error al cerrar el chat:", data?.error || "Unknown error");
+          }
+      }).catch(error => {
+          console.error("Request failed:", error);
+      });
   } else {
-    // O usuário escolheu Cancelar
-    console.log("El usuario canceló el cierre del chat.");
+      console.log("El usuario canceló el cierre del chat.");
   }
 }
+
+// Modificaciones en la interfaz
 
 const tabNew = document.getElementById("tab-new");
 const tabOpen = document.getElementById("tab-open");
