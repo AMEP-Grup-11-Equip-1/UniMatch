@@ -7,116 +7,109 @@
     <title>Chats - Unimatch</title>
     <link rel="icon" href="img1.png" type="image/x-icon" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="chats.css" />
+    <link rel="stylesheet" href="chat.css" />
     <link rel="stylesheet" href="../Menu/menu.css" />
+</head>
 
+<body>
 
-    <body>
+    <span class="menu-icon" onclick="openMenu()">&#9776;</span>
 
-
-        <span class="menu-icon" onclick="openMenu()">&#9776;</span>
-
-        <div id="sideMenu" class="side-menu">
-            <span class="close-btn" onclick="closeMenu()">&times;</span>
-            <a href="../Pantalla_Inicio/bienvenida.html">Inicio</a>
-            <a href="../Pantalla_Perfil/perfil.php">Perfil</a>
-            <a href="../Pantalla_Chat/chat.html">Chats</a>
-            <a href="../Pantalla_Config/configuracion.html">Configuraciones</a>
-            <a href="../Pantalla_Ayuda/ayuda.html">Ayuda</a>
-    <button
-        class="logout-btn-side"
-        onclick="window.location.href='../../Controller/logout.php'"
-      >
-        Cerrar sesión
-      </button>            <button class="delete-account-btn" onclick="eliminarCuenta()" style="background-color: red; color: white; border: none; padding: 10px; width: 100%;">
+    <div id="sideMenu" class="side-menu">
+        <span class="close-btn" onclick="closeMenu()">&times;</span>
+        <a href="../Pantalla_Inicio/bienvenida.html">Inicio</a>
+        <a href="../Pantalla_Perfil/perfil.php">Perfil</a>
+        <a href="../Pantalla_Chat/chat.html">Chats</a>
+        <a href="../Pantalla_Config/configuracion.html">Configuraciones</a>
+        <a href="../Pantalla_Ayuda/ayuda.html">Ayuda</a>
+        <button class="logout-btn-side" onclick="window.location.href='../../Controller/logout.php'">
+            Cerrar sesión
+        </button>
+        <button class="delete-account-btn" onclick="eliminarCuenta()" style="background-color: red; color: white; border: none; padding: 10px; width: 100%;">
             Eliminar cuenta
         </button>
-        </div>
+    </div>
 
-        <div class="chat-container">
-            <div class="chat-list">
-                <div class="tab-container">
-                    <button class="tab active" id="tab-matches">Matches</button>
-                    <button class="tab" id="tab-groups">Grupos</button>
-                </div>
-
-                <div class="search-container">
-                    <input type="text" id="searchInput" placeholder="Buscar..." />
-                </div>
-
-                <div class="tab-underline"></div>
-
-                <!-- Aquí tus listas -->
-                <div id="matchList"></div>
-                <div id="groupList" style="display:none;"></div>
-
+    <div class="chat-container">
+        <div class="chat-list">
+            <div class="tab-container">
+                <button class="tab active" id="tab-matches">Matches</button>
+                <button class="tab" id="tab-groups">Grupos</button>
             </div>
 
-            <div class="chat-box">
-                <h2>Conversación</h2>
-                <div class="messages" id="messagesContainer"></div>
-                <div class="message-input">
-                    <input type="text" id="message" placeholder="Escribe un mensaje..." />
-                    <button onclick="enviarMensaje()">Enviar</button>
-                </div>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Buscar..." />
             </div>
+
+            <div class="tab-underline"></div>
+
+            <!-- Aquí tus listas -->
+            <div id="matchList"></div>
+            <div id="groupList" style="display:none;"></div>
+
         </div>
 
-        <script>
-            function openMenu() {
-                document.getElementById('sideMenu').style.width = '250px';
-            }
+        <div class="chat-box">
+            <h2>Conversación</h2>
+            <div class="messages" id="messagesContainer"></div>
+            <div class="message-input">
+                <input type="text" id="message" placeholder="Escribe un mensaje..." />
+                <button id="btnEnviar">Enviar</button>
+            </div>
+        </div>
+    </div>
 
-            function closeMenu() {
-                document.getElementById('sideMenu').style.width = '0';
-            }
-            // Puedes obtener este ID del login y guardarlo en localStorage
+    <script>
+        function openMenu() {
+            document.getElementById('sideMenu').style.width = '250px';
+        }
 
-            let userId = 0; // por defecto 0 o null
+        function closeMenu() {
+            document.getElementById('sideMenu').style.width = '0';
+        }
 
-            fetch('../../Controller/get_session.php') // Cambia la ruta a la real
-                .then(res => res.json())
-                .then(data => {
-                    if (data.usuarioID) {
-                        userId = data.usuarioID;
-                        console.log('Usuario logueado con ID:', userId);
-                        // Aquí puedes llamar a cargarMatches(), cargarMensajes() o lo que sea, 
-                        // para cargar la conversación con el userId ya disponible
-                    } else {
-                        console.warn('Usuario no logueado:', data.error);
-                        window.location.href = "../Pantalla_de_Bloqueo/Pantalladebloqueo.html";
+        let userId = 0; // por defecto 0 o null
 
-                    }
+        fetch('../../Controller/get_session.php') // Cambia la ruta a la real
+            .then(res => res.json())
+            .then(data => {
+                if (data.usuarioID) {
+                    userId = data.usuarioID;
+                    console.log('Usuario logueado con ID:', userId);
+                    // Aquí puedes llamar a cargarMatches(), cargarMensajes() o lo que sea,
+                    // para cargar la conversación con el userId ya disponible
+                } else {
+                    console.warn('Usuario no logueado:', data.error);
+                    window.location.href = "../Pantalla_de_Bloqueo/Pantalladebloqueo.html";
+
+                }
+            })
+            .catch(err => console.error('Error al obtener sesión:', err));
+
+        let receptor_id = null;
+        const matchList = document.getElementById("matchList");
+        const messagesContainer = document.getElementById("messagesContainer");
+        const messageInput = document.getElementById("message");
+
+        function cargarMatches() {
+            console.log("cargando matches...");
+            fetch("../../Controller/obtener_matches.php")
+                .then((res) => {
+                    console.log("Response status:", res.status);
+                    return res.json();
                 })
-                .catch(err => console.error('Error al obtener sesión:', err));
+                .then((data) => {
+                    console.log("Datos recibidos:", data);
+                    if (data.success) {
+                        matchList.innerHTML = "";
+                        data.matches.forEach((match) => {
+                            const avatar = match.imagen && match.imagen.trim() !== "" ?
+                                match.imagen :
+                                "../../Imagenes/img2.png";
 
-
-
-
-            let receptor_id = null;
-            const matchList = document.getElementById("matchList");
-            const messagesContainer = document.getElementById("messagesContainer");
-            const messageInput = document.getElementById("message");
-
-            function cargarMatches() {
-                console.log("cargando matches...");
-                fetch("../../Controller/obtener_matches.php")
-                    .then((res) => {
-                        console.log("Response status:", res.status);
-                        return res.json();
-                    })
-                    .then((data) => {
-                        console.log("Datos recibidos:", data);
-                        if (data.success) {
-                            matchList.innerHTML = "";
-                            data.matches.forEach((match) => {
-                                const avatar = match.imagen && match.imagen.trim() !== "" ?
-                                    match.imagen :
-                                    "../../Imagenes/img2.png"; // ← pon aquí la ruta a tu imagen
-
-                                const div = document.createElement("div");
-                                div.className = "chat-item";
-                                div.innerHTML = `
+                            const div = document.createElement("div");
+                            div.className = "chat-item";
+                            div.innerHTML = `
                                 <div style="display:flex;align-items:center;">
                                     <img src="${avatar}"
                                         style="width:40px;height:40px;border-radius:50%;margin-right:10px;" />
@@ -126,174 +119,293 @@
                           </div>
                         </div>
                     `;
-                                div.onclick = () => abrirChat(match.id, match.name);
-                                matchList.appendChild(div);
-                            });
-                        } else {
-                            console.error("Error al obtener matches:", data.message);
-                            matchList.innerHTML = "<p>No se encontraron matches.</p>";
-                        }
-                    })
-                    .catch((err) => {
-                        console.error("Error cargando matches:", err);
-                        matchList.innerHTML = "<p>Error cargando matches.</p>";
-                    });
-            }
-            // Filtrar matches en tiempo real
-            document.getElementById("searchInput").addEventListener("input", function() {
-                const filtro = this.value.toLowerCase();
-                const items = matchList.querySelectorAll(".chat-item");
-
-                items.forEach((item) => {
-                    const nombre = item.querySelector("strong").textContent.toLowerCase();
-                    if (nombre.includes(filtro)) {
-                        item.style.display = "flex"; // mostrar si coincide
+                            div.onclick = () => abrirChat(match.id, match.name);
+                            matchList.appendChild(div);
+                        });
                     } else {
-                        item.style.display = "none"; // ocultar si no coincide
+                        console.error("Error al obtener matches:", data.message);
+                        matchList.innerHTML = "<p>No se encontraron matches.</p>";
                     }
+                })
+                .catch((err) => {
+                    console.error("Error cargando matches:", err);
+                    matchList.innerHTML = "<p>Error cargando matches.</p>";
                 });
+        }
+        // Filtrar matches en tiempo real
+        document.getElementById("searchInput").addEventListener("input", function() {
+            const filtro = this.value.toLowerCase();
+            const items = matchList.querySelectorAll(".chat-item");
+
+            items.forEach((item) => {
+                const nombre = item.querySelector("strong").textContent.toLowerCase();
+                if (nombre.includes(filtro)) {
+                    item.style.display = "flex"; // mostrar si coincide
+                } else {
+                    item.style.display = "none"; // ocultar si no coincide
+                }
             });
+        });
 
+        function abrirChat(id, name) {
+            receptor_id = id;
+            grupo_id_actual = null; // Para evitar confusiones si había grupo abierto
+            document.querySelector(".chat-box h2").textContent = "Conversación con " + name;
+            cargarMensajes();
+        }
 
+        function cargarMensajes() {
+            if (!receptor_id) return;
+            fetch(`../../Controller/obtener_mensajes.php?receptor_id=${receptor_id}`)
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.success) {
+                        messagesContainer.innerHTML = "";
+                        data.mensajes.forEach((msg) => {
+                            const messageDiv = document.createElement("div");
+                            messageDiv.className = (String(msg.emisor) === String(userId)) ? "message message-sent" : "message message-received";
 
-            function abrirChat(id, name) {
-                receptor_id = id;
-                document.querySelector(".chat-box h2").textContent = "Conversación con " + name;
-                cargarMensajes();
-            }
+                            const textDiv = document.createElement("div");
+                            textDiv.className = "message-text";
+                            textDiv.textContent = msg.mensaje;
 
-            function cargarMensajes() {
-                if (!receptor_id) return;
-                fetch(`../../Controller/obtener_mensajes.php?receptor_id=${receptor_id}`)
-                    .then((res) => res.json())
-                    .then((data) => {
-                        if (data.success) {
-                            messagesContainer.innerHTML = "";
-                            data.mensajes.forEach((msg) => {
-                                console.log("userId:", userId, typeof userId);
-                                console.log("msg.emisor:", msg.emisor, typeof msg.emisor);
-
-                                const messageDiv = document.createElement("div");
-                                messageDiv.className = (String(msg.emisor) === String(userId)) ? "message message-sent" : "message message-received  ";
-
-                                const textDiv = document.createElement("div");
-                                textDiv.className = "message-text";
-                                textDiv.textContent = msg.mensaje;
-
-                                const timeDiv = document.createElement("div");
-                                timeDiv.className = "message-time";
-                                const fecha = new Date(msg.fecha);
-                                timeDiv.textContent = fecha.toLocaleTimeString([], {
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                });
-
-                                messageDiv.appendChild(textDiv);
-                                messageDiv.appendChild(timeDiv);
-
-                                messagesContainer.appendChild(messageDiv);
+                            const timeDiv = document.createElement("div");
+                            timeDiv.className = "message-time";
+                            const fecha = new Date(msg.fecha);
+                            timeDiv.textContent = fecha.toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit'
                             });
 
-                            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                        }
-                    })
-                    .catch((err) => console.error("Error cargando mensajes:", err));
+                            messageDiv.appendChild(textDiv);
+                            messageDiv.appendChild(timeDiv);
+
+                            messagesContainer.appendChild(messageDiv);
+                        });
+
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    }
+                })
+                .catch((err) => console.error("Error cargando mensajes:", err));
+        }
+
+        function enviarMensaje() {
+            const text = messageInput.value.trim();
+            if (!text || !receptor_id) return;
+
+            const formData = new FormData();
+            formData.append("receptor_id", receptor_id);
+            formData.append("mensaje", text);
+
+            fetch("../../Controller/enviar_mensaje.php", {
+                    method: "POST",
+                    body: formData,
+                })
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.success) {
+                        messageInput.value = "";
+                        cargarMensajes();
+                    } else {
+                        alert("No se pudo enviar el mensaje");
+                    }
+                })
+                .catch((err) => console.error("Error al enviar mensaje:", err));
+        }
+
+        // --- Parte de grupos ---
+
+        const tabMatches = document.getElementById("tab-matches");
+        const tabGroups = document.getElementById("tab-groups");
+        const matchListDiv = document.getElementById("matchList");
+        const groupListDiv = document.getElementById("groupList");
+        const btnEnviar = document.getElementById("btnEnviar");
+
+        let modoGrupo = false;
+        let grupo_id_actual = null;
+
+        tabMatches.addEventListener("click", () => {
+            modoGrupo = false;
+            tabMatches.classList.add("active");
+            tabGroups.classList.remove("active");
+            matchListDiv.style.display = "block";
+            groupListDiv.style.display = "none";
+            cargarMatches();
+            receptor_id = null;
+            grupo_id_actual = null;
+            document.querySelector(".chat-box h2").textContent = "Conversación";
+            messagesContainer.innerHTML = "";
+        });
+
+        tabGroups.addEventListener("click", () => {
+            modoGrupo = true;
+            tabGroups.classList.add("active");
+            tabMatches.classList.remove("active");
+            matchListDiv.style.display = "none";
+            groupListDiv.style.display = "block";
+            cargarGrupos();
+            receptor_id = null;
+            grupo_id_actual = null;
+            document.querySelector(".chat-box h2").textContent = "Conversación";
+            messagesContainer.innerHTML = "";
+        });
+
+        btnEnviar.addEventListener("click", () => {
+            if (modoGrupo) {
+                enviarMensajeGrupal();
+            } else {
+                enviarMensaje();
             }
+        });
 
+        function cargarGrupos() {
+            console.log("Cargando grupos...");
+            fetch("../../Controller/obtener_grupos_unidos.php")
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        groupListDiv.innerHTML = ""; // Limpiar lista
+                        data.grupos.forEach(grupo => {
+                            const div = document.createElement("div");
+                            div.className = "chat-item"; // puedes usar la misma clase que matches para estilo
 
-            function enviarMensaje() {
-                const text = messageInput.value.trim();
-                if (!text || !receptor_id) return;
-
-                const formData = new FormData();
-                formData.append("receptor_id", receptor_id);
-                formData.append("mensaje", text);
-
-                fetch("../../Controller/enviar_mensaje.php", {
-                        method: "POST",
-                        body: formData,
-                    })
-                    .then((res) => res.json())
-                    .then((data) => {
-                        if (data.success) {
-                            messageInput.value = "";
-                            cargarMensajes();
-                        } else {
-                            alert("No se pudo enviar el mensaje");
-                        }
-                    })
-                    .catch((err) => console.error("Error al enviar mensaje:", err));
-            }
-
-            window.onload = () => {
-                cargarMatches();
-                setInterval(() => {
-                    if (receptor_id) cargarMensajes();
-                }, 3000);
-            };
-
-            const tabMatches = document.getElementById("tab-matches");
-            const tabGroups = document.getElementById("tab-groups");
-            const matchListDiv = document.getElementById("matchList");
-            const groupListDiv = document.getElementById("groupList");
-
-            tabMatches.addEventListener("click", () => {
-                tabMatches.classList.add("active");
-                tabGroups.classList.remove("active");
-                matchListDiv.style.display = "block";
-                groupListDiv.style.display = "none";
-                cargarMatches();
-            });
-
-            tabGroups.addEventListener("click", () => {
-                tabGroups.classList.add("active");
-                tabMatches.classList.remove("active");
-                matchListDiv.style.display = "none";
-                groupListDiv.style.display = "block";
-                cargarGrupos(); // función que tienes que crear para cargar grupos
-            });
-
-            // Ejemplo básico de función cargarGrupos (debes adaptar según tu backend)
-            function cargarGrupos() {
-                console.log("cargando grupos...");
-                fetch("../../Controller/obtener_grupos_unidos.php")
-                    .then((res) => {
-                        console.log("Response status:", res.status);
-                        return res.json();
-                    })
-                    .then((data) => {
-                        console.log("Datos recibidos:", data);
-                        if (data.success) {
-                            groupListDiv.innerHTML = "";
-                            data.grupos.forEach((grupo) => {
-                                // Si tienes imagen para grupo, aquí la puedes manejar igual que en matches
-                                // Por ahora asumimos solo nombre
-                                const div = document.createElement("div");
-                                div.className = "section-item";
-                                div.innerHTML = `
+                            div.innerHTML = `
                         <div style="display:flex;align-items:center;">
+                            <img src="${grupo.imagen || '../../Imagenes/img2.png'}" 
+                                 style="width:40px; height:40px; border-radius:50%; margin-right:10px;" />
                             <div>
-                                <strong>${grupo.nombre}</strong><br />
-                                <small>Haz clic para ver grupo</small>
+                              <strong>${grupo.nom}</strong><br/>
+                              <small>Haz clic para chatear</small>
                             </div>
                         </div>
-                    `;
-                                // Puedes agregar evento click aquí si quieres abrir el grupo
-                                // div.onclick = () => abrirGrupo(grupo.id, grupo.nombre);
+                        `;
 
-                                groupListDiv.appendChild(div);
+                            div.onclick = () => abrirChatGrupal(grupo.id, grupo.nom);
+                            groupListDiv.appendChild(div);
+                        });
+                    } else {
+                        groupListDiv.innerHTML = "<p>No estás en ningún grupo.</p>";
+                    }
+                })
+                .catch(err => {
+                    console.error("Error cargando grupos:", err);
+                    groupListDiv.innerHTML = "<p>Error cargando grupos.</p>";
+                });
+        }
+
+        function abrirChatGrupal(id, nombre) {
+            grupo_id_actual = id;
+            receptor_id = null;
+            document.querySelector(".chat-box h2").textContent = "Chat grupal: " + nombre;
+            cargarMensajesGrupales();
+        }
+
+        function cargarMensajesGrupales() {
+            if (!grupo_id_actual) return;
+
+            fetch(`../../Controller/obtener_mensajes_grupo.php?grupo_id=${grupo_id_actual}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        messagesContainer.innerHTML = "";
+
+                        let lastEmisorId = null;
+
+                        data.mensajes.forEach(msg => {
+                            const isOwnMessage = String(msg.emisor_id) === String(userId);
+
+                            const wrapper = document.createElement("div");
+                            wrapper.style.display = "flex";
+                            wrapper.style.flexDirection = "column";
+                            wrapper.style.alignItems = isOwnMessage ? "flex-end" : "flex-start";
+                            wrapper.style.marginBottom = "10px"; // aquí el espacio extra
+
+
+                            // Mostrar el nombre solo si es diferente al anterior
+                            if (lastEmisorId !== msg.emisor_id) {
+                                const nombreDiv = document.createElement("div");
+                                nombreDiv.className = "grupo-username";
+                                nombreDiv.textContent = msg.emisor_nombre;
+                                nombreDiv.style.margin = "0 10px 4px 10px";
+                                wrapper.appendChild(nombreDiv);
+                                lastEmisorId = msg.emisor_id;
+                            }
+
+                            const messageDiv = document.createElement("div");
+                            messageDiv.className = "grupo-message " + (isOwnMessage ? "grupo-message-other" : "grupo-message-own");
+
+                            const messageContentDiv = document.createElement("div");
+                            messageContentDiv.style.display = "flex";
+                            messageContentDiv.style.justifyContent = "space-between";
+                            messageContentDiv.style.alignItems = "center";
+
+                            const textDiv = document.createElement("div");
+                            textDiv.className = "message-text";
+                            textDiv.textContent = msg.mensaje;
+
+                            const timeDiv = document.createElement("div");
+                            timeDiv.className = "message-time";
+                            const fecha = new Date(msg.fecha);
+                            timeDiv.textContent = fecha.toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit'
                             });
+
+                            messageContentDiv.appendChild(textDiv);
+                            messageContentDiv.appendChild(timeDiv);
+
+                            messageDiv.appendChild(messageContentDiv);
+
+                            wrapper.appendChild(messageDiv);
+                            messagesContainer.appendChild(wrapper);
+                        });
+
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    }
+                })
+                .catch(err => console.error("Error cargando mensajes grupales:", err));
+        }
+
+
+
+
+
+
+
+        function enviarMensajeGrupal() {
+            const text = messageInput.value.trim();
+            if (!text || !grupo_id_actual) return;
+
+            const formData = new FormData();
+            formData.append("grupo_id", grupo_id_actual);
+            formData.append("mensaje", text);
+
+            fetch("../../Controller/enviar_mensaje_grupo.php", {
+                    method: "POST",
+                    body: formData,
+                })
+                .then(res => res.text())
+                .then(text => {
+                    console.log("Respuesta cruda servidor:", text);
+                    try {
+                        const data = JSON.parse(text);
+                        if (data.success) {
+                            messageInput.value = "";
+                            cargarMensajesGrupales();
                         } else {
-                            console.error("Error al obtener grupos:", data.message);
-                            groupListDiv.innerHTML = "<p>No se encontraron grupos.</p>";
+                            alert("No se pudo enviar el mensaje: " + (data.message || "Error desconocido"));
                         }
-                    })
-                    .catch((err) => {
-                        console.error("Error cargando grupos:", err);
-                        groupListDiv.innerHTML = "<p>Error cargando grupos.</p>";
-                    });
-            }
-        </script>
-    </body>
+                    } catch (e) {
+                        console.error("No es JSON válido:", e, text);
+                    }
+                })
+                .catch(err => console.error("Error al enviar mensaje grupal:", err));
+        }
+
+
+        // Inicializar mostrando Matches
+        cargarMatches();
+    </script>
+</body>
 
 </html>
