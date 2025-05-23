@@ -230,6 +230,5 @@ tabClosed.addEventListener("click", () => {
   loadData();
 });
 
-
 // Hace la función sendMessage accesible globalmente (por ejemplo, desde el HTML)
 window.sendMessage = sendMessage;

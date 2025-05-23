@@ -103,7 +103,7 @@ if (!$resultado_nuevos) {
             . htmlspecialchars(addslashes($linha['nombre_usuario'])) . "\")'>";
         echo "<span class='protocolo'>" . htmlspecialchars($linha['numero_protocolo']) . "</span>";
         echo "<span class='usuario'>" . htmlspecialchars($linha['nombre_usuario']) . "</span>";
-        echo "<span class='mensaje'>" . htmlspecialchars($linha['mensaje']) . "</span>";
+        echo "<span class='preview'>" . htmlspecialchars($linha['mensaje']) . "</span>";
         echo "<span class='fecha'>" . htmlspecialchars($data_formatada) . "</span>";
         echo "</div>";
     }
