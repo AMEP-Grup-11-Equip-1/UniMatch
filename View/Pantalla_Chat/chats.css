@@ -367,3 +367,43 @@ body::after {
     user-select: none;
     /* no se puede seleccionar */
 }
+
+.grupo-message {
+    max-width: 60%;
+    padding: 8px 12px;
+    border-radius: 15px;
+    position: relative;
+    font-size: 14px;
+    line-height: 1.3;
+    word-wrap: break-word;
+}
+
+.grupo-username {
+    font-size: 12px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+    user-select: none;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.grupo-message-own {
+    align-self: flex-start;
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+}
+
+.grupo-message-other {
+    align-self: flex-end;
+    background-color: #ffecfc;
+    border: 1px solid #ddd;
+    /* verde claro estilo WhatsApp */
+    margin-left: 10px;
+}
+
+.message-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
