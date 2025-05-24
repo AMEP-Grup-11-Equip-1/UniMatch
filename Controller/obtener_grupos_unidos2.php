@@ -11,25 +11,25 @@ if (!isset($_SESSION['usuarioID'])) {
 }
 
 $usuarioID = $_SESSION['usuarioID'];
-$modo = $_GET['modo'] ?? 'todos';
+$modo = $_GET['modo'] ?? 'todos'; // Puede ser 'todos' o 'unidos'
 
 $db = new ConexionBD();
 $conn = $db->getConexion();
 
 if ($modo === 'unidos') {
-    // Solo los grupos en los que está unido (grup_usuaris)
+    // Grupos donde el usuario está unido o es propietario, sin duplicados
     $sql = "
-        SELECT g.* 
+        SELECT DISTINCT g.* 
         FROM grups g
-        INNER JOIN grup_usuaris gu ON g.id = gu.grup_id
-        WHERE gu.usuari_id = ?";
+        LEFT JOIN grup_usuaris gu ON g.id = gu.grup_id
+        WHERE gu.usuari_id = ? OR g.propietari_id = ?";
     $stmt = $conn->prepare($sql);
     if (!$stmt) {
         error_log("Error preparando la consulta: " . $conn->error);
         echo json_encode(["success" => false, "message" => "Error en la consulta"]);
         exit;
     }
-    $stmt->bind_param("i", $usuarioID);
+    $stmt->bind_param("ii", $usuarioID, $usuarioID);
 } else {
     // Todos los grupos
     $sql = "SELECT * FROM grups";
