@@ -1,8 +1,10 @@
+// Função para obter um parâmetro da URL
 function getQueryParam(param) {
   const params = new URLSearchParams(window.location.search);
   return params.get(param);
 }
 
+// Obtém o ID do usuário da URL
 const userId = getQueryParam("id");
 let currentSlide = 0;
 let stories = [];
@@ -10,11 +12,13 @@ let matches = [];
 
 // Cargar datos del usuario
 if (!userId) {
+  // Si no hay ID, muestra error y limpia campos
   alert("No se especificó el usuario.");
   document.getElementById("user-name").textContent = "Error";
   document.getElementById("user-email").textContent = "";
   document.getElementById("user-status").textContent = "";
 } else {
+  // Busca los datos del usuario por ID
   fetch(`../../Controller/usuari_per_id.php?id=${userId}`)
     .then((res) => {
       if (!res.ok) throw new Error("Usuario no encontrado");
@@ -57,19 +61,20 @@ if (!userId) {
       cargarDenuncias();
     })
     .catch((err) => {
+      // Si hay error, muestra mensaje y limpia campos
       console.error(err);
-      // Rellenar nombre/email/estado como vacío solo si no vino nada del backend
       document.getElementById("user-name").textContent = "Error al cargar usuario";
       document.getElementById("user-email").textContent = "";
       document.getElementById("user-status").textContent = "";
     });
 }
 
-// Inicializar carrusel con historias
+// Inicializa el carrusel con las historias del usuario
 function initCarousel() {
   const carousel = document.querySelector('.carousel');
   
   if (stories.length === 0) {
+    // Si no hay historias, muestra mensaje
     carousel.innerHTML = '<div class="carousel-slide active"><p>No hay historias disponibles</p></div>';
     return;
   }
@@ -100,11 +105,12 @@ function initCarousel() {
   });
 }
 
-// Inicializar lista de matches
+// Inicializa la lista de matches del usuario
 function initMatches() {
   const matchList = document.querySelector('.match-list');
   
   if (matches.length === 0) {
+    // Si no hay matches, muestra mensaje
     matchList.innerHTML = '<li class="match-item"><p>No hay matches disponibles</p></li>';
     return;
   }
@@ -115,7 +121,7 @@ function initMatches() {
     const matchItem = document.createElement('li');
     matchItem.className = 'match-item';
     
-    // Puedes personalizar esto con los datos reales del match
+    // Personaliza la información del match
     matchItem.innerHTML = `
       <div class="match-info">
         <div class="match-name">${match.nombre_match}</div>
@@ -127,7 +133,7 @@ function initMatches() {
   });
 }
 
-// Rotar carrusel
+// Rota el carrusel a la izquierda o derecha
 function rotateCarousel(direction) {
   const slides = document.querySelectorAll('.carousel-slide');
   if (slides.length === 0) return;
@@ -145,7 +151,7 @@ function rotateCarousel(direction) {
   slides[currentSlide].classList.add('active');
 }
 
-// Función para enviar el estado del usuario
+// Envía el estado del usuario (verificado/bloqueado)
 function enviarEstado(valor) {
   if (!userId) {
     alert("ID del usuario no encontrado.");
@@ -170,8 +176,7 @@ function enviarEstado(valor) {
     });
 }
 
-
-// Adicione esta função no seu user.js
+// Carga las denuncias recibidas y hechas por el usuario
 function cargarDenuncias() {
     if (!userId) return;
 
@@ -181,11 +186,11 @@ function cargarDenuncias() {
             const recebidasList = document.getElementById('denuncias-recebidas');
             const feitasList = document.getElementById('denuncias-feitas');
 
-            // Limpar listas existentes
+            // Limpiar listas existentes
             recebidasList.innerHTML = '';
             feitasList.innerHTML = '';
 
-            // Preencher denúncias recebidas
+            // Rellena denuncias recibidas
             if (denuncias.denuncias_recebidas.length > 0) {
                 denuncias.denuncias_recebidas.forEach(denuncia => {
                     const item = document.createElement('li');
@@ -203,7 +208,7 @@ function cargarDenuncias() {
                 recebidasList.innerHTML = '<li class="denuncia-item">Nenhuma denúncia recebida</li>';
             }
 
-            // Preencher denúncias feitas
+            // Rellena denuncias hechas
             if (denuncias.denuncias_feitas.length > 0) {
                 denuncias.denuncias_feitas.forEach(denuncia => {
                     const item = document.createElement('li');
@@ -222,13 +227,14 @@ function cargarDenuncias() {
             }
         })
         .catch(err => {
+            // Si hay error, muestra mensaje en la lista
             console.error('Erro ao carregar denúncias:', err);
             document.getElementById('denuncias-recebidas').innerHTML = 
                 '<li class="denuncia-item">Erro ao carregar denúncias</li>';
         });
 }
 
-// Adicione esta função para alternar entre as abas
+// Muestra la pestaña de denuncias recibidas o hechas
 function mostrarDenuncias(tipo) {
     document.getElementById('denuncias-recebidas').style.display = 'none';
     document.getElementById('denuncias-feitas').style.display = 'none';
@@ -243,7 +249,7 @@ function mostrarDenuncias(tipo) {
     }
 }
 
-// Agregar navegación por teclado para el carrusel
+// Agrega navegación por teclado para el carrusel
 document.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowLeft') {
     rotateCarousel(-1);
