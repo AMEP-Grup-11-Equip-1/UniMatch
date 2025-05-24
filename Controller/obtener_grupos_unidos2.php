@@ -11,25 +11,42 @@ if (!isset($_SESSION['usuarioID'])) {
 }
 
 $usuarioID = $_SESSION['usuarioID'];
-$modo = $_GET['modo'] ?? 'todos'; // Puede ser 'todos' o 'unidos'
+$modo = $_GET['modo'] ?? 'todos';
 
 $db = new ConexionBD();
 $conn = $db->getConexion();
 
 if ($modo === 'unidos') {
-    // Grupos en los que está unido o es propietario
-    $sql = "SELECT g.* FROM grups g
-            INNER JOIN grup_usuaris gu ON g.id = gu.grup_id
-            WHERE gu.usuari_id = ? OR g.propietari_id = ?";
+    // Solo los grupos en los que está unido (grup_usuaris)
+    $sql = "
+        SELECT g.* 
+        FROM grups g
+        INNER JOIN grup_usuaris gu ON g.id = gu.grup_id
+        WHERE gu.usuari_id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ii", $usuarioID, $usuarioID);
+    if (!$stmt) {
+        error_log("Error preparando la consulta: " . $conn->error);
+        echo json_encode(["success" => false, "message" => "Error en la consulta"]);
+        exit;
+    }
+    $stmt->bind_param("i", $usuarioID);
 } else {
     // Todos los grupos
     $sql = "SELECT * FROM grups";
     $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        error_log("Error preparando la consulta: " . $conn->error);
+        echo json_encode(["success" => false, "message" => "Error en la consulta"]);
+        exit;
+    }
 }
 
-$stmt->execute();
+if (!$stmt->execute()) {
+    error_log("Error ejecutando la consulta: " . $stmt->error);
+    echo json_encode(["success" => false, "message" => "Error ejecutando la consulta"]);
+    exit;
+}
+
 $result = $stmt->get_result();
 
 $grupos = [];
@@ -39,5 +56,11 @@ while ($row = $result->fetch_assoc()) {
 
 echo json_encode([
     "success" => true,
-    "grupos" => $grupos
+    "count" => count($grupos),
+    "grupos" => $grupos,
+    "debug" => [
+        "usuarioID" => $usuarioID,
+        "modo" => $modo,
+        "sql" => $sql
+    ]
 ]);
