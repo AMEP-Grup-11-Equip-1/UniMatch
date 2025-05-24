@@ -260,7 +260,7 @@
 
         function cargarGrupos() {
             console.log("Cargando grupos...");
-            fetch("../../Controller/obtener_grupos_unidos2.php")
+            fetch("../../Controller/obtener_grupos_unidos2.php?modo=unidos")
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
