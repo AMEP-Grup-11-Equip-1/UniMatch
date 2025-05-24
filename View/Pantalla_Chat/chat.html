@@ -67,101 +67,78 @@
         function closeMenu() {
             document.getElementById('sideMenu').style.width = '0';
         }
+        let userId = 0;
+        let receptor_id = null;
+        let grupo_id_actual = null;
+        let chatPollingInterval = null;
 
-        let userId = 0; // por defecto 0 o null
+        const matchList = document.getElementById("matchList");
+        const messagesContainer = document.getElementById("messagesContainer");
+        const messageInput = document.getElementById("message");
+        const btnEnviar = document.getElementById("btnEnviar");
 
-        fetch('../../Controller/get_session.php') // Cambia la ruta a la real
+        fetch('../../Controller/get_session.php')
             .then(res => res.json())
             .then(data => {
                 if (data.usuarioID) {
                     userId = data.usuarioID;
-                    console.log('Usuario logueado con ID:', userId);
-                    // Aquí puedes llamar a cargarMatches(), cargarMensajes() o lo que sea,
-                    // para cargar la conversación con el userId ya disponible
+                    cargarMatches();
                 } else {
-                    console.warn('Usuario no logueado:', data.error);
                     window.location.href = "../Pantalla_de_Bloqueo/Pantalladebloqueo.html";
-
                 }
             })
             .catch(err => console.error('Error al obtener sesión:', err));
 
-        let receptor_id = null;
-        const matchList = document.getElementById("matchList");
-        const messagesContainer = document.getElementById("messagesContainer");
-        const messageInput = document.getElementById("message");
-
         function cargarMatches() {
-            console.log("cargando matches...");
             fetch("../../Controller/obtener_matches.php")
-                .then((res) => {
-                    console.log("Response status:", res.status);
-                    return res.json();
-                })
-                .then((data) => {
-                    console.log("Datos recibidos:", data);
+                .then(res => res.json())
+                .then(data => {
                     if (data.success) {
                         matchList.innerHTML = "";
-                        data.matches.forEach((match) => {
-                            const avatar = match.imagen && match.imagen.trim() !== "" ?
-                                match.imagen :
-                                "../../Imagenes/img2.png";
+                        data.matches.forEach(match => {
+                            const avatar = match.imagen && match.imagen.trim() !== "" ? match.imagen : "../../Imagenes/img2.png";
 
                             const div = document.createElement("div");
                             div.className = "chat-item";
                             div.innerHTML = `
-                                <div style="display:flex;align-items:center;">
-                                    <img src="${avatar}"
-                                        style="width:40px;height:40px;border-radius:50%;margin-right:10px;" />
-                                    <div>
-                            <strong>${match.name}</strong><br />
-                            <small>Haz clic para chatear</small>
-                          </div>
-                        </div>
-                    `;
+                            <div style="display:flex;align-items:center;">
+                                <img src="${avatar}" style="width:40px;height:40px;border-radius:50%;margin-right:10px;" />
+                                <div>
+                                    <strong>${match.name}</strong><br />
+                                    <small>Haz clic para chatear</small>
+                                </div>
+                            </div>
+                        `;
                             div.onclick = () => abrirChat(match.id, match.name);
                             matchList.appendChild(div);
                         });
                     } else {
-                        console.error("Error al obtener matches:", data.message);
                         matchList.innerHTML = "<p>No se encontraron matches.</p>";
                     }
                 })
-                .catch((err) => {
-                    console.error("Error cargando matches:", err);
+                .catch(() => {
                     matchList.innerHTML = "<p>Error cargando matches.</p>";
                 });
         }
-        // Filtrar matches en tiempo real
-        document.getElementById("searchInput").addEventListener("input", function() {
-            const filtro = this.value.toLowerCase();
-            const items = matchList.querySelectorAll(".chat-item");
-
-            items.forEach((item) => {
-                const nombre = item.querySelector("strong").textContent.toLowerCase();
-                if (nombre.includes(filtro)) {
-                    item.style.display = "flex"; // mostrar si coincide
-                } else {
-                    item.style.display = "none"; // ocultar si no coincide
-                }
-            });
-        });
 
         function abrirChat(id, name) {
             receptor_id = id;
-            grupo_id_actual = null; // Para evitar confusiones si había grupo abierto
+            grupo_id_actual = null;
             document.querySelector(".chat-box h2").textContent = "Conversación con " + name;
+
+            if (chatPollingInterval) clearInterval(chatPollingInterval);
             cargarMensajes();
+            chatPollingInterval = setInterval(cargarMensajes, 3000);
         }
 
         function cargarMensajes() {
             if (!receptor_id) return;
             fetch(`../../Controller/obtener_mensajes.php?receptor_id=${receptor_id}`)
-                .then((res) => res.json())
-                .then((data) => {
+                .then(res => res.json())
+                .then(data => {
                     if (data.success) {
                         messagesContainer.innerHTML = "";
-                        data.mensajes.forEach((msg) => {
+                        data.mensajes.forEach(msg => {
                             const messageDiv = document.createElement("div");
                             messageDiv.className = (String(msg.emisor) === String(userId)) ? "message message-sent" : "message message-received";
 
@@ -179,14 +156,12 @@
 
                             messageDiv.appendChild(textDiv);
                             messageDiv.appendChild(timeDiv);
-
                             messagesContainer.appendChild(messageDiv);
                         });
-
                         messagesContainer.scrollTop = messagesContainer.scrollHeight;
                     }
                 })
-                .catch((err) => console.error("Error cargando mensajes:", err));
+                .catch(err => console.error("Error cargando mensajes:", err));
         }
 
         function enviarMensaje() {
@@ -201,8 +176,8 @@
                     method: "POST",
                     body: formData,
                 })
-                .then((res) => res.json())
-                .then((data) => {
+                .then(res => res.json())
+                .then(data => {
                     if (data.success) {
                         messageInput.value = "";
                         cargarMensajes();
@@ -210,22 +185,21 @@
                         alert("No se pudo enviar el mensaje");
                     }
                 })
-                .catch((err) => console.error("Error al enviar mensaje:", err));
+                .catch(err => console.error("Error al enviar mensaje:", err));
         }
 
-        // --- Parte de grupos ---
+        // ---------------------------- GRUPOS ----------------------------
 
         const tabMatches = document.getElementById("tab-matches");
         const tabGroups = document.getElementById("tab-groups");
         const matchListDiv = document.getElementById("matchList");
         const groupListDiv = document.getElementById("groupList");
-        const btnEnviar = document.getElementById("btnEnviar");
 
         let modoGrupo = false;
-        let grupo_id_actual = null;
 
         tabMatches.addEventListener("click", () => {
             modoGrupo = false;
+            if (chatPollingInterval) clearInterval(chatPollingInterval);
             tabMatches.classList.add("active");
             tabGroups.classList.remove("active");
             matchListDiv.style.display = "block";
@@ -239,6 +213,7 @@
 
         tabGroups.addEventListener("click", () => {
             modoGrupo = true;
+            if (chatPollingInterval) clearInterval(chatPollingInterval);
             tabGroups.classList.add("active");
             tabMatches.classList.remove("active");
             matchListDiv.style.display = "none";
@@ -259,27 +234,24 @@
         });
 
         function cargarGrupos() {
-            console.log("Cargando grupos...");
             fetch("../../Controller/obtener_grupos_unidos2.php?modo=unidos")
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        groupListDiv.innerHTML = ""; // Limpiar lista
+                        groupListDiv.innerHTML = "";
                         data.grupos.forEach(grupo => {
                             const div = document.createElement("div");
-                            div.className = "chat-item"; // puedes usar la misma clase que matches para estilo
-
+                            div.className = "chat-item";
                             div.innerHTML = `
-                        <div style="display:flex;align-items:center;">
-                            <img src="${grupo.imagen || '../../Imagenes/img2.png'}" 
-                                 style="width:40px; height:40px; border-radius:50%; margin-right:10px;" />
-                            <div>
-                              <strong>${grupo.nom}</strong><br/>
-                              <small>Haz clic para chatear</small>
+                            <div style="display:flex;align-items:center;">
+                                <img src="${grupo.imagen || '../../Imagenes/img2.png'}" 
+                                     style="width:40px; height:40px; border-radius:50%; margin-right:10px;" />
+                                <div>
+                                  <strong>${grupo.nom}</strong><br/>
+                                  <small>Haz clic para chatear</small>
+                                </div>
                             </div>
-                        </div>
                         `;
-
                             div.onclick = () => abrirChatGrupal(grupo.id, grupo.nom);
                             groupListDiv.appendChild(div);
                         });
@@ -297,18 +269,19 @@
             grupo_id_actual = id;
             receptor_id = null;
             document.querySelector(".chat-box h2").textContent = "Chat grupal: " + nombre;
+
+            if (chatPollingInterval) clearInterval(chatPollingInterval);
             cargarMensajesGrupales();
+            chatPollingInterval = setInterval(cargarMensajesGrupales, 3000);
         }
 
         function cargarMensajesGrupales() {
             if (!grupo_id_actual) return;
-
             fetch(`../../Controller/obtener_mensajes_grupo.php?grupo_id=${grupo_id_actual}`)
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
                         messagesContainer.innerHTML = "";
-
                         let lastEmisorId = null;
 
                         data.mensajes.forEach(msg => {
@@ -318,10 +291,8 @@
                             wrapper.style.display = "flex";
                             wrapper.style.flexDirection = "column";
                             wrapper.style.alignItems = isOwnMessage ? "flex-end" : "flex-start";
-                            wrapper.style.marginBottom = "10px"; // aquí el espacio extra
+                            wrapper.style.marginBottom = "10px";
 
-
-                            // Mostrar el nombre solo si es diferente al anterior
                             if (lastEmisorId !== msg.emisor_id) {
                                 const nombreDiv = document.createElement("div");
                                 nombreDiv.className = "grupo-username";
@@ -353,7 +324,6 @@
 
                             messageContentDiv.appendChild(textDiv);
                             messageContentDiv.appendChild(timeDiv);
-
                             messageDiv.appendChild(messageContentDiv);
 
                             wrapper.appendChild(messageDiv);
@@ -365,12 +335,6 @@
                 })
                 .catch(err => console.error("Error cargando mensajes grupales:", err));
         }
-
-
-
-
-
-
 
         function enviarMensajeGrupal() {
             const text = messageInput.value.trim();
@@ -386,7 +350,6 @@
                 })
                 .then(res => res.text())
                 .then(text => {
-                    console.log("Respuesta cruda servidor:", text);
                     try {
                         const data = JSON.parse(text);
                         if (data.success) {
@@ -401,11 +364,8 @@
                 })
                 .catch(err => console.error("Error al enviar mensaje grupal:", err));
         }
-
-
-        // Inicializar mostrando Matches
-        cargarMatches();
     </script>
+
 </body>
 
 </html>
