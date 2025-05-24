@@ -4,71 +4,100 @@ HISTORICO DE PEDIDO DE AYUDA
 
 <!DOCTYPE html>
 <html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Perfil Usuario - UniMatch</title>
+    <link rel="stylesheet" href="ADM.css" />
+    <link rel="stylesheet" href="user.css" />
+    <link rel="stylesheet" href="../Menu/menu.css" />
+    <link rel="icon" href="../../Imagenes/img1.png" type="image/x-icon" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Perfil Usuario - UniMatch</title>
-  <link rel="stylesheet" href="ADM.css" />
-  <link rel="stylesheet" href="user.css" />
-  <link rel="stylesheet" href="../Menu/menu.css" />
-  <link rel="icon" href="../../Imagenes/img1.png" type="image/x-icon">
+    <script src="gestion_session.js"></script>
+    <script src="user.js" defer></script>
+    <script src="menu_lateral.js" defer></script>
+  </head>
 
-  <script src="gestion_session.js"></script>
-  <script src="user.js" defer></script>
-  <script src="menu_lateral.js" defer></script>
-</head>
+  <body>
+    <!-- Icono menu lateral -->
+    <span class="menu-icon" onclick="openMenu()">&#9776;</span>
 
-<body>
-  <!-- Icono menu lateral -->
-  <span class="menu-icon" onclick="openMenu()">&#9776;</span>
-
-  <!-- Menú lateral -->
-  <div id="sideMenu" class="side-menu">
-    <span class="close-btn" onclick="closeMenu()">&times;</span>
-    <a href="perfil_ADM.html">Perfil</a>
-    <a href="home.html">Home</a>
-    <a href="denuncias.html">Denuncias</a>
-    <a href="ayuda.html">Ayuda</a>
-    <button class="logout-btn-side" onclick="window.location.href='../../Controller/logout.php'">
-      Cerrar sesión
-    </button>
-  </div>
-
-  <!-- Isla flotante centrada -->
-  <main class="perfil-box">
-    <h1>UniMatch</h1>
-    <h1>Perfil del Usuario</h1>
-
-    <p><strong>Nom:</strong> <span id="user-name">Cargando...</span></p>
-    <p><strong>Email:</strong> <span id="user-email">Cargando...</span></p>
-    <p><strong>Status:</strong> <span id="user-status">Cargando...</span></p>
-
-    <div class="user-actions">
-      <button onclick="enviarEstado(1)">Aprobar</button>
-      <button onclick="enviarEstado(0)">Rechazar</button>
-    </div>
-  </main>
-
-  <div class="Infos">    
-    <!-- Carrusel de historias del usuario -->
-    <div class="carousel-container">
-      <button class="arrow left-arrow" onclick="rotateCarousel(-1)">&lt;</button>
-      <!-- El JS va a rellenar este ul con las historias del usuario -->
-      <ul class="carousel">
-        <!-- JS va a rellenar con <li> -->
-      </ul>
-      <button class="arrow right-arrow" onclick="rotateCarousel(1)">&gt;</button>
+    <!-- Menú lateral -->
+    <div id="sideMenu" class="side-menu">
+      <span class="close-btn" onclick="closeMenu()">&times;</span>
+      <a href="perfil_ADM.html">Perfil</a>
+      <a href="home.html">Home</a>
+      <a href="denuncias.html">Denuncias</a>
+      <a href="ayuda.html">Ayuda</a>
+      <button
+        class="logout-btn-side"
+        onclick="window.location.href='../../Controller/logout.php'"
+      >
+        Cerrar sesión
+      </button>
     </div>
 
-    <!-- Lista de matches del usuario -->
-    <div class="Matches">
-      <h2>Matches</h2>
-      <ul class="match-list">
-        <!-- JS va a rellenar con los matches -->
-      </ul>
-    </div>
-  </div>
-</body>
+    <!-- Isla flotante centrada -->
+    <main class="perfil-box">
+      <h1>UniMatch</h1>
+      <h1>Perfil del Usuario</h1>
 
+      <p><strong>Nom:</strong> <span id="user-name">Cargando...</span></p>
+      <p><strong>Email:</strong> <span id="user-email">Cargando...</span></p>
+      <p><strong>Status:</strong> <span id="user-status">Cargando...</span></p>
+
+      <div class="user-actions">
+        <button onclick="enviarEstado(1)">Aprobar</button>
+        <button onclick="enviarEstado(0)">Rechazar</button>
+      </div>
+    </main>
+
+    <!-- Adicione esta nova div acima da div Infos existente -->
+    <div class="Infos" id="denuncias-container">
+      <div class="Denuncias">
+        <h2>Histórico de Denúncias</h2>
+        <div class="denuncias-tabs">
+          <button
+            class="tab-button active"
+            onclick="mostrarDenuncias('recebidas')"
+          >
+            Recebidas
+          </button>
+          <button class="tab-button" onclick="mostrarDenuncias('feitas')">
+            Feitas
+          </button>
+        </div>
+        <ul class="denuncias-list" id="denuncias-recebidas">
+          <!-- JS vai preencher com denúncias recebidas -->
+        </ul>
+        <ul class="denuncias-list" id="denuncias-feitas" style="display: none">
+          <!-- JS vai preencher com denúncias feitas -->
+        </ul>
+      </div>
+    </div>
+
+    <div class="Infos">
+      <!-- Carrusel de historias del usuario -->
+      <div class="carousel-container">
+        <button class="arrow left-arrow" onclick="rotateCarousel(-1)">
+          &lt;
+        </button>
+        <!-- El JS va a rellenar este ul con las historias del usuario -->
+        <ul class="carousel">
+          <!-- JS va a rellenar con <li> -->
+        </ul>
+        <button class="arrow right-arrow" onclick="rotateCarousel(1)">
+          &gt;
+        </button>
+      </div>
+
+      <!-- Lista de matches del usuario -->
+      <div class="Matches">
+        <h2>Matches</h2>
+        <ul class="match-list">
+          <!-- JS va a rellenar con los matches -->
+        </ul>
+      </div>
+    </div>
+  </body>
 </html>

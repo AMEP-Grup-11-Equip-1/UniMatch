@@ -53,6 +53,8 @@ if (!userId) {
       // Inicializar carrusel y matches (no da error si está vacío)
       initCarousel();
       initMatches();
+
+      cargarDenuncias();
     })
     .catch((err) => {
       console.error(err);
@@ -166,6 +168,79 @@ function enviarEstado(valor) {
       alert("Error al enviar estado.");
       console.error(err);
     });
+}
+
+
+// Adicione esta função no seu user.js
+function cargarDenuncias() {
+    if (!userId) return;
+
+    fetch(`../../Controller/denuncias_per_id.php?id=${userId}`)
+        .then(res => res.json())
+        .then(denuncias => {
+            const recebidasList = document.getElementById('denuncias-recebidas');
+            const feitasList = document.getElementById('denuncias-feitas');
+
+            // Limpar listas existentes
+            recebidasList.innerHTML = '';
+            feitasList.innerHTML = '';
+
+            // Preencher denúncias recebidas
+            if (denuncias.denuncias_recebidas.length > 0) {
+                denuncias.denuncias_recebidas.forEach(denuncia => {
+                    const item = document.createElement('li');
+                    item.className = 'denuncia-item';
+                    item.innerHTML = `
+                        <div class="denuncia-header">
+                            <span class="denuncia-user">${denuncia.denunciante}</span>
+                            <span class="denuncia-date">${new Date(denuncia.data).toLocaleDateString()}</span>
+                        </div>
+                        <div class="denuncia-type">${denuncia.tipo_denuncia}</div>
+                    `;
+                    recebidasList.appendChild(item);
+                });
+            } else {
+                recebidasList.innerHTML = '<li class="denuncia-item">Nenhuma denúncia recebida</li>';
+            }
+
+            // Preencher denúncias feitas
+            if (denuncias.denuncias_feitas.length > 0) {
+                denuncias.denuncias_feitas.forEach(denuncia => {
+                    const item = document.createElement('li');
+                    item.className = 'denuncia-item';
+                    item.innerHTML = `
+                        <div class="denuncia-header">
+                            <span class="denuncia-user">${denuncia.denunciado}</span>
+                            <span class="denuncia-date">${new Date(denuncia.data).toLocaleDateString()}</span>
+                        </div>
+                        <div class="denuncia-type">${denuncia.tipo_denuncia}</div>
+                    `;
+                    feitasList.appendChild(item);
+                });
+            } else {
+                feitasList.innerHTML = '<li class="denuncia-item">Nenhuma denúncia feita</li>';
+            }
+        })
+        .catch(err => {
+            console.error('Erro ao carregar denúncias:', err);
+            document.getElementById('denuncias-recebidas').innerHTML = 
+                '<li class="denuncia-item">Erro ao carregar denúncias</li>';
+        });
+}
+
+// Adicione esta função para alternar entre as abas
+function mostrarDenuncias(tipo) {
+    document.getElementById('denuncias-recebidas').style.display = 'none';
+    document.getElementById('denuncias-feitas').style.display = 'none';
+    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+    
+    if (tipo === 'recebidas') {
+        document.getElementById('denuncias-recebidas').style.display = 'block';
+        document.querySelector('.tab-button:first-child').classList.add('active');
+    } else {
+        document.getElementById('denuncias-feitas').style.display = 'block';
+        document.querySelector('.tab-button:last-child').classList.add('active');
+    }
 }
 
 // Agregar navegación por teclado para el carrusel
