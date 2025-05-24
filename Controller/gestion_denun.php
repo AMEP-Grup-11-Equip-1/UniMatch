@@ -7,10 +7,10 @@ $conexion = new ConexionBD();
 $conn = $conexion->getConexion();
 
 
-$sql = "SELECT u.id, u.name, v.report_id
-        FROM verifications v
-        JOIN usuario u ON v.user = u.id
-        WHERE v.report_id IS NOT NULL";
+$sql = "SELECT v.id as verification_id, u.id, u.name, v.report_num
+            FROM verifications v
+            JOIN usuario u ON v.user = u.id
+            WHERE v.report_num > 0";
 
 $resultado = mysqli_query($conn, $sql);
 
@@ -20,8 +20,10 @@ if (!$resultado) {
 }
 
 while ($linha = mysqli_fetch_assoc($resultado)) {
-echo "<tr>";
-    echo "<td><a href='user.html?id=" . urlencode($linha['id']) . "' style='display:block; width:100%; height:100%; text-decoration:none; color:inherit;'>" . htmlspecialchars($linha['name'] ?? '') . "</a></td>";
+    $url = 'user.html?id=' . urlencode($linha['verification_id']);
+    echo "<tr onclick=\"window.location.href='{$url}'\" style='cursor:pointer;'>";
+    echo "<td>" . htmlspecialchars($linha['name'] ?? '') . "</td>";
+    echo "<td>" . htmlspecialchars($linha['report_num'] ?? '') . "</td>";
     echo "</tr>";
 }
 ?>
