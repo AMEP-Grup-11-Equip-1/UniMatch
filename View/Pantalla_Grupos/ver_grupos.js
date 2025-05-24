@@ -1,4 +1,5 @@
  let usuarioID = null;
+ let gruposYaUnidos = new Set();
 
  // 1. Obtener el ID del usuario logueado
  fetch("../../Controller/get_session.php")
@@ -6,8 +7,9 @@
      .then(data => {
          if (data.usuarioID) {
              usuarioID = parseInt(data.usuarioID);
-             cargarGrupos(); // Si hay sesión, cargar grupos
-             cargarGruposUnidos();
+            cargarGruposUnidos().then(() => {
+                 cargarGrupos();
+             });
          } else {
              document.getElementById("sinGrupos").textContent = "Debes iniciar sesión para ver los grupos.";
              document.getElementById("sinGrupos").style.display = "block";
@@ -41,6 +43,10 @@
              let tieneGrupos = false;
 
              data.forEach(grup => {
+                if (gruposYaUnidos.has(grup.id)) {
+                    return; // Saltar si ya está unido
+                }
+
                  const esPropio = grup.propietari_id == usuarioID;
 
                  const div = document.createElement("div");
@@ -78,10 +84,18 @@
                  }
 
                  if (esPropio) {
-                     boton.classList.add("success");
-                     boton.disabled = false;
-                     return; // aún no hacemos nada al clickear en "Gestionar grupo"
-                 }
+                    boton.classList.add("success");
+                    boton.disabled = false;
+
+                    // Redireccionar a gestionar_grupo.html
+                    boton.addEventListener("click", () => {
+                        window.location.href = `gestionar_grupo.html?grupo_id=${grup.id}`;
+                    });
+
+                    propios.appendChild(div);
+                    return;
+                }
+
 
                  boton.addEventListener("click", () => {
                      if (boton.classList.contains("success")) return;
@@ -98,10 +112,27 @@
                                  console.log(resp); // Para depurar en consola
                                  mostrarPopup(resp.message);
                                  if (resp.success) {
-                                     boton.textContent = "Ya te has unido";
-                                     boton.classList.add("success");
-                                     boton.disabled = true;
-                                 }
+                                    mostrarPopup(resp.message);
+
+                                    // Eliminar el grupo del listado actual
+                                    div.remove();
+
+                                    // Agregarlo a la lista de "Grupos Unidos"
+                                    const nuevoDiv = document.createElement("div");
+                                    nuevoDiv.classList.add("grupo-item");
+                                    nuevoDiv.innerHTML = `
+                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                            <div>
+                                                <h2>${grup.nom}</h2>
+                                                <p>${grup.descripcio}</p>
+                                                <p><strong>Visibilidad:</strong> ${grup.visibilitat}</p>
+                                            </div>
+                                            <button class="join-button success" disabled>Miembro</button>
+                                        </div>
+                                    `;
+                                    document.getElementById("gruposUnidos").appendChild(nuevoDiv);
+                                }
+
                              })
                              .catch(err => {
                                  console.error("Error en fetch:", err);
@@ -131,42 +162,49 @@
 
 
  function cargarGruposUnidos() {
-     fetch("../../Controller/obtener_grupos_unidos.php", {
-             method: "POST",
-             headers: {
-                 "Content-Type": "application/json"
-             }
-         })
-         .then(res => res.json())
-         .then(data => {
-             const lista = document.getElementById("gruposUnidos");
 
-             if (!Array.isArray(data) || data.length === 0) return;
+    return fetch("../../Controller/obtener_grupos_unidos.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ usuari_id: usuarioID })
+    })
+    .then(res => res.json())
+    .then(data => {
+        const lista = document.getElementById("gruposUnidos");
 
-             data.forEach(grup => {
+        if (!Array.isArray(data) || data.length === 0) return;
 
-                 const div = document.createElement("div");
-                 div.classList.add("grupo-item");
+        data.forEach(grup => {
+            gruposYaUnidos.add(grup.id); // <- evita que aparezcan de nuevo
 
-                 div.innerHTML = `
+            const div = document.createElement("div");
+            div.classList.add("grupo-item");
+            div.innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
                         <h2>${grup.nom}</h2>
                         <p>${grup.descripcio}</p>
                         <p><strong>Visibilidad:</strong> ${grup.visibilitat}</p>
                     </div>
-                    <button class="join-button success" disabled>Miembro</button>
+                    <button class="join-button success">Ver Grupo</button>
                 </div>
-                
             `;
+            const boton = div.querySelector(".join-button");
 
-                 lista.appendChild(div);
-             });
-         })
-         .catch(err => {
-             console.error("Error al cargar grupos unidos:", err);
-         });
- }
+            boton.addEventListener("click", () => {
+                window.location.href = `ver_grupos_unidos.html?grupo_id=${grup.id}`;
+            });
+
+            lista.appendChild(div);
+        });
+    })
+    .catch(err => {
+        console.error("Error al cargar grupos unidos:", err);
+    });
+}
+
 
  // 3. Cambiar pestañas
  document.getElementById("tab-disponibles").addEventListener("click", () => {
@@ -197,3 +235,4 @@
          popup.style.display = "none";
      }, 3000);
  }
+
