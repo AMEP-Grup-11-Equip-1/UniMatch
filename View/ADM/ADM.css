@@ -6,11 +6,7 @@ body {
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
     padding: 0;
-    /* Quitamos flex para que no centre toda la página y permita menú lateral */
-    /* display: flex; */
-    /* justify-content: center; */
-    /* align-items: center; */
-    /* height: 100vh; */
+    
 }
 
 /* ------------------------ Títulos ------------------------- */
