@@ -6,11 +6,7 @@ body {
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
     padding: 0;
-    /* Quitamos flex para que no centre toda la página y permita menú lateral */
-    /* display: flex; */
-    /* justify-content: center; */
-    /* align-items: center; */
-    /* height: 100vh; */
+    
 }
 
 /* ------------------------ Títulos ------------------------- */
@@ -29,32 +25,7 @@ h1:nth-of-type(2) {
     margin-bottom: 20px;
 }
 
-/* ------------------------ Perfil -------------------------- */
 
-.perfil-box {
-    background: #1f1f1f;
-    color: #eee;
-    padding: 40px;
-    border-radius: 20px;
-    width: 400px;
-    max-width: 90vw;
-    text-align: left;
-    box-shadow: 0 0 25px rgba(255, 105, 180, 0.6);
-    font-family: 'Segoe UI', sans-serif;
-    line-height: 1.6;
-    margin: 60px auto; /* centrado horizontal y separación arriba */
-}
-
-    /* Párrafos y texto dentro del perfil */
-    .perfil-box p {
-        font-size: 1.2em;
-        margin: 15px 0;
-    }
-
-    /* Texto fuerte en rosa */
-    .perfil-box strong {
-        color: #ff4f7b;
-    }
 
 /* ----------------------- Botones -------------------------- */
 
@@ -115,6 +86,8 @@ h1:nth-of-type(2) {
     box-shadow: 0 0 20px rgba(255, 105, 180, 0.3);
     width: 95%;
     max-width: 700px;
+    max-height: 500px;
+    overflow-y: auto;
     margin: 60px auto;
 }
 

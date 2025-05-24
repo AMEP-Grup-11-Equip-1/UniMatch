@@ -1,0 +1,82 @@
+﻿/* ------------------- Estilo General ------------------- */
+
+body {
+    background-color: #121212;
+    color: #fff;
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* ------------------- Caja de Formulario ------------------- */
+
+.form-box {
+    background: #1f1f1f;
+    padding: 40px 50px;
+    border-radius: 20px;
+    box-shadow: 0 0 25px rgba(255, 105, 180, 0.4);
+    width: 400px;
+    max-width: 90vw;
+    text-align: center;
+}
+
+    /* ------------------- Título ------------------- */
+
+    .form-box h2 {
+        color: #ff4f7b;
+        font-size: 2em;
+        margin-bottom: 30px;
+    }
+
+    /* ------------------- Campos de Entrada ------------------- */
+
+    .form-box input[type="text"],
+    .form-box input[type="password"] {
+        width: 100%;
+        padding: 14px 16px;
+        margin: 12px 0;
+        border: 2px solid #ff4f7b;
+        border-radius: 12px;
+        background-color: #2a2a2a;
+        color: #fff;
+        font-size: 1em;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+    }
+
+    .form-box input:focus {
+        outline: none;
+        border-color: #ff81a3;
+        box-shadow: 0 0 10px rgba(255, 79, 123, 0.6);
+    }
+
+    /* ------------------- Botón ------------------- */
+
+    .form-box button {
+        background-color: transparent;
+        color: #ff4f7b;
+        border: 2.5px solid #ff4f7b;
+        padding: 14px 30px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 1em;
+        margin-top: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+        .form-box button:hover {
+            background-color: #ff4f7b;
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 79, 123, 0.7);
+            transform: scale(1.03);
+        }
+
+        .form-box button:active {
+            transform: scale(0.96);
+        }

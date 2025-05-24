@@ -3,7 +3,7 @@ let currentProtocol = null; // Almacena el protocolo del chat actual
 let pollingInterval = null; // Intervalo para actualización de mensajes
 let dataPollingInterval = null; // Intervalo para actualización de datos generales
 const POLLING_INTERVAL = 3000; // Intervalo de 3 segundos para mensajes del chat
-const DATA_POLLING_INTERVAL = 10000; // Intervalo de 10 segundos para datos generales
+const DATA_POLLING_INTERVAL = 5000; // Intervalo de 5 segundos para datos generales
 
 // Función auxiliar para realizar peticiones AJAX (fetch)
 // Permite enviar datos por GET o POST y devuelve la respuesta en JSON
