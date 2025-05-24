@@ -9,7 +9,7 @@ if (!isset($input['grup_id']) || !isset($input['usuari_id'])) {
 }
 
 $grup_id = intval($input['grup_id']);
-$usuari_id = intval($input['usuari_id']);
+$usuari_id = isset($_SESSION['usuarioID']) ? intval($_SESSION['usuarioID']) : null;
 
 try {
     $db = new ConexionBD();
