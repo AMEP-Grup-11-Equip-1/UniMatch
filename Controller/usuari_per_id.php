@@ -14,55 +14,109 @@ if (!$conn) {
     exit;
 }
 
-// Si la solicitud es GET, obtiene los datos del usuario por ID
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // Verifica que el parámetro 'id' esté presente en la URL
     if (!isset($_GET['id'])) {
         echo json_encode(["status" => "error", "message" => "Falta el parámetro id"]);
         exit;
     }
 
     $id_verf = intval($_GET['id']);
-    // Consulta para obtener el ID de usuario asociado a la verificación
-    $sql = "SELECT user FROM verifications WHERE id = ?";
+    
+    // 1. Primero verificamos si existe la verificación
+    $sql = "SELECT user, ok FROM verifications WHERE id = ?";
     $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        echo json_encode(["status" => "error", "message" => "Error al preparar la consulta de verificación"]);
+        exit;
+    }
+    
     $stmt->bind_param("i", $id_verf);
-    $stmt->execute();
-    $stmt->bind_result($id);
-    $stmt->fetch();
+    if (!$stmt->execute()) {
+        echo json_encode(["status" => "error", "message" => "Error al ejecutar la consulta de verificación"]);
+        exit;
+    }
+    
+    $stmt->bind_result($id, $okResult);
+    if (!$stmt->fetch()) {
+        $stmt->close();
+        echo json_encode(["status" => "error", "message" => "ID de verificación no encontrado"]);
+        exit;
+    }
     $stmt->close();
 
-    // Crea una instancia del modelo de usuario y obtiene los datos por ID
+    // 2. Ahora obtenemos el usuario
     $usuarioModel = new Usuario($conn);
     $resultado = $usuarioModel->obtenerUsuarioPorID($id);
-
-    // Si la consulta fue exitosa, obtiene también el estado de verificación
-    if ($resultado['status'] === 'success') {
-        // Consulta para obtener el estado de verificación (ok)
-        $sqlOk = "SELECT ok FROM verifications WHERE user = ?";
-        $stmtOk = $conn->prepare($sqlOk);
-        $okValue = null;
-
-        if ($stmtOk) {
-            $stmtOk->bind_param("i", $id);
-            $stmtOk->execute();
-            $stmtOk->bind_result($okResult);
-            $stmtOk->fetch();
-            $stmtOk->close();
-        }
-
-        // Devuelve los datos del usuario y el estado de verificación
-        echo json_encode([
-            "nombre" => $resultado['usuario']['name'],
-            "email" => $resultado['usuario']['mail'],
-            "ok" => isset($okResult) ? (is_null($okResult) ? null : intval($okResult)) : null
-        ]);
-    } else {
-        // Si hubo un error al obtener el usuario
-        echo json_encode(["status" => "error", "message" => $resultado['message']]);
+    
+    if ($resultado['status'] !== 'success' || empty($resultado['usuario'])) {
+        echo json_encode(["status" => "error", "message" => "Usuario no encontrado"]);
+        exit;
     }
+
+    // 3. Consulta combinada (historias y matches)
+    $sql_union = "SELECT 
+                    '1' AS origem,
+                    h.descripcion,
+                    h.imagen,
+                    NULL AS id_match,
+                    NULL AS nombre_match,
+                    NULL AS data_match
+                  FROM historias h
+                  WHERE h.usuario_id = ?
+                  
+                  UNION ALL
+                  
+                  SELECT 
+                    '2' AS origem,
+                    NULL AS descripcion,
+                    NULL AS imagen,
+                    m.id AS id_match,
+                    CASE 
+                        WHEN m.usuario1_id = ? THEN u2.name
+                        WHEN m.usuario2_id = ? THEN u1.name
+                    END AS nombre_match,
+                    m.fecha AS data_match
+                  FROM matches m
+                  LEFT JOIN usuario u1 ON m.usuario1_id = u1.id
+                  LEFT JOIN usuario u2 ON m.usuario2_id = u2.id
+                  WHERE m.usuario1_id = ? OR m.usuario2_id = ?";
+    
+    $stmt_union = $conn->prepare($sql_union);
+    if (!$stmt_union) {
+        echo json_encode(["status" => "error", "message" => "Error al preparar la consulta combinada"]);
+        exit;
+    }
+    
+    $stmt_union->bind_param("iiiii", $id, $id, $id, $id, $id);
+    if (!$stmt_union->execute()) {
+        echo json_encode(["status" => "error", "message" => "Error al ejecutar la consulta combinada"]);
+        exit;
+    }
+    
+    $result_union = $stmt_union->get_result();
+    $dados_union = [];
+    while ($row = $result_union->fetch_assoc()) {
+        $dados_union[] = $row;
+    }
+    $stmt_union->close();
+
+    // Respuesta exitosa
+    echo json_encode([
+        "status" => "success",
+        "data" => [
+            "usuario" => [
+                "nombre" => $resultado['usuario']['name'],
+                "email" => $resultado['usuario']['mail']
+            ],
+            "verificacion" => [
+                "ok" => isset($okResult) ? (is_null($okResult) ? null : intval($okResult)) : null
+            ],
+            "contenido" => $dados_union
+        ]
+    ]);
     exit;
 }
+
 
 // Si la solicitud es POST, actualiza el estado de verificación del usuario
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
