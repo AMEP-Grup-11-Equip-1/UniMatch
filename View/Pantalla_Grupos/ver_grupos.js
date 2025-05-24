@@ -127,7 +127,7 @@
                                                 <p>${grup.descripcio}</p>
                                                 <p><strong>Visibilidad:</strong> ${grup.visibilitat}</p>
                                             </div>
-                                            <button class="join-button success" disabled>Miembro</button>
+                                            <button class="join-button success" disabled>Ver Grupo</button>
                                         </div>
                                     `;
                                     document.getElementById("gruposUnidos").appendChild(nuevoDiv);
