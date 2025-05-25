@@ -1,141 +1,163 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gestionar Grupo</title>
-    <link rel="stylesheet" href="gestionar_grupo.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestionar Grupo</title>
+  <link rel="stylesheet" href="gestionar_grupo.css" />
 </head>
 <body>
 
-    <a href="ver_grupos.html" class="back-button">← Volver</a>
+<a href="ver_grupos.html" class="back-button">← Volver</a>
 
-    <div class="grupo-card">
-        <h2 id="nombre-grupo">Nombre del Grupo</h2>
+<div class="grupo-card">
+  <h2 id="nombre-grupo">Nombre del Grupo</h2>
 
-        <p><strong>Descripción:</strong></p>
-        <textarea id="descripcion-input" rows="3" style="width: 100%; border-radius: 6px; padding: 8px;"></textarea>
-        <button id="guardar-descripcion" class="chat-btn" style="margin-top: 10px;">Guardar descripción</button>
+  <p><strong>Descripción:</strong></p>
+  <textarea id="descripcion-input" rows="3" style="width: 100%; border-radius: 6px; padding: 8px;"></textarea>
+  <button id="guardar-descripcion" class="chat-btn" style="margin-top: 10px;">Guardar descripción</button>
 
-        <p><strong>Visibilidad:</strong> <span id="visibilidad-grupo"></span></p>
+  <p><strong>Visibilidad:</strong> <span id="visibilidad-grupo"></span></p>
 
-        <div class="miembros">
-            <p><strong class="propietario-label">Propietario:</strong> <span id="nombre-propietario" class="propietario-nombre"></span></p>
-            <strong>Miembros:</strong>
-            <ul id="lista-miembros"></ul>
-        </div>
+  <div class="miembros">
+    <p><strong class="propietario-label">Propietario:</strong> <span id="nombre-propietario" class="propietario-nombre"></span></p>
+    <strong>Miembros:</strong>
+    <ul id="lista-miembros"></ul>
+  </div>
 
-        <button class="chat-btn" onclick="irAlChatDeGrupo()">Chat de Grupo</button>
-        <button id="salir-grupo" class="salir-btn">Eliminar Grupo</button>
-    </div>
+  <button class="chat-btn" onclick="irAlChatDeGrupo()">Chat de Grupo</button>
+  <button id="salir-grupo" class="salir-btn">Eliminar Grupo</button>
+</div>
 
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        const grupoID = params.get("grupo_id");
-        const usuarioID = localStorage.getItem("usuario_id") || 1;
+<!-- Popups -->
+<div id="popupNotificacion" class="popup-notificacion" style="display: none;"></div>
+<div id="popupConfirmacion" class="popup-confirmacion" style="display: none;">
+  <h3>Unimatch</h3>
+  <p id="popupConfirmacionMensaje"></p>
+  <div class="popup-botones">
+    <button id="btnConfirmar" class="btn-confirmar">Sí</button>
+    <button id="btnCancelar" class="btn-cancelar">No</button>
+  </div>
+</div>
 
-        // 1. Cargar detalles del grupo
-        fetch("../../Controller/get_grupo_detalle.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ grup_id: grupoID })
-        })
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById("nombre-grupo").textContent = data.nombre;
-                document.getElementById("descripcion-input").value = data.descripcion;
-                document.getElementById("visibilidad-grupo").textContent = data.visibilidad;
-                document.getElementById("nombre-propietario").textContent = data.propietario_nombre;
+<script>
+  const grupoID = new URLSearchParams(window.location.search).get("grupo_id");
+  const usuarioID = localStorage.getItem("usuario_id") || 1;
 
-                const lista = document.getElementById("lista-miembros");
+  fetch("../../Controller/get_grupo_detalle.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ grup_id: grupoID })
+  })
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("nombre-grupo").textContent = data.nombre;
+      document.getElementById("descripcion-input").value = data.descripcion;
+      document.getElementById("visibilidad-grupo").textContent = data.visibilidad;
+      document.getElementById("nombre-propietario").textContent = data.propietario_nombre;
 
-                data.miembros.forEach(usuario => {
-                    if (usuario.id != data.propietario_id) {
-                        const li = document.createElement("li");
-                        li.textContent = usuario.nombre;
+      const lista = document.getElementById("lista-miembros");
 
-                        const btn = document.createElement("button");
-                        btn.textContent = "Expulsar";
-                        btn.classList.add("expulsar-btn");
-                        btn.style.marginLeft = "12px";
-                        btn.addEventListener("click", () => {
-                            if (confirm(`¿Seguro que quieres expulsar a ${usuario.nombre}?`)) {
-                                fetch("../../Controller/expulsar_miembro.php", {
-                                    method: "POST",
-                                    headers: { "Content-Type": "application/json" },
-                                    body: JSON.stringify({
-                                        grup_id: grupoID,
-                                        usuari_id: usuario.id
-                                    })
-                                })
-                                    .then(res => res.json())
-                                    .then(resp => {
-                                        alert(resp.message);
-                                        if (resp.success) {
-                                            li.remove();
-                                        }
-                                    });
-                            }
-                        });
+      data.miembros.forEach(usuario => {
+        if (usuario.id != data.propietario_id) {
+          const li = document.createElement("li");
+          li.textContent = usuario.nombre;
 
-                        li.appendChild(btn);
-                        lista.appendChild(li);
-                    }
-                });
-
-                // 2. Guardar descripción
-                document.getElementById("guardar-descripcion").addEventListener("click", () => {
-                    const nuevaDescripcion = document.getElementById("descripcion-input").value;
-
-                    fetch("../../Controller/actualizar_descripcion_grupo.php", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                            grupo_id: grupoID,
-                            nueva_descripcion: nuevaDescripcion
-                        })
-                    })
-                        .then(async res => {
-                            const text = await res.text();
-                            try {
-                                const json = JSON.parse(text);
-                                alert(json.message || "Descripción actualizada correctamente.");
-                            } catch (err) {
-                                console.error("Respuesta inesperada del servidor:", text);
-                                alert("La descripción se guardó.");
-                            }
-                        })
-                        .catch(err => {
-                            console.error("Error al actualizar descripción:", err);
-                            alert("Hubo un error al guardar la descripción.");
-                        });
-                });
+          const btn = document.createElement("button");
+          btn.textContent = "Expulsar";
+          btn.classList.add("expulsar-btn");
+          btn.style.marginLeft = "12px";
+          btn.addEventListener("click", () => {
+            mostrarConfirmacion(`¿Seguro que quieres expulsar a ${usuario.nombre}?`, () => {
+              fetch("../../Controller/expulsar_miembro.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ grup_id: grupoID, usuari_id: usuario.id })
+              })
+              .then(res => res.json())
+              .then(resp => {
+                mostrarPopup(resp.message || "Miembro expulsado.");
+                if (resp.success) li.remove();
+              });
             });
+          });
 
-        // 3. Eliminar grupo
-        document.getElementById("salir-grupo").addEventListener("click", () => {
-            if (confirm("¿Seguro que querés eliminar este grupo? Esta acción no se puede deshacer.")) {
-                fetch("../../Controller/eliminar_grupo.php", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ grup_id: grupoID, usuari_id: usuarioID })
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        alert(data.message || "Grupo eliminado.");
-                        window.location.href = "ver_grupos.html";
-                    });
-            }
-        });
-
-        function irAlChatDeGrupo() {
-            if (grupoID) {
-                window.location.href = `../Pantalla_Chat/chat.html?grupo_id=${grupoID}`;
-            } else {
-                alert("No se ha encontrado el ID del grupo.");
-            }
+          li.appendChild(btn);
+          lista.appendChild(li);
         }
-    </script>
+      });
+
+      document.getElementById("guardar-descripcion").addEventListener("click", () => {
+        const nuevaDescripcion = document.getElementById("descripcion-input").value;
+
+        fetch("../../Controller/actualizar_descripcion_grupo.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            grupo_id: grupoID,
+            nueva_descripcion: nuevaDescripcion
+          })
+        })
+        .then(res => res.json())
+        .then(json => {
+          mostrarPopup(json.message || "Descripción actualizada correctamente.");
+        })
+        .catch(() => {
+          mostrarPopup("Error al guardar la descripción.");
+        });
+      });
+    });
+
+  document.getElementById("salir-grupo").addEventListener("click", () => {
+    mostrarConfirmacion("¿Seguro que querés eliminar este grupo? Esta acción no se puede deshacer.", () => {
+      fetch("../../Controller/eliminar_grupo.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ grup_id: grupoID, usuari_id: usuarioID })
+      })
+      .then(res => res.json())
+      .then(data => {
+        mostrarPopup(data.message || "Grupo eliminado.");
+        setTimeout(() => {
+          window.location.href = "ver_grupos.html";
+        }, 2000);
+      });
+    });
+  });
+
+  function irAlChatDeGrupo() {
+    window.location.href = `../Pantalla_Chat/chat.html?grupo_id=${grupoID}`;
+  }
+
+  function mostrarPopup(mensaje) {
+    const popup = document.getElementById("popupNotificacion");
+    popup.textContent = mensaje;
+    popup.style.display = "block";
+    setTimeout(() => {
+      popup.style.display = "none";
+    }, 3000);
+  }
+
+  function mostrarConfirmacion(mensaje, onConfirmar) {
+    const popup = document.getElementById("popupConfirmacion");
+    const mensajeElem = document.getElementById("popupConfirmacionMensaje");
+    const btnConfirmar = document.getElementById("btnConfirmar");
+    const btnCancelar = document.getElementById("btnCancelar");
+
+    mensajeElem.textContent = mensaje;
+    popup.style.display = "block";
+
+    const cerrar = () => popup.style.display = "none";
+
+    btnConfirmar.onclick = () => {
+      cerrar();
+      onConfirmar();
+    };
+
+    btnCancelar.onclick = cerrar;
+  }
+</script>
 
 </body>
 </html>
+
