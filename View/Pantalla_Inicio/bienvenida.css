@@ -98,6 +98,27 @@ body::after {
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
 }
 
+/*---------------------------------------Botó Denuncia------------------------------------------------------------------>*/
+
+.report-btn {
+  position: absolute;
+  right: 10px;
+  bottom: 18px;
+  background: #ff4f7b;
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  cursor: pointer;
+  z-index: 10;
+  transition: background-color 0.3s ease;
+}
+
+.report-btn:hover {
+  background-color: #e429fd;
+}
+
 
 /*------------------------------------------------ Notificación ---------------------------------------------------->*/
 
