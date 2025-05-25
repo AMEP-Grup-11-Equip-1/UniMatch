@@ -844,31 +844,33 @@ h1 {
 
 /* En tu bienvenida.css */
 
+
 .error-message {
     position: fixed;
-    top: 200px;
-    left: 83.5%;
+    top: 22vh;
+    left: 83.5vw;
+    /* 85% del ancho del viewport, para estar más a la derecha */
     transform: translateX(-50%);
     display: none;
     align-items: center;
-    gap: 10px;
+    gap: 0.6rem;
     background-color: #ffecec;
     color: #990000;
-    border-left: 3px solid #ff4d4d;
-    padding: 12px 18px;
-    border-radius: 10px;
-    font-size: 15px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    width: 450px;
-    /* ancho fijo */
-    max-width: none;
-    /* sin límite de max ancho */
+    border-left: 0.3rem solid #ff4d4d;
+    padding: 1rem 1.5rem;
+    border-radius: 1.25rem;
+    font-size: 1rem;
+    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05);
+    width: 25vw;
+    /* Ancho proporcional, por ejemplo 25% del viewport */
+    min-width: 250px;
+    /* Ancho mínimo para no quedar muy estrecho */
+    max-width: 500px;
+    /* Máximo ancho */
     opacity: 1;
     transition: opacity 1s ease-in-out;
     z-index: 1000;
-    /* Para que esté encima de todo */
     white-space: normal;
-    /* para que el texto haga salto de línea si es largo */
     text-align: center;
 }
 
