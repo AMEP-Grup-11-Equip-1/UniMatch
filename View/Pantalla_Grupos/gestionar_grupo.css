@@ -120,3 +120,77 @@ body {
 .expulsar-btn:hover {
   background-color: #cc0000;
 }
+
+.popup-confirmacion {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #1e1e1e;
+  color: white;
+  padding: 30px 40px;
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.7);
+  text-align: center;
+  display: none;
+  z-index: 2000;
+  width: 300px;
+}
+
+.popup-confirmacion h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 20px;
+}
+
+.popup-confirmacion p {
+  margin-bottom: 20px;
+}
+
+.popup-botones {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.btn-confirmar,
+.btn-cancelar {
+  padding: 10px 22px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-confirmar {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-cancelar {
+  background-color: #aaa;
+  color: black;
+}
+
+.popup-notificacion {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #28a745; /* verde éxito */
+  color: white;
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  z-index: 1000;
+  animation: fadeInOut 3s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0%   { opacity: 0; transform: translateY(20px); }
+  10%  { opacity: 1; transform: translateY(0); }
+  90%  { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(20px); }
+}
+
