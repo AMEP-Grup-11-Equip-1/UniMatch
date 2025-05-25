@@ -175,19 +175,29 @@
             formData.append("mensaje", text);
 
             fetch("../../Controller/enviar_mensaje.php", {
-                    method: "POST",
-                    body: formData,
-                })
-                .then(res => res.json())
-                .then(data => {
+                method: "POST",
+                body: formData
+            })
+            .then(res => res.text())
+            .then(text => {
+                try {
+                    const data = JSON.parse(text);
                     if (data.success) {
                         messageInput.value = "";
                         cargarMensajes();
                     } else {
+                        console.error(" Error servidor:", data.message || text);
                         alert("No se pudo enviar el mensaje");
                     }
-                })
-                .catch(err => console.error("Error al enviar mensaje:", err));
+                } catch (e) {
+                    console.error(" Error parsejant JSON:", text);
+                    alert("Error inesperado del servidor");
+                }
+            })
+            .catch(err => {
+                console.error(" Error de red:", err);
+                alert("Error al enviar el mensaje");
+            });
         }
 
         // ---------------------------- GRUPOS ----------------------------
