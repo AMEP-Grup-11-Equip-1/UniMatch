@@ -1,3 +1,13 @@
+// Función para abrir el menú lateral
+function openMenu() {
+  document.getElementById("sideMenu").style.width = "250px";
+}
+
+// Función para cerrar el menú lateral
+function closeMenu() {
+  document.getElementById("sideMenu").style.width = "0";
+}
+
 // Evento que se ejecuta cuando el DOM está completamente cargado
 window.addEventListener("DOMContentLoaded", () => {
   loadChat();
@@ -42,6 +52,9 @@ function loadChat() {
           } else {
             OpenListDiv.appendChild(div);
           }
+
+          checkEmptyList(OpenListDiv, 'tab-open');
+        checkEmptyList(CloseListDiv, 'tab-closed');
         });
       }
     })
@@ -240,17 +253,17 @@ function closeChat() {
     .catch((error) => console.error("Error en la solicitud:", error));
 }
 
-// Función para abrir el menú lateral
-function openMenu() {
-  document.getElementById("sideMenu").style.width = "250px";
-}
+function checkEmptyList(listDiv, tabId) {
+    if (listDiv.children.length === 0) {
+      const emptyMessage = document.createElement('div');
+      emptyMessage.className = 'empty-list-message';
+      emptyMessage.textContent = `No hay ${tabId === 'tab-open' ? 'consultas abiertas' : 'consultas cerradas'}`;
+      listDiv.appendChild(emptyMessage);
+    }
+  }
 
-// Función para cerrar el menú lateral
-function closeMenu() {
-  document.getElementById("sideMenu").style.width = "0";
-}
 
-// --- Bloco para rating de estrelas ---
+// --- Rating de estrellas ---
 document.addEventListener('DOMContentLoaded', () => {
   const observer = new MutationObserver(() => {
     const stars = document.querySelectorAll('.rating .star');
