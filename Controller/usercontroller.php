@@ -41,7 +41,7 @@ try {
             "usuario" => [
                 "nombre" => $resultado['usuario']['name'],
                 "descripcion" => $resultado['usuario']['descripcion'],
-                "imagen" => $resultado['usuario']['imagen'] ? $resultado['usuario']['imagen'] : "../Imagenes/foto_perfil.png" // Imagen por defecto
+                "imagen" => $resultado['usuario']['imagen'] ? $resultado['usuario']['imagen'] : "../../Imagenes/img2.png" // Imagen por defecto
             ]
         ]);
     } else {
