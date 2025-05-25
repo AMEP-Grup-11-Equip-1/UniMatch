@@ -215,6 +215,93 @@
     font-size: 0.9em;
 }
 
+/* ------------------------ Abas de Denúncias ------------------------- */
+.denuncias-tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #444;
+}
+
+.tab-button {
+    padding: 8px 20px;
+    background: none;
+    border: none;
+    color: #aaa;
+    cursor: pointer;
+    font-size: 1em;
+    position: relative;
+}
+
+.tab-button.active {
+    color: #ff4f7b;
+    font-weight: bold;
+}
+
+.tab-button.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #ff4f7b;
+}
+
+/* ------------------------ Lista de Denúncias ------------------------- */
+.denuncia-item {
+    padding: 15px;
+    margin-bottom: 15px;
+    background: #333;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.denuncia-item:hover {
+    background: #3a3a3a;
+    transform: translateX(5px);
+    box-shadow: 0 5px 15px rgba(255, 79, 123, 0.2);
+}
+
+.denuncia-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.denuncia-user {
+    font-weight: bold;
+    color: #ff4f7b;
+}
+
+.denuncia-date {
+    color: #aaa;
+    font-size: 0.9em;
+}
+
+.denuncia-type {
+    color: #ff9eb5;
+    font-style: italic;
+    margin: 5px 0;
+}
+
+.denuncia-status {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.status-pendente {
+    background-color: #ff9800;
+    color: #000;
+}
+
+.status-resolvido {
+    background-color: #4caf50;
+    color: #fff;
+}
+
 /* ------------------------ Responsividade ------------------------- */
 
 @media (max-width: 1000px) {
