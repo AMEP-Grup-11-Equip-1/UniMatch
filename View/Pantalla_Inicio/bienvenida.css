@@ -844,10 +844,9 @@ h1 {
 
 /* En tu bienvenida.css */
 
-
 .error-message {
     position: fixed;
-    top: 22vh;
+    top: 24vh;
     left: 83.5vw;
     /* 85% del ancho del viewport, para estar más a la derecha */
     transform: translateX(-50%);
@@ -859,7 +858,7 @@ h1 {
     border-left: 0.3rem solid #ff4d4d;
     padding: 1rem 1.5rem;
     border-radius: 1.25rem;
-    font-size: 1rem;
+    font-size: 0.8rem;
     box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05);
     width: 25vw;
     /* Ancho proporcional, por ejemplo 25% del viewport */
