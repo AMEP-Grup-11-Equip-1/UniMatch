@@ -16,14 +16,14 @@
     left: 50%;
 }
 
-.perfil-box p {
-    font-size: 1.2em;
-    margin: 15px 0;
-}
+    .perfil-box p {
+        font-size: 1.2em;
+        margin: 15px 0;
+    }
 
-.perfil-box strong {
-    color: #ff4f7b;
-}
+    .perfil-box strong {
+        color: #ff4f7b;
+    }
 
 .user-actions {
     margin-top: 20px;
@@ -31,27 +31,27 @@
     gap: 10px;
 }
 
-.user-actions button {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    background-color: #ff4f7b;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
+    .user-actions button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        background-color: #ff4f7b;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
 
-.user-actions button:hover {
-    background-color: #ff2d62;
-    transform: translateY(-2px);
-}
+        .user-actions button:hover {
+            background-color: #ff2d62;
+            transform: translateY(-2px);
+        }
 
 /* -------------------------- Seção de informações -------------------------- */
 
 .Infos {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    justify-content: center;
+    align-items: stretch;
     gap: 30px;
     width: 90%;
     max-width: 1000px;
@@ -60,61 +60,71 @@
     background: #1f1f1f;
     border-radius: 20px;
     box-shadow: 0 0 25px rgba(255, 105, 180, 0.3);
+    flex-wrap: wrap;
 }
 
 /* ------------------------ Carrossel de Fotos com Descrição ------------------------- */
 
 .carousel-container {
-    position: relative;
-    width: 400px;
-    height: 550px; /* Aumentei para acomodar a descrição */
+    flex: 1;
+    height: 550px;
     box-sizing: border-box;
     overflow: hidden;
     border-radius: 15px;
     background: #2a2a2a;
     padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
 }
 
 .carousel {
     position: relative;
     width: 100%;
     height: 100%;
+    display: flex;
+    overflow: hidden;
 }
 
 .carousel-slide {
-    position: absolute;
     width: 100%;
     height: 100%;
-    display: flex;
+    display: none;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    opacity: 0;
-    transition: opacity 0.5s ease;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
 }
 
-.carousel-slide.active {
-    opacity: 1;
-}
+    .carousel-slide.active {
+        display: flex;
+    }
 
-.carousel-slide img {
-    max-width: 90%;
-    max-height: 80%; /* Reduzi para dar espaço à descrição */
-    object-fit: contain;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-    margin-bottom: 15px;
-}
+    .carousel-slide img {
+        width: auto;
+        height: auto;
+        max-height: 70%;
+        max-width: 100%;
+        object-fit: contain;
+        margin-bottom: 15px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
 
 .carousel-caption {
-    width: 90%;
-    padding: 10px;
+    width: 100%;
+    max-height: 20%;
+    overflow-y: auto;
     background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
     border-radius: 8px;
     color: #fff;
-    text-align: center;
     font-size: 0.95em;
     line-height: 1.4;
+    box-sizing: border-box;
 }
 
 .arrow {
@@ -133,17 +143,17 @@
     transition: all 0.3s ease;
 }
 
-.arrow:hover {
-    background-color: #ff4f7b;
-    transform: translateY(-50%) scale(1.1);
-}
-
 .left-arrow {
     left: 10px;
 }
 
 .right-arrow {
     right: 10px;
+}
+
+.arrow:hover {
+    background-color: #ff4f7b;
+    transform: translateY(-50%) scale(1.1);
 }
 
 /* ------------------------ Lista de Matches ------------------------- */
@@ -153,19 +163,19 @@
     background: #2a2a2a;
     padding: 25px;
     border-radius: 15px;
-    height: 550px; /* Ajustado para combinar com o carrossel */
+    height: 550px;
     box-sizing: border-box;
     overflow-y: auto;
 }
 
-.Matches h2 {
-    color: #ff4f7b;
-    font-size: 1.8em;
-    margin-bottom: 20px;
-    text-align: center;
-    border-bottom: 2px solid #ff4f7b;
-    padding-bottom: 10px;
-}
+    .Matches h2 {
+        color: #ff4f7b;
+        font-size: 1.8em;
+        margin-bottom: 20px;
+        text-align: center;
+        border-bottom: 2px solid #ff4f7b;
+        padding-bottom: 10px;
+    }
 
 .match-list {
     list-style-type: none;
@@ -184,11 +194,11 @@
     cursor: pointer;
 }
 
-.match-item:hover {
-    background: #3a3a3a;
-    transform: translateX(5px);
-    box-shadow: 0 5px 15px rgba(255, 79, 123, 0.2);
-}
+    .match-item:hover {
+        background: #3a3a3a;
+        transform: translateX(5px);
+        box-shadow: 0 5px 15px rgba(255, 79, 123, 0.2);
+    }
 
 .match-avatar {
     width: 50px;
@@ -218,34 +228,39 @@
 /* ------------------------ Abas de Denúncias ------------------------- */
 .denuncias-tabs {
     display: flex;
+    justify-content: space-between;
+    width: 100%;
     margin-bottom: 20px;
     border-bottom: 1px solid #444;
+    gap: 20px;
 }
 
 .tab-button {
-    padding: 8px 20px;
+    flex: 1;
+    padding: 12px 0;
     background: none;
     border: none;
     color: #aaa;
     cursor: pointer;
     font-size: 1em;
     position: relative;
+    text-align: center;
 }
 
-.tab-button.active {
-    color: #ff4f7b;
-    font-weight: bold;
-}
+    .tab-button.active {
+        color: #ff4f7b;
+        font-weight: bold;
+    }
 
-.tab-button.active::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: #ff4f7b;
-}
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #ff4f7b;
+        }
 
 /* ------------------------ Lista de Denúncias ------------------------- */
 .denuncia-item {
@@ -256,11 +271,11 @@
     transition: all 0.3s ease;
 }
 
-.denuncia-item:hover {
-    background: #3a3a3a;
-    transform: translateX(5px);
-    box-shadow: 0 5px 15px rgba(255, 79, 123, 0.2);
-}
+    .denuncia-item:hover {
+        background: #3a3a3a;
+        transform: translateX(5px);
+        box-shadow: 0 5px 15px rgba(255, 79, 123, 0.2);
+    }
 
 .denuncia-header {
     display: flex;
@@ -309,13 +324,13 @@
         flex-direction: column;
         align-items: center;
     }
-    
+
     .carousel-container {
         width: 100%;
         height: 450px;
         max-width: 400px;
     }
-    
+
     .Matches {
         width: 100%;
         max-height: none;
@@ -327,18 +342,18 @@
 
 @media (max-width: 600px) {
     .perfil-box {
-        padding: 25px;
+        padding: 30px;
         margin: 30px auto;
     }
-    
+
     .carousel-container {
         height: 400px;
     }
-    
+
     .carousel-slide img {
         max-height: 70%;
     }
-    
+
     .arrow {
         width: 30px;
         height: 30px;
