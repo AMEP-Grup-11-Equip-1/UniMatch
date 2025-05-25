@@ -3,6 +3,7 @@ let currentIndex = 0;
 let isThrottled = false;
 let islands = [];
 let currentUserId = null;
+let tipusFiltreActual = "todas"; // valor inicial per veure-ho tot
 
 // Obtenir l'ID de l'usuari via AJAX
 fetch('../../Controller/get_session.php')
