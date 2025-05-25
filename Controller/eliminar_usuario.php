@@ -23,7 +23,7 @@ try {
     $stmt->close();
 
     $queries = [
-        "DELETE FROM grups WHERE propietari_id = ?",
+        "DELETE FROM grup_usuaris WHERE grup_id IN (SELECT id FROM grups WHERE propietari_id = ?)",
         "DELETE FROM mensajes_adm WHERE protocolo IN (SELECT id FROM ayuda WHERE usuario_id = ?)",
         "DELETE FROM ayuda WHERE usuario_id = ?",
         "DELETE FROM matches WHERE usuario1_id = ? OR usuario2_id = ?",
@@ -32,10 +32,10 @@ try {
         "DELETE FROM notificaciones WHERE usuario_id = ? OR autorLikeId = ?",
         "DELETE FROM likes WHERE usuario_id = ?",
         "DELETE FROM grup_usuaris WHERE usuari_id = ?",
-        "DELETE FROM invitacions_grups WHERE usuari_id = ? OR destinatari_id = ?"
+        "DELETE FROM invitacions_grups WHERE usuari_id = ? OR destinatari_id = ?",
+        "DELETE FROM historias WHERE usuario_id = ?",
+        "DELETE FROM reports WHERE target_user_id = ? OR reporting_user_id = ?"
     ];
-
-
 
     foreach ($queries as $sql) {
         $stmt = $conn->prepare($sql);
@@ -48,11 +48,17 @@ try {
         $stmt->close();
     }
 
-    // Finalmente, eliminar al usuario
+    // Eliminar al usuario
     $stmt = $conn->prepare("DELETE FROM usuario WHERE id = ?");
     $stmt->bind_param("i", $usuarioID);
     $stmt->execute();
     $stmt->close();
+
+    // 🧹 Limpiar grupos cuyos propietarios ya no existen
+    $conn->query("DELETE FROM grups WHERE propietari_id NOT IN (SELECT id FROM usuario)");
+
+    // 🧹 Limpiar historias cuyos usuarios ya no existen
+    $conn->query("DELETE FROM historias WHERE usuario_id NOT IN (SELECT id FROM usuario)");
 
     $conn->commit();
     session_destroy();
@@ -63,4 +69,5 @@ try {
     $conn->rollback();
     echo json_encode(["status" => "error", "message" => "Error al eliminar la cuenta: " . $e->getMessage()]);
 }
+
 
