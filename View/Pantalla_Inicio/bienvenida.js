@@ -108,7 +108,7 @@ function closeMenu() {
 
 function eliminarCuenta() {
     if (confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.")) {
-        fetch("../../Controller/usercontroller.php", {
+        fetch("../../Controller/eliminar_usuario.php", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
