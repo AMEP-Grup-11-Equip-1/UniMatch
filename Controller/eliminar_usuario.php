@@ -23,6 +23,7 @@ try {
     $stmt->close();
 
     $queries = [
+        "DELETE FROM grups WHERE propietari_id = ?",
         "DELETE FROM mensajes_adm WHERE protocolo IN (SELECT id FROM ayuda WHERE usuario_id = ?)",
         "DELETE FROM ayuda WHERE usuario_id = ?",
         "DELETE FROM matches WHERE usuario1_id = ? OR usuario2_id = ?",
