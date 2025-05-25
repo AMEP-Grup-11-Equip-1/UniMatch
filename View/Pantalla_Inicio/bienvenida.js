@@ -34,6 +34,7 @@ async function inicializarCarrusel() {
             const island = document.createElement("div");
             island.className = "island";
             island.dataset.id = perfil.id;
+            island.dataset.targetUserId = perfil.user_id; // 🔑 ID del creador de la història
 
             island.innerHTML = `
                 <img src="${perfil.imagen}" alt="${perfil.nombre}">
@@ -45,6 +46,7 @@ async function inicializarCarrusel() {
                 <span class="like-btn" onclick="toggleLike(this)">
                     <span class="material-icons">favorite_border</span>
                 </span>
+                <button class="report-btn" onclick="openReportPopup(${perfil.user_id})">🚩</button>
             `;
 
             carouselContainer.appendChild(island);
@@ -56,6 +58,7 @@ async function inicializarCarrusel() {
         console.error('Error al carregar els perfils:', error);
     }
 }
+
 
 function updateCarousel(instant = false) {
     islands.forEach((island, i) => {
@@ -436,4 +439,86 @@ function mostrarError(element, mensaje) {
             element.style.display = 'none';
         }, 1000);
     }, 5000);
+}
+
+function openReportPopup(targetUserId) {
+    closeAllPopups();
+    document.getElementById('reportHistoriaTargetUserId').value = targetUserId;
+    document.getElementById('reportPopup').classList.add('show');
+    cargarMotivosDenuncia();
+}
+
+function closeReportPopup() {
+    document.getElementById('reportPopup').classList.remove('show');
+}
+
+function handleReportChange() {
+    const motivo = document.getElementById('reportReason').value;
+    document.getElementById('otherReason').style.display = motivo === '9' ? 'block' : 'none';
+}
+
+async function cargarMotivosDenuncia() {
+    const select = document.getElementById('reportReason');
+    if (select.options.length > 1) return;
+
+    try {
+        const response = await fetch('../../Controller/get_report_types.php');
+        const motivos = await response.json();
+        motivos.forEach(m => {
+            const option = document.createElement('option');
+            option.value = m.id;
+            option.textContent = m.name;
+            select.appendChild(option);
+        });
+    } catch (e) {
+        console.error("Error carregant motius denúncia:", e);
+    }
+}
+
+document.getElementById('reportForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const target_user_id = document.getElementById('reportHistoriaTargetUserId').value;
+    const report_type_id = document.getElementById('reportReason').value;
+    const descripcio = document.getElementById('otherReason').value.trim();
+    const errorDiv = document.getElementById('errorMensajeDenuncia');
+
+    errorDiv.textContent = "";
+
+    if (!report_type_id) {
+        errorDiv.textContent = "Has de seleccionar un motiu.";
+        return;
+    }
+
+    if (report_type_id === "9" && descripcio.length < 5) {
+        errorDiv.textContent = "Has d'explicar el motiu si selecciones 'Altres'.";
+        return;
+    }
+
+    fetch('../../Controller/denunciar_historia.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+            target_user_id,
+            reporting_user_id: currentUserId,
+            report_type_id
+        })
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success") {
+                alert("✅ Denúncia enviada correctament.");
+                closeReportPopup();
+            } else {
+                errorDiv.textContent = data.message || "Error desconegut";
+            }
+        })
+        .catch(err => {
+            console.error("Error enviant denúncia:", err);
+            errorDiv.textContent = "Error del servidor. Torna-ho a provar.";
+        });
+});
+
+function closeAllPopups() {
+    document.querySelectorAll('.profile-popup').forEach(p => p.classList.remove('show'));
 }
