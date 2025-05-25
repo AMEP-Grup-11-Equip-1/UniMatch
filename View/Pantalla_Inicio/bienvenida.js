@@ -198,9 +198,9 @@ function cargarNotificaciones() {
             lista.innerHTML = ''; // Limpiamos cualquier contenido previo.
 
             // 👉 Aquest és el filtre correcte!
-            const filtrades = tipusFiltreActual === "todas" ?
-                data.data :
-                data.data.filter(n => n.tipo === tipusFiltreActual);
+            const filtrades = tipusFiltreActual === "todas"
+                ? data.data
+                : data.data.filter(n => n.tipo === tipusFiltreActual);
 
             if (filtrades.length > 0) {
                 filtrades.forEach(n => {
@@ -219,9 +219,9 @@ function cargarNotificaciones() {
                     notificationActions.classList.add('notification-actions');
 
                     // NOMÉS afegim botons si és de tipus 'match'
-                    if (n.tipo === 'match') {
+                    if (n.tipo === "match" || n.tipo === "grupo"){
                         notificationActions.innerHTML = `
-                            <button class="accept-btn" onclick="aceptarNotificacion(${n.id})">Aceptar</button>
+                            <button class="accept-btn" onclick="aceptarNotificacion(${n.id}, '${n.tipo}')">Aceptar</button>
                             <button class="reject-btn" onclick="rechazarNotificacion(${n.id})">Rechazar</button>
                         `;
                     }
