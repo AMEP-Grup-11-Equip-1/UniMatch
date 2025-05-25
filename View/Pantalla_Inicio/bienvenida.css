@@ -876,3 +876,84 @@ h1 {
 .error-message .error-icon {
     font-size: 18px;
 }
+
+
+/* Estilo para input file (subida de imagen) */
+
+input[type="file"] {
+    border: 2px dashed #999;
+    padding: 15px;
+    width: 80%;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+    font-size: 14px;
+    color: #666;
+}
+
+input[type="file"]:hover {
+    border-color: #555;
+}
+
+
+/* Contenedor para selector toggle */
+
+.toggle-group {
+    display: flex;
+    gap: 10px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    /* menos espacio arriba para subir */
+    justify-content: center;
+}
+
+
+/* Oculta el select nativo */
+
+#grup_visibilitat {
+    display: none;
+}
+
+
+/* Estilo botones toggle */
+
+.toggle-group label {
+    flex: none;
+    padding: 6px 50px;
+    font-size: 14px;
+    text-align: center;
+    border: 2px solid #b2b2b2;
+    border-radius: 20px;
+    color: #686868;
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+    background-color: #f0f0f0;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    line-height: 1.2;
+}
+
+
+/* Oculta los radios (botón) */
+
+.toggle-group input[type="radio"] {
+    display: none;
+}
+
+
+/* Color cuando está seleccionado */
+
+.toggle-group input[type="radio"]:checked+label {
+    background-color: #4caf50;
+    /* verde */
+    color: white;
+    border-color: #4caf50;
+}
+
+
+/* Hover para botones no seleccionados */
+
+.toggle-group label:hover {
+    background-color: #ddd;
+}
