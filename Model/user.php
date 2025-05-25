@@ -7,7 +7,7 @@ class Usuario {
     }
 
     public function eliminar($id) {
-        $query = "DELETE FROM usuarios WHERE id = ?";
+        $query = "DELETE FROM usuario WHERE id = ?";
         $stmt = $this->conn->prepare($query);
         if (!$stmt) {
             return ["status" => "error", "message" => "Error en la preparación de la consulta"];
