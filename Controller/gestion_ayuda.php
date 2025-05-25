@@ -69,6 +69,16 @@ if (!$resultado_nuevos) {
     echo "<tr><td colspan='4'>Error en la consulta de nuevos mensajes</td></tr>";
 } else {
     while ($linha = mysqli_fetch_assoc($resultado_nuevos)) {
+
+        $msg = $linha['mensaje'];
+
+        $limite = 110; // Definir el límite de caracteres
+
+        // Limitar el mensaje a 110 caracteres
+        if (strlen($msg) > $limite) {
+            $msg = substr($msg, 0, $limite) . '...';
+        }
+
                 $data_formatada = date('H:i d/m', strtotime($linha['fecha']));
 
          echo "<div class='chat-item' data-cerrado='" . "' onclick='loadChat("
@@ -76,7 +86,7 @@ if (!$resultado_nuevos) {
             . htmlspecialchars(addslashes($linha['nombre_usuario'])) . "\")'>";
         echo "<span class='protocolo'>" . htmlspecialchars($linha['numero_protocolo']) . "</span>";
         echo "<span class='usuario'>" . htmlspecialchars($linha['nombre_usuario']) . "</span>";
-        echo "<span class='preview'>" . htmlspecialchars($linha['mensaje']) . "</span>";
+        echo "<span class='preview'>" . htmlspecialchars($msg) . "</span>";
         echo "<span class='fecha'>" . htmlspecialchars($data_formatada) . "</span>";
         echo "</div>";
     }
