@@ -78,7 +78,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute();
             $stmt->close();
 
-            // 🔧 Adiciona esta linha:
             echo json_encode(["success" => true]);
             http_response_code(200);
         } else {
