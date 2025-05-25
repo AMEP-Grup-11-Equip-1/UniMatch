@@ -377,63 +377,55 @@ document.getElementById('historiaForm').addEventListener('submit', function(e) {
 });
 
 
-document.getElementById('historiaForm').addEventListener('submit', function(e) {
-    const form = e.target;
-    const nombre = form.nombre.value.trim();
-    const universidad = form.universidad.value.trim();
-    const descripcion = form.descripcion.value.trim();
-    const imagen = form.imagen.files[0];
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('historiaForm');
     const errorDiv = document.getElementById('errorMensajeHistoria');
 
-    // Limpiar errores previos y ocultar el error
-    errorDiv.textContent = '';
-    errorDiv.style.opacity = '0';
-    errorDiv.style.display = 'none';
+    form.addEventListener('submit', function(e) {
+        errorDiv.textContent = '';
+        errorDiv.style.opacity = '0';
+        errorDiv.style.display = 'none';
 
-    if (!imagen || !nombre || !universidad || !descripcion) {
-        e.preventDefault(); // Prevenir envío
-        mostrarError(errorDiv, 'Todos los campos son obligatorios.');
-        return;
-    }
+        const nombre = form.nombre.value.trim();
+        const universidad = form.universidad.value.trim();
+        const descripcion = form.descripcion.value.trim();
+        const imagen = form.imagen.files[0];
 
-    if (descripcion.length < 10) {
-        e.preventDefault();
-        mostrarError(errorDiv, 'La descripción debe tener al menos 10 caracteres.');
-        return;
-    }
+        console.log('Validando formulario historia...');
 
-    // Más validaciones aquí si quieres
+        // Validaciones
+        if (!imagen || !nombre || !universidad || !descripcion) {
+            e.preventDefault();
+            mostrarError(errorDiv, 'Todos los campos son obligatorios.');
+            return;
+        }
+
+        if (nombre.length < 2) {
+            e.preventDefault();
+            mostrarError(errorDiv, 'El nombre debe tener al menos 2 caracteres.');
+            return;
+        }
+
+        if (universidad.length < 2) {
+            e.preventDefault();
+            mostrarError(errorDiv, 'La universidad debe tener al menos 2 caracteres.');
+            return;
+        }
+
+        if (descripcion.length < 10) {
+            e.preventDefault();
+            mostrarError(errorDiv, 'La descripción debe tener al menos 10 caracteres.');
+            return;
+        }
+
+        // Si llegas aquí, el formulario se envía porque no hubo preventDefault
+        console.log('Formulario validado, enviando...');
+    });
 });
 
-document.getElementById('formCrearGrupo').addEventListener('submit', function(e) {
-    const form = e.target;
-    const nombre = form.nom.value.trim();
-    const visibilidad = form.visibilitat.value;
-    const descripcion = form.descripcio.value.trim();
-    const errorDiv = document.getElementById('errorMensajeGrupo');
-
-    errorDiv.textContent = '';
-    errorDiv.style.opacity = '0';
-    errorDiv.style.display = 'none';
-
-    if (!nombre || !visibilidad || !descripcion) {
-        e.preventDefault();
-        mostrarError(errorDiv, 'Por favor, completa todos los campos del grupo.');
-        return;
-    }
-
-    if (nombre.length < 3) {
-        e.preventDefault();
-        mostrarError(errorDiv, 'El nombre del grupo debe tener al menos 3 caracteres.');
-        return;
-    }
-});
-
-// Función para mostrar el error y ocultarlo después de 5 segundos
 function mostrarError(element, mensaje) {
     element.textContent = mensaje;
     element.style.display = 'flex';
-    // Pequeño delay para que la transición de opacidad funcione
     setTimeout(() => {
         element.style.opacity = '1';
     }, 10);
@@ -442,6 +434,6 @@ function mostrarError(element, mensaje) {
         element.style.opacity = '0';
         setTimeout(() => {
             element.style.display = 'none';
-        }, 1000); // Tiempo igual a la transición CSS
-    }, 5000); // Duración visible
+        }, 1000);
+    }, 5000);
 }
