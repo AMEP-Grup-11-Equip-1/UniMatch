@@ -219,7 +219,7 @@ function cargarNotificaciones() {
                     notificationActions.classList.add('notification-actions');
 
                     // NOMÉS afegim botons si és de tipus 'match'
-                    if (n.tipo === 'match') {
+                    if (n.tipo === "match" || n.tipo === "grupo") {
                         notificationActions.innerHTML = `
                             <button class="accept-btn" onclick="aceptarNotificacion(${n.id})">Aceptar</button>
                             <button class="reject-btn" onclick="rechazarNotificacion(${n.id})">Rechazar</button>
