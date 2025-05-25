@@ -107,7 +107,7 @@ body::after {
     right: 40px;
     width: 90%;
     max-width: 450px;
-    height: 500px;
+    height: 550px;
     background-color: #f8f8f8;
     padding: 20px;
     border-radius: 20px;
@@ -766,7 +766,7 @@ h1 {
     right: 40px;
     width: 90%;
     max-width: 450px;
-    height: 500px;
+    height: 550px;
     background-color: #f8f8f8;
     padding: 20px;
     border-radius: 20px;
@@ -846,7 +846,7 @@ h1 {
 
 .error-message {
     position: fixed;
-    top: 24vh;
+    top: 18vh;
     left: 83.5vw;
     /* 85% del ancho del viewport, para estar más a la derecha */
     transform: translateX(-50%);
