@@ -154,9 +154,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Popup sugerencias
 function toggleSugerenciaPopup() {
-  const popup = document.getElementById('sugerenciaPopup');
-  popup.style.display = popup.style.display === "block" ? "none" : "block";
+    const sugerenciaPopup = document.getElementById('sugerenciaPopup');
+    const guiaPopup = document.getElementById('guiaPopup');
+
+    // Tancar guia
+    guiaPopup?.classList.remove('show');
+    guiaPopup?.style.display && (guiaPopup.style.display = 'none');
+
+    // Obre o tanca aquest
+    sugerenciaPopup.style.display = sugerenciaPopup.style.display === "block" ? "none" : "block";
 }
+
 function openMenu() {
     document.getElementById('sideMenu').style.width = '250px';
 }
@@ -198,10 +206,16 @@ function eliminarCuenta() {
     }
 }
 
-
 function toggleGuiaPopup() {
-    const popup = document.getElementById('guiaPopup');
-    popup.style.display = (popup.style.display === "block") ? "none" : "block";
+    const guiaPopup = document.getElementById('guiaPopup');
+    const sugerenciaPopup = document.getElementById('sugerenciaPopup');
+
+    // Tancar sugg
+    sugerenciaPopup?.classList.remove('show');
+    sugerenciaPopup?.style.display && (sugerenciaPopup.style.display = 'none');
+
+    // Obre o tanca aquest
+    guiaPopup.style.display = guiaPopup.style.display === "block" ? "none" : "block";
 }
 
 
