@@ -11,7 +11,10 @@ body {
 }
 
 
+
+
 /*------------------------------------ Fondo -------------------------------------->*/
+
 
 body::before,
 body::after,
@@ -27,6 +30,7 @@ body::after,
     z-index: -1;
 }
 
+
 body::before {
     width: 700px;
     height: 800px;
@@ -34,6 +38,7 @@ body::before {
     top: 20%;
     left: 45%;
 }
+
 
 body::after {
     width: 700px;
@@ -43,6 +48,7 @@ body::after {
     right: 45%;
 }
 
+
 .glow-1 {
     width: 300px;
     height: 300px;
@@ -51,6 +57,7 @@ body::after {
     left: 15%;
 }
 
+
 .glow-2 {
     width: 280px;
     height: 280px;
@@ -58,6 +65,7 @@ body::after {
     bottom: 45%;
     right: 15%;
 }
+
 
 .glow-3 {
     width: 350px;
@@ -68,7 +76,10 @@ body::after {
 }
 
 
+
+
 /*---------------------------------------------------------------------------------->*/
+
 
 .chat-item {
     display: flex;
@@ -81,9 +92,11 @@ body::after {
     transition: 0.3s;
 }
 
+
 .chat-item:hover {
     background: #ffe6f0;
 }
+
 
 .chat-item img {
     width: 40px;
@@ -93,7 +106,10 @@ body::after {
 }
 
 
+
+
 /*------------------------------------- CHAT- -------------------------------------->*/
+
 
 .tab-container {
     display: flex;
@@ -102,6 +118,7 @@ body::after {
     margin-bottom: 20px;
     margin-top: 5px;
 }
+
 
 .tab {
     background-color: #f9f9f9;
@@ -116,11 +133,13 @@ body::after {
     user-select: none;
 }
 
+
 .tab:hover {
     background-color: #000000;
     color: white;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
 }
+
 
 .tab.active {
     background-color: #000000;
@@ -128,12 +147,14 @@ body::after {
     transform: scale(1.05);
 }
 
+
 .search-container {
     max-width: 400px;
     margin: 15px auto 25px auto;
     display: flex;
     justify-content: center;
 }
+
 
 #searchInput {
     width: 80%;
@@ -146,10 +167,12 @@ body::after {
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
+
 #searchInput:focus {
     border-color: #000000;
     box-shadow: 0 0 12px 3px rgba(0, 0, 0, 0.7);
 }
+
 
 .chat-container {
     display: flex;
@@ -160,6 +183,7 @@ body::after {
     max-width: 1200px;
     padding: 20px;
 }
+
 
 .chat-list {
     width: 30%;
@@ -172,6 +196,7 @@ body::after {
     margin-right: 20px;
 }
 
+
 .chat-item {
     padding: 15px;
     margin-bottom: 10px;
@@ -183,9 +208,11 @@ body::after {
     align-items: center;
 }
 
+
 .chat-item:hover {
     background-color: #ffe6f0;
 }
+
 
 .chat-item img {
     border-radius: 50%;
@@ -193,6 +220,7 @@ body::after {
     height: 40px;
     margin-right: 10px;
 }
+
 
 .chat-box {
     width: 65%;
@@ -206,8 +234,10 @@ body::after {
     justify-content: space-between;
 }
 
+
 .messages {
     flex: 1;
+    overflow-x: hidden;
     overflow-y: auto;
     /* Permite desplazamiento */
     max-height: 100%;
@@ -215,25 +245,32 @@ body::after {
     margin-bottom: 10px;
     padding-right: 10px;
     /* Espacio para el scroll */
+    display: flex;
+    flex-direction: column;
 }
+
 
 .message {
     padding: 10px;
     background-color: #f0f0f0;
     border-radius: 10px;
-    width: fit-content;
-    max-width: 80%;
-    margin-left: auto;
     margin-bottom: 10px;
-    display: flex;
-    align-items: center;
+    max-width: 80%;
+    display: inline-block;
+    word-break: break-word;     /* Rompe palabras largas */
+    overflow-wrap: break-word;  /* Permite saltos seguros */
+    white-space: normal;        /* Permite el salto de línea */
 }
+
+
+
 
 .message.user {
     background-color: #000000;
     color: white;
     margin-left: 0;
 }
+
 
 .message img {
     border-radius: 50%;
@@ -242,12 +279,14 @@ body::after {
     margin-right: 10px;
 }
 
+
 .message-input {
     display: flex;
     align-items: center;
     border-top: 1px solid #ddd;
     padding-top: 10px;
 }
+
 
 .message-input input {
     flex: 1;
@@ -258,6 +297,7 @@ body::after {
     font-size: 16px;
 }
 
+
 .message-input button {
     background-color: #000000;
     color: white;
@@ -267,9 +307,11 @@ body::after {
     cursor: pointer;
 }
 
+
 .message-input button:hover {
     background-color: #000000;
 }
+
 
 .logout-btn-side {
     font-size: 20px;
@@ -283,14 +325,17 @@ body::after {
     text-align: left;
 }
 
+
 .logout-btn-side:hover {
     color: #000000;
 }
+
 
 .logout-btn-side {
     display: flex;
     justify-content: flex-start;
 }
+
 
 .section-title {
     font-size: 18px;
@@ -299,6 +344,7 @@ body::after {
     margin-bottom: 10px;
     color: #000000;
 }
+
 
 .section-item {
     padding: 12px;
@@ -311,6 +357,7 @@ body::after {
     align-items: center;
 }
 
+
 .section-item img {
     border-radius: 50%;
     width: 40px;
@@ -318,12 +365,16 @@ body::after {
     margin-right: 10px;
 }
 
+
 .section-item:hover {
     background-color: #ffe6f0;
 }
 
 
+
+
 /*---------------------------------------------------------------------------------->*/
+
 
 .message {
     max-width: 60%;
@@ -335,25 +386,29 @@ body::after {
     word-wrap: break-word;
 }
 
+
 .message-received {
-    align-self: flex-end;
+    align-self: flex-start;
     background-color: #ffffff;
     border: 1px solid #ddd;
-    /* verde claro estilo WhatsApp */
-    margin-left: 10px;
+    text-align: left;
 }
-
 .message-sent {
-    align-self: flex-start;
+    align-self: flex-end;
     background-color: #ffecfc;
     border: 1px solid #ddd;
+    text-align: right;
 }
+
+
+
 
 .message-text {
     /* ...tus estilos previos... */
     margin-Right: 10px;
     /* aumenta este valor para más espacio */
 }
+
 
 .message-time {
     font-size: 10px;
@@ -368,6 +423,7 @@ body::after {
     /* no se puede seleccionar */
 }
 
+
 .grupo-message {
     max-width: 60%;
     padding: 8px 12px;
@@ -377,6 +433,7 @@ body::after {
     line-height: 1.3;
     word-wrap: break-word;
 }
+
 
 .grupo-username {
     font-size: 12px;
@@ -388,11 +445,13 @@ body::after {
     margin-right: 10px;
 }
 
+
 .grupo-message-own {
     align-self: flex-start;
     background-color: #f8f8f8;
     border: 1px solid #ddd;
 }
+
 
 .grupo-message-other {
     align-self: flex-end;
@@ -401,6 +460,7 @@ body::after {
     /* verde claro estilo WhatsApp */
     margin-left: 10px;
 }
+
 
 .message-content {
     display: flex;
