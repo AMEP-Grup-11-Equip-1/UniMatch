@@ -109,19 +109,19 @@ function closeMenu() {
 function eliminarCuenta() {
     if (confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.")) {
         fetch("../../Controller/usercontroller.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);
-            if (data.status === "success") {
-                window.location.href = "../Pantalla_de_Bloqueo/Pantalladebloqueo.html";
-            }
-        })
-        .catch(error => console.error("Error en la solicitud:", error));
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.status === "success") {
+                    window.location.href = "../Pantalla_de_Bloqueo/Pantalladebloqueo.html";
+                }
+            })
+            .catch(error => console.error("Error en la solicitud:", error));
     }
 }
 
@@ -151,22 +151,22 @@ function toggleLike(element) {
         heartBeatLong(element);
 
         fetch('../../Controller/dar_like.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: `historia_id=${historiaId}`
-        })
-        .then(response => response.text())
-        .then(text => {
-            console.log("📄 Text rebut:", text);
-            try {
-                const data = JSON.parse(text);
-                console.log("✅ Like enregistrat:", data);
-            } catch (e) {
-                console.error("❌ Error parsejant JSON:", e, "\nResposta original:", text);
-            }
-        });
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `historia_id=${historiaId}`
+            })
+            .then(response => response.text())
+            .then(text => {
+                console.log("📄 Text rebut:", text);
+                try {
+                    const data = JSON.parse(text);
+                    console.log("✅ Like enregistrat:", data);
+                } catch (e) {
+                    console.error("❌ Error parsejant JSON:", e, "\nResposta original:", text);
+                }
+            });
     }
 }
 
@@ -198,9 +198,9 @@ function cargarNotificaciones() {
             lista.innerHTML = ''; // Limpiamos cualquier contenido previo.
 
             // 👉 Aquest és el filtre correcte!
-            const filtrades = tipusFiltreActual === "todas"
-                ? data.data
-                : data.data.filter(n => n.tipo === tipusFiltreActual);
+            const filtrades = tipusFiltreActual === "todas" ?
+                data.data :
+                data.data.filter(n => n.tipo === tipusFiltreActual);
 
             if (filtrades.length > 0) {
                 filtrades.forEach(n => {
@@ -219,7 +219,7 @@ function cargarNotificaciones() {
                     notificationActions.classList.add('notification-actions');
 
                     // NOMÉS afegim botons si és de tipus 'match'
-                    if (n.tipo === "match" || n.tipo === "grupo") {
+                    if (n.tipo === 'match') {
                         notificationActions.innerHTML = `
                             <button class="accept-btn" onclick="aceptarNotificacion(${n.id})">Aceptar</button>
                             <button class="reject-btn" onclick="rechazarNotificacion(${n.id})">Rechazar</button>
@@ -242,58 +242,58 @@ function aceptarNotificacion(id) {
     console.log(" Has fet clic a ACCEPTAR notificació amb ID:", id);
 
     fetch("../../Controller/aceptar_notificacion.php", {
-        method: 'POST',
-        body: new URLSearchParams({ id: id }),
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        }
-    })
-    .then(async response => {
-        const text = await response.text();
-        try {
-            const data = JSON.parse(text);
-            if (data.status === 'success') {
-                cargarNotificaciones();
-            
-                // Redirigeix al xat perquè es vegi el nou match
-                window.location.href = "../Pantalla_Chat/chat.php";
-            } else {
-                alert('Error al aceptar la notificación: ' + data.message);
+            method: 'POST',
+            body: new URLSearchParams({ id: id }),
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
             }
-        } catch (e) {
-            console.error(" Resposta NO JSON:", text);
-            alert('Error inesperado del servidor. Mira la consola.');
-        }
-    })
-    .catch(error => console.error(' Error al aceptar la notificación (catch):', error));
+        })
+        .then(async response => {
+            const text = await response.text();
+            try {
+                const data = JSON.parse(text);
+                if (data.status === 'success') {
+                    cargarNotificaciones();
+
+                    // Redirigeix al xat perquè es vegi el nou match
+                    window.location.href = "../Pantalla_Chat/chat.php";
+                } else {
+                    alert('Error al aceptar la notificación: ' + data.message);
+                }
+            } catch (e) {
+                console.error(" Resposta NO JSON:", text);
+                alert('Error inesperado del servidor. Mira la consola.');
+            }
+        })
+        .catch(error => console.error(' Error al aceptar la notificación (catch):', error));
 }
 
 function rechazarNotificacion(id) {
     console.log(" Has fet clic a RECHAZAR notificació amb ID:", id);
 
     fetch("../../Controller/rechazar_notificacion.php", {
-        method: 'POST',
-        body: new URLSearchParams({ id: id }),
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        }
-    })
-    .then(async response => {
-        const text = await response.text();
-        try {
-            const data = JSON.parse(text);
-            if (data.status === 'success') {
-                cargarNotificaciones();
-                
-            } else {
-                alert('Error al rechazar la notificación: ' + data.message);
+            method: 'POST',
+            body: new URLSearchParams({ id: id }),
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
             }
-        } catch (e) {
-            console.error(" Resposta NO JSON:", text);
-            alert('Error inesperado del servidor al rechazar. Mira la consola.');
-        }
-    })
-    .catch(error => console.error(' Error al rechazar la notificación (catch):', error));
+        })
+        .then(async response => {
+            const text = await response.text();
+            try {
+                const data = JSON.parse(text);
+                if (data.status === 'success') {
+                    cargarNotificaciones();
+
+                } else {
+                    alert('Error al rechazar la notificación: ' + data.message);
+                }
+            } catch (e) {
+                console.error(" Resposta NO JSON:", text);
+                alert('Error inesperado del servidor al rechazar. Mira la consola.');
+            }
+        })
+        .catch(error => console.error(' Error al rechazar la notificación (catch):', error));
 }
 
 
@@ -316,3 +316,99 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Inicializar carrusel al cargar
 inicializarCarrusel();
+
+
+document.getElementById('historiaForm').addEventListener('submit', function(e) {
+    const form = e.target;
+    const nombre = form.nombre.value.trim();
+    const universidad = form.universidad.value.trim();
+    const descripcion = form.descripcion.value.trim();
+    const imagen = form.imagen.files[0];
+    const errorDiv = document.getElementById('errorMensajeHistoria');
+
+    errorDiv.textContent = ''; // Limpiar errores previos
+
+    if (!imagen || !nombre || !universidad || !descripcion) {
+        e.preventDefault(); // Prevenir envío
+        errorDiv.textContent = 'Todos los campos son obligatorios.';
+        return;
+    }
+
+    if (descripcion.length < 10) {
+        e.preventDefault();
+        errorDiv.textContent = 'La descripción debe tener al menos 10 caracteres.';
+        return;
+    }
+
+    // Aquí puedes hacer más validaciones si quieres
+});
+
+
+document.getElementById('historiaForm').addEventListener('submit', function(e) {
+    const form = e.target;
+    const nombre = form.nombre.value.trim();
+    const universidad = form.universidad.value.trim();
+    const descripcion = form.descripcion.value.trim();
+    const imagen = form.imagen.files[0];
+    const errorDiv = document.getElementById('errorMensajeHistoria');
+
+    // Limpiar errores previos y ocultar el error
+    errorDiv.textContent = '';
+    errorDiv.style.opacity = '0';
+    errorDiv.style.display = 'none';
+
+    if (!imagen || !nombre || !universidad || !descripcion) {
+        e.preventDefault(); // Prevenir envío
+        mostrarError(errorDiv, 'Todos los campos son obligatorios.');
+        return;
+    }
+
+    if (descripcion.length < 10) {
+        e.preventDefault();
+        mostrarError(errorDiv, 'La descripción debe tener al menos 10 caracteres.');
+        return;
+    }
+
+    // Más validaciones aquí si quieres
+});
+
+document.getElementById('formCrearGrupo').addEventListener('submit', function(e) {
+    const form = e.target;
+    const nombre = form.nom.value.trim();
+    const visibilidad = form.visibilitat.value;
+    const descripcion = form.descripcio.value.trim();
+    const errorDiv = document.getElementById('errorMensajeGrupo');
+
+    errorDiv.textContent = '';
+    errorDiv.style.opacity = '0';
+    errorDiv.style.display = 'none';
+
+    if (!nombre || !visibilidad || !descripcion) {
+        e.preventDefault();
+        mostrarError(errorDiv, 'Por favor, completa todos los campos del grupo.');
+        return;
+    }
+
+    if (nombre.length < 3) {
+        e.preventDefault();
+        mostrarError(errorDiv, 'El nombre del grupo debe tener al menos 3 caracteres.');
+        return;
+    }
+});
+
+// Función para mostrar el error y ocultarlo después de 5 segundos
+function mostrarError(element, mensaje) {
+    element.textContent = mensaje;
+    element.style.display = 'flex';
+    // Pequeño delay para que la transición de opacidad funcione
+    setTimeout(() => {
+        element.style.opacity = '1';
+    }, 10);
+
+    setTimeout(() => {
+        element.style.opacity = '0';
+        setTimeout(() => {
+            element.style.display = 'none';
+        }, 1000); // Tiempo igual a la transición CSS
+    }, 5000); // Duración visible
+}
