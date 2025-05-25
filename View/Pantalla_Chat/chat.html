@@ -288,6 +288,28 @@
             chatPollingInterval = setInterval(cargarMensajesGrupales, 3000);
         }
 
+            function eliminarCuenta() {
+                if (confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.")) {
+                    fetch("../../Controller/eliminar_usuario.php", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);
+                        if (data.status === "success") {
+                            window.location.href = "../Pantalla_de_Bloqueo/Pantalladebloqueo.html";
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error en la solicitud:", error);
+                        alert("Ocurrió un error al intentar eliminar tu cuenta.");
+                    });
+                }
+            }
+
         function cargarMensajesGrupales() {
             if (!grupo_id_actual) return;
             fetch(`../../Controller/obtener_mensajes_grupo.php?grupo_id=${grupo_id_actual}`)
