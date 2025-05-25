@@ -22,143 +22,115 @@
      });
 
  // 2. Obtener grupos y dividir en dos listas
- function cargarGrupos() {
-     fetch("../../Controller/obtener_grupos.php", {
-             method: "POST",
-             headers: {
-                 "Content-Type": "application/json"
-             }
-         })
-         .then(res => res.json())
-         .then(data => {
-             const disponibles = document.getElementById("listaGrupos");
-             const propios = document.getElementById("misGrupos");
-             const vacio = document.getElementById("sinGrupos");
+function cargarGrupos() {
+    fetch("../../Controller/obtener_grupos.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then(res => res.json())
+        .then(data => {
+            const disponibles = document.getElementById("listaGrupos");
+            const propios = document.getElementById("misGrupos");
+            const vacio = document.getElementById("sinGrupos");
 
-             if (!Array.isArray(data) || data.length === 0) {
-                 vacio.style.display = "block";
-                 return;
-             }
+            if (!Array.isArray(data) || data.length === 0) {
+                vacio.style.display = "block";
+                return;
+            }
 
-             let tieneGrupos = false;
+            data.forEach(grup => {
+                const esPropio = grup.propietari_id == usuarioID;
 
-             data.forEach(grup => {
-                if (gruposYaUnidos.has(grup.id)) {
-                    return; // Saltar si ya está unido
-                }
-
-                 const esPropio = grup.propietari_id == usuarioID;
-
-                 const div = document.createElement("div");
-                 div.classList.add("grupo-item");
-
-                 const esPublico = grup.visibilitat.toLowerCase() === "public";
-                 let textoBoton;
-                 let botonClaseExtra = "";
-                 if (esPropio) {
-                     textoBoton = "Gestionar grupo";
-                     botonClaseExtra = "success"; // esto aplica el estilo verde
-                 } else {
-                     textoBoton = esPublico ? "Unirse" : "Solicitar unirse";
-                 }
-
-
-                 div.innerHTML = `
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <h2>${grup.nom}</h2>
-                                <p>${grup.descripcio}</p>
-                                <p><strong>Visibilidad:</strong> ${grup.visibilitat}</p>
-                            </div>
-                            <button class="join-button ${botonClaseExtra}">${textoBoton}</button>
-                            </div>
-                        `;
-
-
-                 const boton = div.querySelector(".join-button");
-
-                 if (esPropio) {
-                     propios.appendChild(div);
-                 } else {
-                     disponibles.appendChild(div);
-                 }
-
-                 if (esPropio) {
-                    boton.classList.add("success");
-                    boton.disabled = false;
-
-                    // Redireccionar a gestionar_grupo.html
-                    boton.addEventListener("click", () => {
-                        window.location.href = `gestionar_grupo.html?grupo_id=${grup.id}`;
-                    });
-
-                    propios.appendChild(div);
+                // ❌ Saltar grupos donde ya soy miembro (si no soy el propietario)
+                if (!esPropio && gruposYaUnidos.has(grup.id)) {
                     return;
                 }
 
+                const div = document.createElement("div");
+                div.classList.add("grupo-item");
 
-                 boton.addEventListener("click", () => {
-                     if (boton.classList.contains("success")) return;
+                const esPublico = grup.visibilitat.toLowerCase() === "public";
+                let textoBoton = "";
+                let botonClaseExtra = "";
 
-                     if (esPublico) {
-                         // Llamar al backend para guardar la relación
-                         fetch('../../Controller/unirse_grupo.php', {
-                                 method: "POST",
-                                 headers: { "Content-Type": "application/json" },
-                                 body: JSON.stringify({ grup_id: grup.id, usuari_id: usuarioID })
-                             })
-                             .then(res => res.json())
-                             .then(resp => {
-                                 console.log(resp); // Para depurar en consola
-                                 mostrarPopup(resp.message);
-                                 if (resp.success) {
-                                    mostrarPopup(resp.message);
+                if (esPropio) {
+                    textoBoton = "Gestionar grupo";
+                    botonClaseExtra = "success";
+                } else {
+                    textoBoton = esPublico ? "Unirse" : "Solicitar unirse";
+                }
 
-                                    // Eliminar el grupo del listado actual
-                                    div.remove();
+                div.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h2>${grup.nom}</h2>
+                        <p>${grup.descripcio}</p>
+                        <p><strong>Visibilidad:</strong> ${grup.visibilitat}</p>
+                    </div>
+                    <button class="join-button ${botonClaseExtra}">${textoBoton}</button>
+                </div>
+            `;
 
-                                    // Agregarlo a la lista de "Grupos Unidos"
-                                    const nuevoDiv = document.createElement("div");
-                                    nuevoDiv.classList.add("grupo-item");
-                                    nuevoDiv.innerHTML = `
-                                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                                            <div>
-                                                <h2>${grup.nom}</h2>
-                                                <p>${grup.descripcio}</p>
-                                                <p><strong>Visibilidad:</strong> ${grup.visibilitat}</p>
-                                            </div>
-                                            <button class="join-button success" disabled>Ver Grupo</button>
-                                        </div>
-                                    `;
-                                    document.getElementById("gruposUnidos").appendChild(nuevoDiv);
+                const boton = div.querySelector(".join-button");
+
+                if (esPropio) {
+                    propios.appendChild(div);
+                    boton.addEventListener("click", () => {
+                        window.location.href = `gestionar_grupo.html?grupo_id=${grup.id}`;
+                    });
+                    return;
+                }
+
+                disponibles.appendChild(div);
+
+                // Unirse o solicitar
+                boton.addEventListener("click", () => {
+                    if (esPublico) {
+                        fetch('../../Controller/unirse_grupo.php', {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ grup_id: grup.id, usuari_id: usuarioID })
+                        })
+                            .then(res => res.json())
+                            .then(resp => {
+                                mostrarPopup(resp.message);
+                                if (resp.success) {
+                                    boton.textContent = "Miembro";
+                                    boton.classList.add("success");
+                                    boton.disabled = true;
                                 }
-
-                             })
-                             .catch(err => {
-                                 console.error("Error en fetch:", err);
-                                 mostrarPopup("Error inesperado al unirse al grupo.");
-                             });
-
-                     } else {
-                         // Para grupos privados solo mostramos mensaje de solicitud enviada, sin guardar aún
-                         mostrarPopup("¡Has enviado la solicitud correctamente!");
-                         boton.textContent = "Solicitud enviada";
-                         boton.classList.add("success");
-                         boton.disabled = true;
-                     }
-                 });
-
-
-                 tieneGrupos = true;
-             });
-
-             if (!tieneGrupos) vacio.style.display = "block";
-         })
-         .catch(error => {
-             console.error("Error al cargar los grupos:", error);
-             document.getElementById("sinGrupos").style.display = "block";
-         });
- }
+                            });
+                    } else {
+                        fetch("../../Controller/solicitar_unirse_grupo.php", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({ grupo_id: grup.id })
+                        })
+                            .then(res => res.json())
+                            .then(resp => {
+                                mostrarPopup(resp.message);
+                                if (resp.success) {
+                                    boton.textContent = "Solicitud enviada";
+                                    boton.classList.add("success");
+                                    boton.disabled = true;
+                                }
+                            })
+                            .catch(err => {
+                                console.error("Error al solicitar unirse:", err);
+                                mostrarPopup("Hubo un problema al enviar la solicitud.");
+                            });
+                    }
+                });
+            });
+        })
+        .catch(err => {
+            console.error("Error al cargar grupos:", err);
+        });
+}
 
 
  function cargarGruposUnidos() {
