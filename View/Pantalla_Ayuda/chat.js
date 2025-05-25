@@ -5,6 +5,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 // Función para cargar la lista de chats abiertos y cerrados
 function loadChat() {
+  const messagesContainer = document.getElementById("messagesContainer");
   const OpenListDiv = document.getElementById("OpenList");
   const CloseListDiv = document.getElementById("CloseList");
   const chatDetailContainer = document.getElementById("chatDetailContainer"); // Contenedor para mostrar el chat completo
@@ -101,6 +102,29 @@ function loadMessages(preguntaId, isFromOpenList) {
           // Añade el mensaje al contenedor de mensajes
           messagesContainer.appendChild(div);
         });
+
+        // Si el chat está cerrado, añade la sección de valoración
+        if (isFromOpenList) {
+          const ratingPrompt = document.createElement("p");
+          ratingPrompt.style.marginTop = "10px";
+          const ratingDiv = document.createElement("div");
+          ratingDiv.classList.add("rating");
+          ratingDiv.id = "rating";
+
+          for (let i = 1; i <= 5; i++) {
+            const starSpan = document.createElement("span");
+            starSpan.classList.add("star");
+            starSpan.dataset.value = i;
+            starSpan.innerHTML = "&#9733;";
+            ratingDiv.appendChild(starSpan);
+          }
+
+          messagesContainer.appendChild(ratingPrompt);
+          messagesContainer.appendChild(ratingDiv);
+
+          getValoracion(preguntaId);
+
+        }
       } else {
         console.error("No se pudieron cargar los mensajes:", data.message);
       }
@@ -224,4 +248,79 @@ function openMenu() {
 // Función para cerrar el menú lateral
 function closeMenu() {
   document.getElementById("sideMenu").style.width = "0";
+}
+
+// --- Bloco para rating de estrelas ---
+document.addEventListener('DOMContentLoaded', () => {
+  const observer = new MutationObserver(() => {
+    const stars = document.querySelectorAll('.rating .star');
+    if (stars.length > 0) {
+      let selectedRating = 0;
+
+      stars.forEach((star, index) => {
+        star.addEventListener('mouseover', () => highlightStars(index));
+        star.addEventListener('mouseout', () => highlightStars(selectedRating - 1));
+        star.addEventListener('click', () => {
+          selectedRating = index + 1;
+          highlightStars(index);
+          enviarValoracion(selectedRating);
+        });
+      });
+
+      function highlightStars(index) {
+        stars.forEach((star, i) => {
+          star.classList.toggle('selected', i <= index);
+          star.classList.toggle('hover', i <= index);
+        });
+      }
+
+      observer.disconnect();
+    }
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
+});
+
+function getValoracion(preguntaId) {
+  console.log("get")
+  fetch(`../../Controller/valoracion.php?action=get_valoracion&pregunta_id=${preguntaId}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data.success && data.valoracion) {
+        console.log(data);
+        // Highlight stars based on the rating
+        const stars = document.querySelectorAll('.rating .star');
+        stars.forEach((star, index) => {
+          star.classList.toggle('selected', index < data.valoracion);
+        });
+      }
+    })
+    .catch(error => console.error("Error al obtener valoración:", error));
+}
+
+function enviarValoracion(rating) {
+  const preguntaId = document.getElementById("chatId").value;
+  const formData = new FormData();
+  formData.append("action", "enviar_valoracion");
+  formData.append("pregunta_id", preguntaId);
+  formData.append("valoracion", rating);
+
+  fetch("../../Controller/valoracion.php", {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        console.log("Valoración enviada con éxito");
+      } else {
+        console.error("Error al valorar:", data.message);
+      }
+    })
+    .catch((error) => console.error("Error en la solicitud:", error));
 }
