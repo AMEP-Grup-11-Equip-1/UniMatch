@@ -73,6 +73,7 @@
         let receptor_id = null;
         let grupo_id_actual = null;
         let chatPollingInterval = null;
+        const grupoId = new URLSearchParams(window.location.search).get("grupo_id");
 
         const matchList = document.getElementById("matchList");
         const messagesContainer = document.getElementById("messagesContainer");
@@ -376,6 +377,56 @@
                 })
                 .catch(err => console.error("Error al enviar mensaje grupal:", err));
         }
+
+         if (grupoId) {
+        tabGroups.click(); // activa pestaña de grupos
+        // Esperamos a que los grupos carguen y luego abrimos el chat del grupo correspondiente
+        setTimeout(() => {
+            grupo_id_actual = grupoId;
+            receptor_id = null;
+
+            fetch("../../Controller/obtener_grupos_unidos2.php?modo=unidos")
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        const grupo = data.grupos.find(g => String(g.id) === String(grupoId));
+                        if (grupo) {
+                            abrirChatGrupal(grupo.id, grupo.nom);
+                        } else {
+                            alert("No estás unido a este grupo.");
+                        }
+                    }
+                })
+                .catch(err => console.error("Error buscando grupo:", err));
+        }, 500); // tiempo para asegurar que la pestaña se haya activado
+    }
+
+    function abrirChatGrupal(id, nombre) {
+  grupo_id_actual = id;
+  receptor_id = null;
+
+  // Si el nombre está en blanco, intenta buscarlo
+  if (!nombre || nombre === "Grupo") {
+    fetch(`../../Controller/get_grupo_detalle.php`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ grup_id: id })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data && data.nombre) {
+        document.querySelector(".chat-box h2").textContent = "Chat grupal: " + data.nombre;
+      }
+    });
+  } else {
+    document.querySelector(".chat-box h2").textContent = "Chat grupal: " + nombre;
+  }
+
+  if (chatPollingInterval) clearInterval(chatPollingInterval);
+  cargarMensajesGrupales();
+  chatPollingInterval = setInterval(cargarMensajesGrupales, 3000);
+}
+
     </script>
 
 </body>
