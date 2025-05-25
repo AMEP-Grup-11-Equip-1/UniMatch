@@ -63,15 +63,21 @@ function cargarGrupos() {
                 }
 
                 div.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <h2>${grup.nom}</h2>
-                        <p>${grup.descripcio}</p>
-                        <p><strong>Visibilidad:</strong> ${grup.visibilitat}</p>
+                  <div style="display: flex; align-items: center; justify-content: space-between;">
+                      <div style="display: flex; align-items: center; gap: 14px;">
+                        <img src="${grup.imagen || '../../Imagenes/img2.png'}"
+                             alt="Foto grupo"
+                             style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" />
+                        <div>
+                          <h2 style="margin: 0;">${grup.nom}</h2>
+                          <p style="margin: 2px 0;">${grup.descripcio}</p>
+                          <p style="margin: 2px 0;"><strong>Visibilidad:</strong> ${grup.visibilitat}</p>
+                        </div>
+                      </div>
+                      <button class="join-button ${botonClaseExtra}">${textoBoton}</button>
                     </div>
-                    <button class="join-button ${botonClaseExtra}">${textoBoton}</button>
-                </div>
-            `;
+                `;
+
 
                 const boton = div.querySelector(".join-button");
 
@@ -154,15 +160,19 @@ function cargarGrupos() {
             const div = document.createElement("div");
             div.classList.add("grupo-item");
             div.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <h2>${grup.nom}</h2>
-                        <p>${grup.descripcio}</p>
-                        <p><strong>Visibilidad:</strong> ${grup.visibilitat}</p>
-                    </div>
-                    <button class="join-button success">Ver Grupo</button>
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                  <img src="${grup.imagen || '../../Imagenes/img2.png'}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" />
+                  <div>
+                    <h2>${grup.nom}</h2>
+                    <p>${grup.descripcio}</p>
+                    <p><strong>Visibilidad:</strong> ${grup.visibilitat}</p>
+                  </div>
                 </div>
+                <button class="join-button success">Ver Grupo</button>
+              </div>
             `;
+
             const boton = div.querySelector(".join-button");
 
             boton.addEventListener("click", () => {
