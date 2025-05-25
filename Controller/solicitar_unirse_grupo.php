@@ -23,7 +23,7 @@ try {
     $conn = $db->getConexion();
 
     // Obtener el propietario del grupo
-    $q = $conn->prepare("SELECT propietari_id FROM grups WHERE id = ?");
+    $q = $conn->prepare("SELECT propietari_id, nom FROM grups WHERE id = ?");
     $q->bind_param("i", $grupoID);
     $q->execute();
     $r = $q->get_result();
@@ -35,9 +35,10 @@ try {
     }
 
     $destinatari_id = intval($grupo['propietari_id']);
+    $nom_grup = $grupo['nom'];
 
     // Comprobar si ya se ha enviado una invitación
-    $check = $conn->prepare("SELECT id FROM invitacions_grups WHERE grup_id = ? AND usuari_id = ?");
+    $check = $conn->prepare("SELECT id FROM invitacions_grups WHERE grup_id = ? AND usuari_id = ? AND estado IN('pendiente', 'aceptado')");
     $check->bind_param("ii", $grupoID, $usuarioID);
     $check->execute();
     $res = $check->get_result();
@@ -52,7 +53,21 @@ try {
     $stmt->bind_param("iii", $grupoID, $usuarioID, $destinatari_id);
     $stmt->execute();
 
-    echo json_encode(["success" => true, "message" => "Solicitud enviada correctamente"]);
+    // Obtener el nombre del solicitante
+    $stmtUser = $conn->prepare("SELECT name FROM usuario WHERE id = ?");
+    $stmtUser->bind_param("i", $usuarioID);
+    $stmtUser->execute();
+    $resUser = $stmtUser->get_result();
+    $solicitante = $resUser->fetch_assoc();
+    $nom_usuari = $solicitante['name'] ?? 'Un usuario';
+
+    // Crear la notificación
+    $mensaje = "$nom_usuari ha solicitado unirse al grupo \"$nom_grup\"";
+    $stmtNoti = $conn->prepare("INSERT INTO notificaciones (usuario_id, mensaje, tipo, fecha, autorLikeId) VALUES (?, ?, 'grupo', NOW(), ?)");
+    $stmtNoti->bind_param("isi", $destinatari_id, $mensaje, $usuarioID);
+    $stmtNoti->execute();
+
+    echo json_encode(["success" => true, "message" => "Solicitud y notificación enviadas"]);
 
 } catch (Exception $e) {
     echo json_encode(["success" => false, "message" => "Error: " . $e->getMessage()]);
