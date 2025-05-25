@@ -94,10 +94,20 @@ function rotateCarousel(direction) {
     updateCarousel();
 }
 
+
 function toggleProfilePopup() {
     const popup = document.getElementById('profilePopup');
+    const crearGrupoPopup = document.getElementById('popupCrearGrupo');
+    const notificationPopup = document.getElementById('notificationPopup');
+
+    // Tancar altres popups
+    crearGrupoPopup?.classList.remove('show');
+    notificationPopup?.classList.remove('show');
+
+    // Obre o tanca aquest
     popup.classList.toggle('show');
 }
+
 
 function openMenu() {
     document.getElementById('sideMenu').style.width = '250px';
@@ -128,6 +138,14 @@ function eliminarCuenta() {
 
 function toggleNotificationPopup() {
     const popup = document.getElementById('notificationPopup');
+    const crearGrupoPopup = document.getElementById('popupCrearGrupo');
+    const profilePopup = document.getElementById('profilePopup');
+
+    // Tancar altres popups
+    crearGrupoPopup?.classList.remove('show');
+    profilePopup?.classList.remove('show');
+
+    // Obre o tanca aquest
     popup.classList.toggle('show');
     if (popup.classList.contains('show')) {
         cargarNotificaciones();
@@ -309,6 +327,14 @@ function rechazarNotificacion(id) {
 // Función para abrir/cerrar el popup de Crear Grupo
 function toggleCrearGrupo() {
     const popup = document.getElementById('popupCrearGrupo');
+    const profilePopup = document.getElementById('profilePopup');
+    const notificationPopup = document.getElementById('notificationPopup');
+
+    // Tancar altres popups
+    profilePopup?.classList.remove('show');
+    notificationPopup?.classList.remove('show');
+
+    // Obre o tanca aquest
     popup.classList.toggle('show');
 }
 
