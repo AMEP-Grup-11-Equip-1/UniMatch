@@ -237,7 +237,7 @@ body::after {
 .sugerencia-popup {
     display: none;
     position: fixed;
-    bottom: 100px;
+    bottom: 150px;
     right: 30px;
     background: white;
     border-radius: 12px;
@@ -246,6 +246,7 @@ body::after {
     box-shadow: 0 0 20px rgba(0,0,0,0.2);
     z-index: 1000;
     animation: fadeInUp 0.3s ease-out;
+   overflow: hidden;
 }
 @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(20px); }
@@ -263,6 +264,7 @@ body::after {
     margin-bottom: 10px;
 }
 .popup-content button {
+    box-sizing:border-box;
     background-color: #000;
     color: white;
     border: none;
@@ -318,6 +320,7 @@ body::after {
     max-width: 90%;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
     z-index: 1001;
+    animation: fadeInUp 0.3s ease-out;
 }
 
 .guia-popup h3 {
