@@ -102,33 +102,27 @@
     </div>
 
     <!-- Popup para crear grupo -->
-    <div class="profile-popup" id="popupCrearGrupo">
+      <div class="profile-popup" id="popupCrearGrupo">
       <span class="close-popup" onclick="toggleCrearGrupo()">&times;</span>
         <h2>Crear Grupo</h2>
-        <form id="formCrearGrupo" action="../../Controller/crear_grup.php" method="POST">
-            <!-- Nombre del grupo -->
+        <form id="formCrearGrupo" action="../../Controller/crear_grup.php" method="POST" enctype="multipart/form-data">
             <input type="file" name="imagen" accept="image/*" required />
             <input type="text" id="grup_nom" name="nom" placeholder="Nombre del grupo" required />
 
-            <!-- Visibilidad: debe ser public o privat -->
             <div class="toggle-group">
-                <input type="radio" id="publico" name="visibilidad" value="public" />
+                <input type="radio" id="publico" name="visibilidad" value="public" required />
                 <label for="publico">Público</label>
 
-                <input type="radio" id="privado" name="visibilidad" value="privat" />
+                <input type="radio" id="privado" name="visibilidad" value="privat" required />
                 <label for="privado">Privado</label>
             </div>
 
-
-            </select>
-
-            <!-- Descripción -->
             <textarea id="grup_descripcio" name="descripcio" placeholder="Descripción" required></textarea>
 
-            <!-- Botón de envío -->
             <div id="errorMensajeGrupo" class="error-message"></div>
             <button type="submit">Guardar</button>
         </form>
+
     </div>
 
     <button class="grupo-button" onclick="window.location.href='../Pantalla_Grupos/ver_grupos.html'">
