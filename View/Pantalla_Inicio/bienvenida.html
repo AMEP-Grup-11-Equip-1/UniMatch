@@ -128,6 +128,22 @@
     <button class="grupo-button" onclick="window.location.href='../Pantalla_Grupos/ver_grupos.html'">
       Grupos
     </button>
+
+    <!-- Popup Denuncies -->
+
+<div class="profile-popup" id="reportPopup">
+    <span class="close-popup" onclick="closeReportPopup()">&times;</span>
+    <h2>Denunciar Història</h2>
+    <form id="reportForm">
+        <input type="hidden" name="target_user_id" id="reportHistoriaTargetUserId" />
+        <select id="reportReason" name="report_reason" required onchange="handleReportChange()">
+            <option value="">Selecciona un motiu</option>
+        </select>
+        <textarea id="otherReason" name="other_description" placeholder="Escriu el motiu..." style="display:none;"></textarea>
+        <div id="errorMensajeDenuncia" class="error-message"></div>
+        <button type="submit">Enviar denúncia</button>
+    </form>
+</div>
 </body>
 
 </html>
