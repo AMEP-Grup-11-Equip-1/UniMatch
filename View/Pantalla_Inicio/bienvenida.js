@@ -238,34 +238,40 @@ function cargarNotificaciones() {
 }
 
 // Función para aceptar la notificación
-function aceptarNotificacion(id) {
-    console.log(" Has fet clic a ACCEPTAR notificació amb ID:", id);
+function aceptarNotificacion(id, tipo) {
+    console.log("Has fet clic a ACCEPTAR notificació amb ID:", id, "i tipus:", tipo);
 
     fetch("../../Controller/aceptar_notificacion.php", {
-            method: 'POST',
-            body: new URLSearchParams({ id: id }),
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            }
-        })
-        .then(async response => {
-            const text = await response.text();
-            try {
-                const data = JSON.parse(text);
-                if (data.status === 'success') {
-                    cargarNotificaciones();
+        method: 'POST',
+        body: new URLSearchParams({ id: id }),
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+    })
+    .then(async response => {
+        const text = await response.text();
+        try {
+            const data = JSON.parse(text);
+            if (data.status === 'success') {
+                cargarNotificaciones();
 
-                    // Redirigeix al xat perquè es vegi el nou match
+                // Actuar segons el tipus
+                if (tipo === "match") {
                     window.location.href = "../Pantalla_Chat/chat.php";
-                } else {
-                    alert('Error al aceptar la notificación: ' + data.message);
+                } else if (tipo === "grupo") {
+                    alert("✅ Usuari afegit al grup correctament!");
+                    // No redirigeixes, simplement es queda on està
                 }
-            } catch (e) {
-                console.error(" Resposta NO JSON:", text);
-                alert('Error inesperado del servidor. Mira la consola.');
+
+            } else {
+                alert('Error al aceptar la notificación: ' + data.message);
             }
-        })
-        .catch(error => console.error(' Error al aceptar la notificación (catch):', error));
+        } catch (e) {
+            console.error("Resposta NO JSON:", text);
+            alert('Error inesperado del servidor. Mira la consola.');
+        }
+    })
+    .catch(error => console.error('Error al aceptar la notificación (catch):', error));
 }
 
 function rechazarNotificacion(id) {
