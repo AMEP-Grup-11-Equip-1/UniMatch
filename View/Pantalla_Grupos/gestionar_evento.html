@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nuevo Evento</title>
+    <link rel="stylesheet" href="gestionar_grupo.css" />
+</head>
+<body>
+
+    <a href="ver_grupos.html" class="back-button">← Volver</a>
+
+    <div class="grupo-card">
+        <h2>Crear Evento</h2>
+
+        <!-- Formulario -->
+        <label for="fecha">Fecha del evento:</label>
+        <input type="date" id="fecha" style="width: 100%; padding: 8px; margin-bottom: 10px;" />
+
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo" placeholder="Título de la actividad" style="width: 100%; padding: 8px; margin-bottom: 10px;" />
+
+        <label for="descripcion">Descripción:</label>
+        <textarea id="descripcion" placeholder="Descripción del evento" rows="4" style="width: 100%; padding: 8px;"></textarea>
+
+        <button id="guardar" class="chat-btn" style="margin-top: 10px;">Guardar evento</button>
+
+        <!-- Lista de eventos -->
+        <div id="eventos-guardados" style="margin-top: 30px;">
+            <h3>📅 Eventos del grupo</h3>
+            <ul id="lista-eventos" style="list-style: none; padding-left: 0;"></ul>
+        </div>
+    </div>
+
+    <script>
+        const grupoID = new URLSearchParams(window.location.search).get("grupo_id");
+
+        // Guardar evento
+        document.getElementById("guardar").addEventListener("click", () => {
+            const fecha = document.getElementById("fecha").value;
+            const titulo = document.getElementById("titulo").value;
+            const descripcion = document.getElementById("descripcion").value;
+
+            if (!fecha || !titulo || !descripcion) {
+                alert("Por favor completa todos los campos.");
+                return;
+            }
+
+            const fechaIngresada = new Date(fecha);
+            const hoy = new Date();
+            hoy.setHours(0, 0, 0, 0);
+
+            if (fechaIngresada < hoy) {
+                alert("No se puede crear un evento en una fecha pasada.");
+                return;
+            }
+
+            fetch("../../Controller/crear_evento_grupo.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    grup_id: grupoID,
+                    activitat: titulo,
+                    descripcio: descripcion,
+                    data_event: fecha
+                })
+            })
+                .then(async res => {
+                    const text = await res.text();
+                    try {
+                        const json = JSON.parse(text);
+                        alert(json.message || "Evento guardado correctamente.");
+                        cargarEventos();
+                    } catch (err) {
+                        console.error("Respuesta inesperada del servidor:", text);
+                        alert("El evento se guardó, pero hubo un error en la respuesta.");
+                    }
+                })
+                .catch(err => {
+                    console.error("Error al guardar evento:", err);
+                    alert("Hubo un error al guardar el evento.");
+                });
+        });
+
+        // Cargar eventos guardados
+        function cargarEventos() {
+            fetch("../../Controller/obtener_eventos_grupo.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ grupo_id: grupoID })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    const lista = document.getElementById("lista-eventos");
+                    lista.innerHTML = "";
+
+                    if (data.success && data.eventos.length > 0) {
+                        data.eventos.forEach(ev => {
+                            const item = document.createElement("li");
+                            item.style.borderBottom = "1px solid #ccc";
+                            item.style.padding = "8px 0";
+                            item.style.display = "flex";
+                            item.style.justifyContent = "space-between";
+                            item.style.alignItems = "center";
+
+                            item.innerHTML = `
+                  <div>
+                    <strong>${ev.activitat}</strong> (${ev.data_event})<br/>
+                    <span>${ev.descripcio}</span>
+                  </div>
+                  <button class="chat-btn" style="background-color: red; color: white;" data-id="${ev.id}">🗑</button>
+                `;
+
+                            const botonEliminar = item.querySelector("button");
+                            botonEliminar.addEventListener("click", () => {
+                                if (confirm("¿Seguro que quieres eliminar este evento?")) {
+                                    fetch("../../Controller/eliminar_evento_grupo.php", {
+                                        method: "POST",
+                                        headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify({ evento_id: ev.id })
+                                    })
+                                        .then(res => res.json())
+                                        .then(resp => {
+                                            alert(resp.message || "Evento eliminado.");
+                                            cargarEventos();
+                                        });
+                                }
+                            });
+
+                            lista.appendChild(item);
+                        });
+                    } else {
+                        lista.innerHTML = "<li>No hay eventos registrados.</li>";
+                    }
+                });
+        }
+
+        // Ejecutar al cargar
+        cargarEventos();
+    </script>
+
+</body>
+</html>
