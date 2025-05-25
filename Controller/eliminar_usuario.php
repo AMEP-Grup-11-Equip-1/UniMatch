@@ -23,6 +23,8 @@ try {
     $stmt->close();
 
     $queries = [
+        "DELETE FROM mensajes_adm WHERE protocolo IN (SELECT id FROM ayuda WHERE usuario_id = ?)",
+        "DELETE FROM ayuda WHERE usuario_id = ?",
         "DELETE FROM matches WHERE usuario1_id = ? OR usuario2_id = ?",
         "DELETE FROM mensajes WHERE emisor = ? OR receptor = ?",
         "DELETE FROM mensajes_grupo WHERE emisor_id = ?",
@@ -31,6 +33,8 @@ try {
         "DELETE FROM grup_usuaris WHERE usuari_id = ?",
         "DELETE FROM invitacions_grups WHERE usuari_id = ? OR destinatari_id = ?"
     ];
+
+
 
     foreach ($queries as $sql) {
         $stmt = $conn->prepare($sql);
@@ -58,3 +62,4 @@ try {
     $conn->rollback();
     echo json_encode(["status" => "error", "message" => "Error al eliminar la cuenta: " . $e->getMessage()]);
 }
+
