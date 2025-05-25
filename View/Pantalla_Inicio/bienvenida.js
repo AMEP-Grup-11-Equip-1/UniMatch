@@ -170,6 +170,19 @@ function toggleLike(element) {
     }
 }
 
+function filtrarNotificaciones(tipus) {
+    tipusFiltreActual = tipus;
+    cargarNotificaciones();
+
+    const botoons = document.querySelectorAll('.notification-filters button');
+    botoons.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('data-tipo') === tipus) {
+            btn.classList.add('active');
+        }
+    });
+}
+
 function heartBeatLong(btn) {
     btn.classList.remove('heartbeat');
     void btn.offsetWidth;
@@ -184,36 +197,37 @@ function cargarNotificaciones() {
             const lista = document.querySelector('.notification-list');
             lista.innerHTML = ''; // Limpiamos cualquier contenido previo.
 
-            if (data.data && data.data.length > 0) {
-                data.data.forEach(n => {
-                    // Crear el contenedor de la notificación
+            // 👉 Aquest és el filtre correcte!
+            const filtrades = tipusFiltreActual === "todas"
+                ? data.data
+                : data.data.filter(n => n.tipo === tipusFiltreActual);
+
+            if (filtrades.length > 0) {
+                filtrades.forEach(n => {
                     const notificationContainer = document.createElement('div');
                     notificationContainer.classList.add('notification-container');
-                    notificationContainer.setAttribute('data-id', n.id);  // Agregar el ID de la notificación
+                    notificationContainer.setAttribute('data-id', n.id);
 
-                    // Contenido de la notificación (mensaje y fecha en el mismo contenedor)
                     const notificationContent = document.createElement('div');
                     notificationContent.classList.add('notification-content');
                     notificationContent.innerHTML = `
-                    <p><strong>${n.mensaje}</strong></p>
-                    <p style="color: #777;">${new Date(n.fecha).toLocaleString()}</p>
-                `;
-                
-
-
-                    // Botones para aceptar o rechazar (centrados y ocupando toda la isla)
-                    const notificationActions = document.createElement('div');
-                    notificationActions.classList.add('notification-actions');
-                    notificationActions.innerHTML = `
-                        <button class="accept-btn" onclick="aceptarNotificacion(${n.id})">Aceptar</button>
-                        <button class="reject-btn" onclick="rechazarNotificacion(${n.id})">Rechazar</button>
+                        <p><strong>${n.mensaje}</strong></p>
+                        <p style="color: #777;">${new Date(n.fecha).toLocaleString()}</p>
                     `;
 
-                    // Agregar el contenido y los botones al contenedor de la notificación
+                    const notificationActions = document.createElement('div');
+                    notificationActions.classList.add('notification-actions');
+
+                    // NOMÉS afegim botons si és de tipus 'match'
+                    if (n.tipo === 'match') {
+                        notificationActions.innerHTML = `
+                            <button class="accept-btn" onclick="aceptarNotificacion(${n.id})">Aceptar</button>
+                            <button class="reject-btn" onclick="rechazarNotificacion(${n.id})">Rechazar</button>
+                        `;
+                    }
+
                     notificationContainer.appendChild(notificationContent);
                     notificationContainer.appendChild(notificationActions);
-
-                    // Añadir la notificación al listado
                     lista.appendChild(notificationContainer);
                 });
             } else {
