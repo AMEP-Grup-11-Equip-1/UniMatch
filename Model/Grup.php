@@ -24,47 +24,20 @@ class Grup {
 
 
     
-    public function crearGrup($nom, $descripcio, $visibilitat, $usuario_id) {
-    // 1. Insertar grupo
-    $sql = "INSERT INTO grups (nom, descripcio, visibilitat, propietari_id) VALUES (?, ?, ?, ?)";
+   public function crearGrup($nom, $descripcio, $visibilitat, $usuario_id, $urlImagen) {
+    $sql = "INSERT INTO grups (nom, descripcio, visibilitat, propietari_id, imagen) VALUES (?, ?, ?, ?, ?)";
     $stmt = $this->conn->prepare($sql);
-
     if ($stmt === false) {
         error_log("Error al preparar la consulta: " . $this->conn->error);
         return false;
     }
-
-    $stmt->bind_param("sssi", $nom, $descripcio, $visibilitat, $usuario_id);
-
+    $stmt->bind_param("sssis", $nom, $descripcio, $visibilitat, $usuario_id, $urlImagen);
     if (!$stmt->execute()) {
         error_log("Error en la ejecución de la consulta: " . $stmt->error);
         $stmt->close();
         return false;
     }
-
-    $grupo_id = $stmt->insert_id; // Obtener el ID del grupo recién creado
     $stmt->close();
-
-    // 2. Insertar al creador en la tabla grup_usuarios con rol 'admin'
-    $rol = 'propietari';
-    $sql2 = "INSERT INTO grup_usuaris (grup_id, usuari_id, rol) VALUES (?, ?, ?)";
-    $stmt2 = $this->conn->prepare($sql2);
-
-    if ($stmt2 === false) {
-        error_log("Error al preparar la inserción en grup_usuarios: " . $this->conn->error);
-        return false;
-    }
-
-    $stmt2->bind_param("iis", $grupo_id, $usuario_id, $rol);
-
-    if (!$stmt2->execute()) {
-        error_log("Error al ejecutar la inserción en grup_usuarios: " . $stmt2->error);
-        $stmt2->close();
-        return false;
-    }
-
-    $stmt2->close();
-
     return true;
 }
 
