@@ -8,78 +8,113 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Configuración Cloudinary
+$cloud_name = 'dpgwhmtud';
+$api_key = '394999426817163';
+$api_secret = '69kEgo9x1YRaxYm2CHJb4JP5vm4';
+
+// Verificar datos del formulario
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $input = json_decode(file_get_contents("php://input"), true);
+    if (!isset($_POST['nom'], $_POST['descripcio'], $_POST['visibilidad']) || !isset($_FILES['imagen'])) {
+        echo "Error: Datos incompletos o imagen no subida.";
+        exit();
+    }
 
-   
-}
+    $nombre = trim($_POST['nom']);
+    $descripcion = trim($_POST['descripcio']);
+    $visibilidad = trim($_POST['visibilidad']);
+    $imagen = $_FILES['imagen'];
 
-// Verificar si los datos POST están disponibles
-if (!isset($_POST['nom'], $_POST['descripcio'], $_POST['visibilitat'])) {
-    echo "Error: Datos incompletos.";
-    exit();
-}
+    // Validar los datos
+    if (strlen($nombre) < 2 || strlen($descripcion) < 5) {
+        echo "Error: Los campos deben tener contenido válido.";
+        exit();
+    }
 
-$nombre = trim($_POST['nom']);
-$descripcion = trim($_POST['descripcio']);
-$visibilidad = trim($_POST['visibilitat']);
+    if ($visibilidad !== "public" && $visibilidad !== "privat") {
+        echo "Error: Valor de visibilidad no válido.";
+        exit();
+    }
 
-// Validar los datos
-if (strlen($nombre) < 2 || strlen($descripcion) < 5) {
-    echo "Error: Los campos deben tener contenido válido.";
-    exit();
-}
+    // Verificar que el usuario esté logueado
+    if (!isset($_SESSION['usuarioID'])) {
+        echo "Error: No has iniciado sesión.";
+        exit();
+    }
+    $propietario_id = $_SESSION['usuarioID'];
 
-if ($visibilidad !== "public" && $visibilidad !== "privat") {
-    echo "Error: Valor de visibilidad no válido.";
-    exit();
-}
+    // Subir imagen a Cloudinary
+    if ($imagen['error'] === 0) {
+        $timestamp = time();
+        $string_to_sign = "timestamp=$timestamp" . $api_secret;
+        $signature = sha1($string_to_sign);
 
-// Conectar a la base de datos
-$db = new ConexionBD();
-$conn = $db->getConexion();
+        $ch = curl_init();
+        $data = [
+            'file' => new CURLFile($imagen['tmp_name']),
+            'api_key' => $api_key,
+            'timestamp' => $timestamp,
+            'signature' => $signature
+        ];
 
-// Verificar si la conexión fue exitosa
-if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
-}
+        curl_setopt($ch, CURLOPT_URL, "https://api.cloudinary.com/v1_1/$cloud_name/image/upload");
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-// Verificar que el usuario está logueado
-if (!isset($_SESSION['usuarioID'])) {
-    echo "Error: No has iniciado sesión.";
-    exit();
-}
+        $response = curl_exec($ch);
+        if (curl_errno($ch)) {
+            echo "Error en la subida a Cloudinary: " . curl_error($ch);
+            exit();
+        }
+        curl_close($ch);
 
-$propietario_id = $_SESSION['usuarioID'];
+        $response_data = json_decode($response, true);
 
-// Depurar la variable de sesión
-echo "UsuarioID: " . $propietario_id . "<br>"; // Muestra el valor de $_SESSION['usuarioID']
+        if (!isset($response_data['secure_url'])) {
+            echo "Error en la respuesta de Cloudinary: " . $response;
+            exit();
+        }
 
-// Verificar que el usuario exista en la base de datos
-$checkUser = $conn->prepare("SELECT id FROM usuario WHERE id = ?");
-$checkUser->bind_param("i", $propietario_id);
-$checkUser->execute();
-$checkUser->store_result();
+        $urlImagen = $response_data['secure_url'];
 
-// Depuración adicional para mostrar si la consulta encuentra al usuario
-if ($checkUser->num_rows === 0) {
-    echo "Error: Usuario no válido o no encontrado en la base de datos.";
-    exit();
+    } else {
+        echo "Error: No se recibió ninguna imagen válida.";
+        exit();
+    }
+
+    // Conectar a la base de datos
+    $db = new ConexionBD();
+    $conn = $db->getConexion();
+
+    if ($conn->connect_error) {
+        die("Conexión fallida: " . $conn->connect_error);
+    }
+
+    // Verificar que el usuario exista en la base de datos
+    $checkUser = $conn->prepare("SELECT id FROM usuario WHERE id = ?");
+    $checkUser->bind_param("i", $propietario_id);
+    $checkUser->execute();
+    $checkUser->store_result();
+
+    if ($checkUser->num_rows === 0) {
+        echo "Error: Usuario no válido o no encontrado en la base de datos.";
+        exit();
+    }
+    $checkUser->close();
+
+    // Crear el grupo incluyendo la URL de la imagen
+    $grupModel = new Grup($conn);
+    $resultado = $grupModel->crearGrup($nombre, $descripcion, $visibilidad, $propietario_id, $urlImagen);
+
+    if ($resultado === true) {
+        header("Location: ../View/Pantalla_Inicio/bienvenida.html");
+        exit();
+    } else {
+        echo "Error al guardar el grupo. Consulta el log.";
+    }
+
 } else {
-    echo "Usuario válido encontrado.<br>"; // Solo para depuración
-}
-
-$checkUser->close();
-
-// Crear el grupo
-$grupModel = new Grup($conn);
-$resultado = $grupModel->crearGrup($nombre, $descripcion, $visibilidad, $propietario_id);
-
-// Redirigir o mostrar mensaje de error según el resultado
-if ($resultado === true) {
-    header("Location: ../View/Pantalla_Inicio/bienvenida.html");
-    exit();
-} else {
-    echo "Error al guardar el grupo. Consulta el log.";
+    echo "Método no permitido.";
 }
 ?>
