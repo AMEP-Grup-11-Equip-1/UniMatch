@@ -217,9 +217,8 @@ body::after {
     /* Espacio para el scroll */
 }
 
-.message {
+.message-user, .message-admin {
     padding: 10px;
-    background-color: #f0f0f0;
     border-radius: 10px;
     width: fit-content;
     max-width: 80%;
@@ -229,18 +228,33 @@ body::after {
     align-items: center;
 }
 
-.message.user {
-    background-color: #000000;
-    color: white;
-    margin-left: 0;
+.message-user {
+    background-color: #ececec;
+        color: black;
+
+    margin-right: 0;
 }
 
-.message img {
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    margin-right: 10px;
+.message-admin {
+    background-color: #444444;
+    color: #ececec;
+    margin-left: 0;
+    text-align: right;
 }
+
+.message-time {
+    font-size: 12px;
+    color: #999;
+    margin-top: 5px;
+}
+
+.senderName {
+    font-weight: bold;
+    color: #ff4f7b;
+    margin-right: 8px;
+}
+
+
 
 .message-input {
     display: flex;
@@ -258,7 +272,7 @@ body::after {
     font-size: 16px;
 }
 
-.message-input button {
+.chat-box button {
     background-color: #000000;
     color: white;
     padding: 10px 20px;
@@ -267,7 +281,16 @@ body::after {
     cursor: pointer;
 }
 
-.message-input button:hover {
+.chat-box button:disabled {
+    background-color: #515151;
+    cursor: default;
+}
+
+.chat-box button:disabled:hover {
+    background-color: #515151;
+}
+
+.chat-box button:hover {
     background-color: #000000;
 }
 
@@ -320,90 +343,4 @@ body::after {
 
 .section-item:hover {
     background-color: #ffe6f0;
-}
-
-
-/*---------------------------------------------------------------------------------->*/
-
-.message {
-    max-width: 60%;
-    padding: 8px 12px;
-    border-radius: 15px;
-    position: relative;
-    font-size: 14px;
-    line-height: 1.3;
-    word-wrap: break-word;
-}
-
-.message-received {
-    align-self: flex-end;
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    /* verde claro estilo WhatsApp */
-    margin-left: 10px;
-}
-
-.message-sent {
-    align-self: flex-start;
-    background-color: #ffecfc;
-    border: 1px solid #ddd;
-}
-
-.message-text {
-    /* ...tus estilos previos... */
-    margin-Right: 10px;
-    /* aumenta este valor para más espacio */
-}
-
-.message-time {
-    font-size: 10px;
-    /* más pequeño */
-    color: #666;
-    /* un gris suave */
-    margin-top: 4px;
-    /* separación del texto */
-    text-align: right;
-    /* alineado a la derecha dentro del mensaje */
-    user-select: none;
-    /* no se puede seleccionar */
-}
-
-.grupo-message {
-    max-width: 60%;
-    padding: 8px 12px;
-    border-radius: 15px;
-    position: relative;
-    font-size: 14px;
-    line-height: 1.3;
-    word-wrap: break-word;
-}
-
-.grupo-username {
-    font-size: 12px;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 4px;
-    user-select: none;
-    margin-left: 10px;
-    margin-right: 10px;
-}
-
-.grupo-message-own {
-    align-self: flex-start;
-    background-color: #f8f8f8;
-    border: 1px solid #ddd;
-}
-
-.grupo-message-other {
-    align-self: flex-end;
-    background-color: #ffecfc;
-    border: 1px solid #ddd;
-    /* verde claro estilo WhatsApp */
-    margin-left: 10px;
-}
-
-.message-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 }

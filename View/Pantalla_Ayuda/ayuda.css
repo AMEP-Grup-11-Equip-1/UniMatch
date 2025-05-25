@@ -345,4 +345,32 @@ body::after {
     cursor: pointer;
 }
 
+/*------------------------------------ Historico --------------------------------------*/
 
+
+.history-button {
+    display: inline-block;
+    background-color: white;
+    color: #ef097c;
+    border: 2px solid #ef097c; 
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+}
+
+.history-button:hover {
+    background-color: white;
+    color: #000;
+}
+
+.history-button .material-icons {
+    margin-right: 8px;
+    font-size: 20px;
+}

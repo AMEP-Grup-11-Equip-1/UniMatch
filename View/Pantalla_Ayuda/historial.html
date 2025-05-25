@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chats - Unimatch</title>
+    <link rel="icon" href="../../Imagenes/img1.png" type="image/x-icon" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="chats.css" />
+    <link rel="stylesheet" href="../Menu/menu.css" />
+  </head>
+
+  <body>
+    <span class="menu-icon" onclick="openMenu()">&#9776;</span>
+
+    <div id="sideMenu" class="side-menu">
+      <span class="close-btn" onclick="closeMenu()">&times;</span>
+      <a href="../Pantalla_Inicio/bienvenida.html">Inicio</a>
+      <a href="../Pantalla_Perfil/perfil.php">Perfil</a>
+      <a href="../Pantalla_Chat/chat.html">Chats</a>
+      <a href="../Pantalla_Config/configuracion.html">Configuraciones</a>
+      <a href="../Pantalla_Ayuda/ayuda.html">Ayuda</a>
+      <button
+        class="logout-btn-side"
+        onclick="window.location.href='../../Controller/logout.php'"
+      >
+        Cerrar sesión
+      </button>
+      <button
+        class="delete-account-btn"
+        onclick="eliminarCuenta()"
+        style="
+          background-color: red;
+          color: white;
+          border: none;
+          padding: 10px;
+          width: 100%;
+        "
+      >
+        Eliminar cuenta
+      </button>
+    </div>
+
+    <div class="chat-container">
+      <div class="chat-list">
+        <div class="tab-container">
+          <button class="tab active" id="tab-open" onclick="Show('open')">
+            Abiertos
+          </button>
+          <button class="tab" id="tab-closed" onclick="Show('close')">
+            Cerrados
+          </button>
+        </div>
+
+        <div class="search-container">
+          <input type="text" id="searchInput" placeholder="Buscar..." />
+        </div>
+
+        <div class="tab-underline"></div>
+
+        <!-- Aquí tus listas -->
+        <div id="OpenList"></div>
+        <div id="CloseList" style="display: none"></div>
+      </div>
+
+      <div class="chat-box">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          "
+        >
+          <h2>Conversación</h2>
+          <input type="hidden" id="chatId" />
+          <button id="btnCerrar" onClick="closeChat()" style="visibility: hidden">Cerrar Chat</button>
+        </div>
+        <div class="messages" id="messagesContainer"></div>
+        <div class="message-input">
+          <input type="text" id="message" placeholder="Escribe un mensaje..." />
+          <button id="btnEnviar" onClick="sendMessage()">Enviar</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="chat.js"></script>
+  </body>
+</html>
