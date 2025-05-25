@@ -167,22 +167,38 @@ function closeMenu() {
 
 function eliminarCuenta() {
     if (confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.")) {
-        fetch("../../Controller/usercontroller.php", {
+        fetch("../../Controller/eliminar_usuario.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             }
         })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);
+        .then(res => res.text())
+        .then(text => {
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch (e) {
+                console.error("Respuesta no JSON:", text);
+                alert("❌ Error inesperado del servidor. Revisa la consola.");
+                return;
+            }
+
             if (data.status === "success") {
+                alert("Tu cuenta ha sido eliminada correctamente.");
                 window.location.href = "../Pantalla_de_Bloqueo/Pantalladebloqueo.html";
+            } else {
+                alert("❌ Error al eliminar la cuenta: " + (data.message || "Error desconocido."));
             }
         })
-        .catch(error => console.error("Error en la solicitud:", error));
+        .catch(error => {
+            console.error("Error en la solicitud:", error);
+            alert("❌ Error de red al intentar eliminar la cuenta.");
+        });
     }
 }
+
+
 function toggleGuiaPopup() {
     const popup = document.getElementById('guiaPopup');
     popup.style.display = (popup.style.display === "block") ? "none" : "block";
