@@ -21,7 +21,7 @@
       <ul id="lista-miembros"></ul>
     </div>
 
-    <button class="chat-btn" disabled>Chat de Grupo</button>
+    <button class="chat-btn" onclick="irAlChatDeGrupo()">Chat de Grupo</button>
     <button id="salir-grupo" class="salir-btn">Eliminar Grupo</button>
   </div>
 
@@ -96,6 +96,15 @@
         });
       }
     });
+
+    function irAlChatDeGrupo() {
+      if (grupoID) {
+        window.location.href = `../Pantalla_Chat/chat.html?grupo_id=${grupoID}`;
+      } else {
+        alert("No se ha encontrado el ID del grupo.");
+      }
+    }
+
   </script>
 
 </body>
