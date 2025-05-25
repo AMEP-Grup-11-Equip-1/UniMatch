@@ -70,7 +70,7 @@ if ($tipo === 'match') {
         $grupo_id = $inv['grup_id'];
 
         // Afegir l'usuari al grup
-        $stmtAdd = $conn->prepare("INSERT INTO grup_usuari (grup_id, usuari_id, rol) VALUES (?, ?, 'integrant')");
+        $stmtAdd = $conn->prepare("INSERT INTO grup_usuaris (grup_id, usuari_id, rol) VALUES (?, ?, 'integrant')");
         $stmtAdd->bind_param("ii", $grupo_id, $autor_id);
         $stmtAdd->execute();
 
