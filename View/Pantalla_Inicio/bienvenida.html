@@ -101,13 +101,19 @@
       </button>
     </div>
 
-    <!-- Popup de notificaciones -->
-    <!-- Popup de notificaciones -->
+     <!-- Popup de notificaciones -->
     <div class="notification-popup" id="notificationPopup">
       <span class="close-popup" onclick="toggleNotificationPopup()"
         >&times;</span
       >
       <h2>Notificaciones</h2>
+      <div class="notification-filters">
+        <button data-tipo="todas" class="active" onclick="filtrarNotificaciones('todas')">Todas</button>
+        <button data-tipo="match" onclick="filtrarNotificaciones('match')">Matches</button>
+        <button data-tipo="chat" onclick="filtrarNotificaciones('chat')">Chats</button>
+        <button data-tipo="grupo" onclick="filtrarNotificaciones('grupo')">Grupos</button>
+      </div>
+
       <div class="notification-list" id="notificationList">
         <!-- Ejemplo de notificación con botones -->
         <div class="notification-item" data-id="1">
