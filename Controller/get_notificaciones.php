@@ -17,10 +17,11 @@ try {
     $bd = new ConexionBD();
     $conn = $bd->getConexion();
 
-    $sql = "SELECT id, mensaje, fecha, leida, autorLike, autorLikeId
-            FROM notificaciones 
-            WHERE usuario_id = ? 
-            ORDER BY fecha DESC";
+   $sql = "SELECT id, mensaje, fecha, leida, autorLike, autorLikeId, tipo
+        FROM notificaciones 
+        WHERE usuario_id = ? 
+        ORDER BY fecha DESC";
+
     
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $usuario_id);
