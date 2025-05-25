@@ -186,35 +186,36 @@ body::after {
 }
 
 .notification-filters {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 botons iguals */
-  gap: 10px;
-  margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    /* 4 botons iguals */
+    gap: 10px;
+    margin-bottom: 10px;
 }
 
 .notification-filters button {
-  min-width: 90px;
-  width: 100%;
-  padding: 10px 0;
-  border: none;
-  border-radius: 10px;
-  background-color: rgba(125, 63, 198, 0.6);
-  color: white;
-  font-weight: 500;
-  font-size: 20px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  backdrop-filter: blur(4px); 
+    min-width: 90px;
+    width: 100%;
+    padding: 10px 0;
+    border: none;
+    border-radius: 10px;
+    background-color: rgba(125, 63, 198, 0.6);
+    color: white;
+    font-weight: 500;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    backdrop-filter: blur(4px);
 }
 
 .notification-filters button:hover {
-  background-color: #9d4ef5;
+    background-color: #9d4ef5;
 }
 
 .notification-filters button.active {
-  background-color: rgba(208, 179, 255, 0.5);
-  color: #2c004a;
-  font-weight: 600;
+    background-color: rgba(208, 179, 255, 0.5);
+    color: #2c004a;
+    font-weight: 600;
 }
 
 .accept-btn,
@@ -839,3 +840,38 @@ h1 {
 
 
 /*--------------------------------------------------------------------------------------------------------->*/
+
+
+/* En tu bienvenida.css */
+
+.error-message {
+    position: fixed;
+    top: 200px;
+    left: 83.5%;
+    transform: translateX(-50%);
+    display: none;
+    align-items: center;
+    gap: 10px;
+    background-color: #ffecec;
+    color: #990000;
+    border-left: 3px solid #ff4d4d;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    width: 450px;
+    /* ancho fijo */
+    max-width: none;
+    /* sin límite de max ancho */
+    opacity: 1;
+    transition: opacity 1s ease-in-out;
+    z-index: 1000;
+    /* Para que esté encima de todo */
+    white-space: normal;
+    /* para que el texto haga salto de línea si es largo */
+    text-align: center;
+}
+
+.error-message .error-icon {
+    font-size: 18px;
+}
