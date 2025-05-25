@@ -107,14 +107,20 @@
         <h2>Crear Grupo</h2>
         <form id="formCrearGrupo" action="../../Controller/crear_grup.php" method="POST">
             <!-- Nombre del grupo -->
+            <input type="file" name="imagen" accept="image/*" required />
             <input type="text" id="grup_nom" name="nom" placeholder="Nombre del grupo" required />
 
             <!-- Visibilidad: debe ser public o privat -->
-            <select id="grup_visibilitat" name="visibilitat" required>
-          <option value="">-- Selecciona visibilidad --</option>
-          <option value="public">Público</option>
-          <option value="privat">Privado</option>
-        </select>
+            <div class="toggle-group">
+                <input type="radio" id="publico" name="visibilidad" value="public" />
+                <label for="publico">Público</label>
+
+                <input type="radio" id="privado" name="visibilidad" value="privat" />
+                <label for="privado">Privado</label>
+            </div>
+
+
+            </select>
 
             <!-- Descripción -->
             <textarea id="grup_descripcio" name="descripcio" placeholder="Descripción" required></textarea>
