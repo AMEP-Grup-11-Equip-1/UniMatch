@@ -40,9 +40,20 @@ function stopDataPolling() {
 }
 
 // Carga los datos generales de la ayuda (consultas nuevas, abiertas, etc.)
+// Modifica la función loadData para incluir la verificación de listas vacías
 async function loadData() {
   const response = await makeRequest("../../Controller/gestion_ayuda.php");
   if (!response) return;
+
+  // Función auxiliar para mostrar mensaje cuando no hay datos
+  function checkEmptyList(listDiv, tabId) {
+    if (listDiv.children.length === 0) {
+      const emptyMessage = document.createElement('div');
+      emptyMessage.className = 'empty-list-message';
+      emptyMessage.textContent = `No hay ${tabId === 'tab-new' ? 'consultas nuevas' : tabId === 'tab-open' ? 'consultas abiertas' : 'consultas cerradas'}`;
+      listDiv.appendChild(emptyMessage);
+    }
+  }
 
   // Actualiza la tabla de nuevas consultas
   if (response.tabla_new) {
@@ -69,6 +80,11 @@ async function loadData() {
       }
     });
   }
+
+  // Verifica si las listas están vacías y muestra mensajes apropiados
+  checkEmptyList(NewListDiv, 'tab-new');
+  checkEmptyList(OpenListDiv, 'tab-open');
+  checkEmptyList(ClosedListDiv, 'tab-closed');
 }
 
 // Función para cargar el chat de un protocolo específico
