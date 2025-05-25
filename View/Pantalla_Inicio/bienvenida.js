@@ -279,7 +279,7 @@ function aceptarNotificacion(id, tipo) {
 
                 // Actuar segons el tipus
                 if (tipo === "match") {
-                    window.location.href = "../Pantalla_Chat/chat.php";
+                    window.location.href = "../Pantalla_Chat/chat.html";
                 } else if (tipo === "grupo") {
                     alert("✅ Usuari afegit al grup correctament!");
                     // No redirigeixes, simplement es queda on està
