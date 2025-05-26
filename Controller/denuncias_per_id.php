@@ -24,65 +24,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $response = [
         "status" => "success",
         "user_id" => $user_id,
-        "denuncias_recebidas" => [],
-        "denuncias_feitas" => []
+        "denuncias_rec" => [],
+        "denuncias_hecha" => []
     ];
 
-    // Verifica denúncias RECEBIDAS pelo usuário (quando outros denunciaram ele)
     $sql_recebidas = "
-        SELECT 
-            u2.name AS denunciante,
-            rt.name AS tipo_denuncia,
-            r.created_at AS data
-        FROM 
-            reports r
-        JOIN 
-            usuario u1 ON r.target_user_id = u1.id
-        JOIN 
-            usuario u2 ON r.reporting_user_id = u2.id
-        JOIN 
-            report_types rt ON r.report_type_id = rt.id
-        WHERE 
-            r.target_user_id = ?
-        ORDER BY 
-            r.created_at DESC";
-    
+SELECT 
+    r.id AS denuncia_id,
+    u2.name AS denunciante,
+    rt.name AS tipo_denuncia,
+    r.created_at AS data,
+    r.history_id AS historia_id
+FROM 
+    verifications v
+JOIN 
+    usuario u1 ON v.user = u1.id
+JOIN 
+    reports r ON r.target_user_id = u1.id
+JOIN 
+    usuario u2 ON r.reporting_user_id = u2.id
+JOIN 
+    report_types rt ON r.report_type_id = rt.id
+WHERE 
+    v.id = ?
+ORDER BY 
+    r.created_at DESC;
+    ";
+
     $stmt = $conn->prepare($sql_recebidas);
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
     $result_recebidas = $stmt->get_result();
-    
+
     while ($row = $result_recebidas->fetch_assoc()) {
-        $response["denuncias_recebidas"][] = $row;
+        $response["denuncias_rec"][] = $row;
     }
     $stmt->close();
 
-    // Verifica denúncias FEITAS pelo usuário (quando ele denunciou outros)
-    $sql_feitas = "
-        SELECT 
-            u1.name AS denunciado,
-            rt.name AS tipo_denuncia,
-            r.created_at AS data
-        FROM 
-            reports r
-        JOIN 
-            usuario u1 ON r.target_user_id = u1.id
-        JOIN 
-            usuario u2 ON r.reporting_user_id = u2.id
-        JOIN 
-            report_types rt ON r.report_type_id = rt.id
-        WHERE 
-            r.reporting_user_id = ?
-        ORDER BY 
-            r.created_at DESC";
+    $sql_feitas = " 
     
+    SELECT 
+    r.id AS denuncia_id,
+    u1.name AS denunciado,
+    rt.name AS tipo_denuncia,
+    r.created_at AS data,
+    r.history_id AS historia_id
+FROM 
+    verifications v
+JOIN 
+    usuario u2 ON v.user = u2.id
+JOIN 
+    reports r ON r.reporting_user_id = u2.id
+JOIN 
+    usuario u1 ON r.target_user_id = u1.id
+JOIN 
+    report_types rt ON r.report_type_id = rt.id
+WHERE 
+    v.id = ?
+ORDER BY 
+    r.created_at DESC;";
+
     $stmt = $conn->prepare($sql_feitas);
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
     $result_feitas = $stmt->get_result();
-    
+
     while ($row = $result_feitas->fetch_assoc()) {
-        $response["denuncias_feitas"][] = $row;
+        $response["denuncias_hecha"][] = $row;
     }
     $stmt->close();
 
@@ -103,4 +111,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 }
 
 echo json_encode(["status" => "error", "message" => "Método no permitido"]);
-?>
