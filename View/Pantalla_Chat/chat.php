@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="es">
 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,7 @@
     <link rel="stylesheet" href="chats.css">
     <link rel="stylesheet" href="../Menu/menu.css">
 </head>
+
 
 <body>
     <span class="menu-icon" onclick="openMenu()">&#9776;</span>
@@ -24,11 +26,13 @@
         <button class="logout-btn-side" onclick="window.location.href='../Pantalla_de_Bloqueo/Pantalladebloqueo.html'">Cerrar sesión</button>
     </div>
 
+
     <div class="chat-container">
         <div class="chat-list">
             <div class="section-title">Matchs</div>
             <div id="matchList"></div>
         </div>
+
 
         <div class="chat-box">
             <h2>Conversación</h2>
@@ -40,14 +44,17 @@
         </div>
     </div>
 
+
     <script>
         function openMenu() {
             document.getElementById('sideMenu').style.width = '250px';
         }
 
+
         function closeMenu() {
             document.getElementById('sideMenu').style.width = '0';
         }
+
 
         let receptor_id = null;
         const messagesContainer = document.getElementById("messagesContainer");
@@ -55,13 +62,16 @@
         const matchList = document.getElementById("matchList");
         const userId = <?php echo $_SESSION['usuarioID']; ?>;
 
+
         function carregarMatches() {
         fetch("../../Controller/obtener_matches.php")
             .then(res => res.text())  // Rebem com a text
             .then(text => {
                 console.log("Resposta crua:", text);  // Mostra a la consola
 
+
                 const data = JSON.parse(text);  // Intentem parsejar-ho
+
 
                 if (data.success) {
                     matchList.innerHTML = "";
@@ -87,6 +97,8 @@
     }
 
 
+
+
         function carregarMissatges() {
             if (!receptor_id) return;
             fetch(`../../Controller/obtener_mensajes.php?receptor_id=${receptor_id}`)
@@ -104,13 +116,16 @@
                 });
         }
 
+
         function enviarMissatge() {
             const text = messageInput.value.trim();
             if (!text || !receptor_id) return;
 
+
             const formData = new FormData();
             formData.append("receptor_id", receptor_id);
             formData.append("mensaje", text);
+
 
             fetch("../../Controller/enviar_mensaje.php", {
                 method: "POST",
@@ -121,11 +136,13 @@
             });
         }
 
+
         function obrirXat(id, nom) {
             receptor_id = id;
             document.querySelector(".chat-box h2").textContent = "Conversación amb " + nom;
             carregarMissatges();
         }
+
 
         setInterval(carregarMissatges, 3000);
         window.onload = () => {
@@ -133,5 +150,6 @@
         };
     </script>
 </body>
+
 
 </html>
