@@ -37,15 +37,60 @@ try {
     require_once $modelDir . '/DataBase.php';
     require_once $modelDir . '/user.php';
 
-    // === 3) VALIDAÇÃO DO PARÂMETRO ===
+    // === 3) TRATA REQUISIÇÕES POST E GET ===
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // --- 3.1) Validação dos parâmetros POST ---
+        if (!isset($_POST['id']) || !ctype_digit($_POST['id'])) {
+            http_response_code(400);
+            echo json_encode(['status'=>'error','message'=>'ID inválido (via POST)']);
+            exit;
+        }
+        if (!isset($_POST['status']) || trim($_POST['status']) === '') {
+            http_response_code(400);
+            echo json_encode(['status'=>'error','message'=>'Status inválido (via POST)']);
+            exit;
+        }
+
+        $id     = (int) $_POST['id'];
+        $status = trim($_POST['status']);
+
+        // --- 3.2) Conexão ao banco ---
+        $db   = new ConexionBD();
+        $conn = $db->getConexion();
+        if (!$conn) {
+            throw new Exception("Falha na conexão ao banco");
+        }
+
+        // === 4) UPDATE via POST ===
+        $sql = "UPDATE reports SET status = ? WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        if (!$stmt) {
+            throw new Exception("Erro no prepare() do UPDATE: " . $conn->error);
+        }
+        $stmt->bind_param("si", $status, $id);
+        $stmt->execute();
+
+        if ($stmt->affected_rows === 0) {
+            http_response_code(404);
+            echo json_encode(['status'=>'error','message'=>'Denúncia não encontrada ou status inalterado']);
+            exit;
+        }
+
+        // Sucesso na atualização
+        echo json_encode(['status'=>'success','message'=>'Status atualizado com sucesso']);
+        exit;
+    }
+
+    // Se não for POST, segue para GET:
+    // === 3.3) Validação do parâmetro via GET ===
     if (!isset($_GET['id']) || !ctype_digit($_GET['id'])) {
         http_response_code(400);
-        echo json_encode(['status'=>'error','message'=>'ID inválido']);
+        echo json_encode(['status'=>'error','message'=>'ID inválido (via GET)']);
         exit;
     }
     $id = (int) $_GET['id'];
 
-    // === 4) CONEXÃO E QUERY ===
+    // === 4) CONEXÃO E QUERY para GET ===
     $db   = new ConexionBD();
     $conn = $db->getConexion();
     if (!$conn) {
@@ -54,30 +99,26 @@ try {
 
     $sql = "
         SELECT 
-    r.id AS denuncia_id,
-    u2.id AS denunciante_id,
-    u2.name AS denunciante,
-    u1.id AS denunciado_id,
-    u1.name AS denunciado,
-    rt.name AS tipo_denuncia,
-    rt.description AS descricao, 
-    r.created_at AS data,
-    r.history_id AS historia_id,
-    h.imagen AS imagem_historia,
-    r.status AS status
-FROM 
-    reports r
-JOIN 
-    usuario u1 ON r.target_user_id = u1.id  
-JOIN 
-    usuario u2 ON r.reporting_user_id = u2.id  
-JOIN 
-    report_types rt ON r.report_type_id = rt.id 
-LEFT JOIN 
-    historias h ON r.history_id = h.id
-WHERE 
-    r.id = ?
-LIMIT 1;
+            r.id AS denuncia_id,
+            u2.id AS denunciante_id,
+            u2.name AS denunciante,
+            u1.id AS denunciado_id,
+            u1.name AS denunciado,
+            rt.name AS tipo_denuncia,
+            rt.description AS descricao, 
+            r.created_at AS data,
+            r.history_id AS historia_id,
+            h.imagen AS imagem_historia,
+            r.status AS status
+        FROM 
+            reports r
+        JOIN usuario u1 ON r.target_user_id    = u1.id  
+        JOIN usuario u2 ON r.reporting_user_id = u2.id  
+        JOIN report_types rt ON r.report_type_id = rt.id 
+        LEFT JOIN historias h ON r.history_id    = h.id
+        WHERE 
+            r.id = ?
+        LIMIT 1;
     ";
     $stmt = $conn->prepare($sql);
     if (!$stmt) {
@@ -97,7 +138,7 @@ LIMIT 1;
     // Formata data como string ISO
     $row['data'] = date('Y-m-d H:i:s', strtotime($row['data']));
 
-    // === 5) ENVIA DADOS ===
+    // === 5) ENVIA DADOS via GET ===
     echo json_encode($row);
     exit;
 

@@ -283,7 +283,9 @@ function mostrarDenuncias(tipo) {
   }
 }
 
-// Agrega navegación por teclado para el carrusel
+let selectedDenunciaId = null;
+
+
 async function ShowInfosDenun(denuncia_id) {
   try {
     // Validação do ID
@@ -292,6 +294,9 @@ async function ShowInfosDenun(denuncia_id) {
       alert("ID de denúncia inválido");
       return;
     }
+
+      selectedDenunciaId = denuncia_id;
+
   
     // Buscar dados da denúncia
     const response = await fetch(
@@ -307,6 +312,27 @@ async function ShowInfosDenun(denuncia_id) {
     const denuncia = await response.json();
 
           console.log(denuncia);
+
+              // pega a div do painel (must exist no HTML)
+    const detalhes = document.querySelector(".denuncia-detalhes");
+    if (!detalhes) throw new Error("Falta .denuncia-detalhes no HTML");
+
+
+
+        // === LIMPA O QUE TIVER SIDO CRIADO ANTES ===
+    const chatOld = detalhes.querySelector("#chat-box");
+    if (chatOld) chatOld.remove();
+    const fotosOld = detalhes.querySelector("#caixa-fotos");
+    if (fotosOld) fotosOld.remove();
+
+const span = document.getElementById("status-denuncia");
+if (denuncia.status === 1) {
+  span.textContent = "Aprobado";
+} else if (denuncia.status === 0) {
+  span.textContent = "Rechazado";
+} else {
+  span.textContent = "Pendiente";
+}
 
 
     // Função auxiliar para definir conteúdo seguro
@@ -329,46 +355,64 @@ async function ShowInfosDenun(denuncia_id) {
     }
       */
 
-    // Tratar caso de história ou mensagens
-    if (denuncia.historia_id === null) {
-// Aquí usamos denunciante_id y denunciado_id de la denuncia
-      const mensajesResponse = await fetch(`../../Controller/obtener_mensajes.php?receptor_id=${denuncia.denunciado_id}`);
-      
-      if (mensajesResponse.ok) {
-        const data = await mensajesResponse.json();
-        if (data.success && data.mensajes.length > 0) {
-          // Formatear los mensajes para mostrar
-          const mensajesFormateados = data.mensajes.map(msg => 
-            `${msg.fecha}: ${msg.texto} (${msg.emisor === denuncia.denunciante_id ? 'Denunciante' : 'Denunciado'})`
-          ).join('\n');
-          
-          setContent('contenido-denuncia', mensajesFormateados);
-        } else {
-          setContent('contenido-denuncia', 'No se encontraron mensajes entre estos usuarios');
+   if (denuncia.historia_id === null) {
+      // ===== CHAT =====
+      const msgRes = await fetch(
+        `../../Controller/get_msg_adm.php` +
+        `?denunciante_id=${denuncia.denunciante_id}` +
+        `&receptor_id=${denuncia.denunciado_id}`
+      );
+      const data = await msgRes.json();
+      console.log("mensagens recebidas:", data);
+
+      // Cria container de chat
+      const chatBox = document.createElement("div");
+      chatBox.id = "chat-box";
+      detalhes.appendChild(chatBox);
+
+      if (data.success && data.mensajes.length > 0) {
+        let i = 0;
+        while (i < data.mensajes.length) {
+          const msg = data.mensajes[i++];
+          const msgDiv = document.createElement("div");
+          msgDiv.className = msg.emisor === denuncia.denunciante_id
+            ? "message-user"
+            : "message-admin";
+
+          const textDiv = document.createElement("div");
+          textDiv.className = "message-text";
+          textDiv.textContent = msg.mensaje;
+
+          const timeDiv = document.createElement("div");
+          timeDiv.className = "message-time";
+          timeDiv.textContent = new Date(msg.fecha)
+            .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+          msgDiv.append(textDiv, timeDiv);
+          chatBox.appendChild(msgDiv);
         }
       } else {
-        setContent('contenido-denuncia', 'Error al cargar mensajes');
+        chatBox.textContent = "Não há mensagens entre estes usuários.";
       }
-    } 
 
-    else{
-// Também insere as histórias como "caixa de foto" dentro de .Denuncias
-      const fotosContainer = document.getElementById("caixa-fotos");
+    } else {
+      // ===== STORY =====
+      const fotosContainer = document.createElement("div");
+      fotosContainer.id = "caixa-fotos";
+      detalhes.appendChild(fotosContainer);
 
-      // Limpa o conteúdo antigo (se necessário)
-      fotosContainer.innerHTML = '<h2 id="Tipo_str">Item</h2>';
-
-
-
-    if (denuncia.imagem_historia) {
-      const img = document.createElement("img");
-      img.src = denuncia.imagem_historia;
-      img.alt = "Historia del usuario";
-      fotosContainer.appendChild(img);
+      if (denuncia.imagem_historia) {
+        const img = document.createElement("img");
+        img.src = denuncia.imagem_historia;
+        img.alt = "História do usuário";
+        fotosContainer.appendChild(img);
+      } else {
+        fotosContainer.textContent = "Nenhuma foto disponível.";
+      }
     }
 
+
        // fotosContainer.appendChild(box);
-  }
 
     // Mostrar painel de detalhes
     const detailsPanel = document.querySelector(".denuncia-detalhes");
@@ -382,4 +426,38 @@ async function ShowInfosDenun(denuncia_id) {
   } finally {
     // Esconder estado de carregamento
   }
+}
+
+function DenEstado(index) {
+  if (!selectedDenunciaId) {
+    alert("Nenhuma denúncia selecionada.");
+    return;
+  }
+
+  fetch("../../Controller/denuncias_infos.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: `id=${encodeURIComponent(selectedDenunciaId)}&status=${encodeURIComponent(index)}`
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === "success") {
+        alert(data.message || "Estado atualizado com sucesso.");
+        // atualizar o texto do status na interface, se tiver um elemento <span id="status-denuncia">
+        const span = document.getElementById("status-denuncia");
+        if (span) {
+          span.textContent = index === 1 ? "Aprobado" : "Rechazado";
+        }
+        // opcional: recarregar a lista ou fechar o painel de detalhes
+        // window.location.reload();
+      } else {
+        alert(data.message || "Erro ao atualizar estado.");
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Erro na comunicação com o servidor.");
+    });
 }
