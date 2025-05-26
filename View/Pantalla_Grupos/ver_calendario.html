@@ -1,63 +1,71 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calendario del Grupo</title>
-  <link rel="stylesheet" href="ver_grupos_unidos.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario del Grupo</title>
+    <link rel="stylesheet" href="ver_grupos_unidos.css">
 </head>
 <body>
 
-  <a href="ver_grupos.html" class="back-button">← Volver</a>
+    <a href="ver_grupos.html" class="back-button">← Volver</a>
 
-  <div class="grupo-card">
-    <h2 id="nombre-grupo">Calendario del grupo</h2>
-    <ul id="lista-eventos" style="list-style: none; padding-left: 0; margin-top: 20px;"></ul>
-  </div>
+    <div class="grupo-card">
+        <h2 id="nombre-grupo">Calendario del grupo</h2>
+        <ul id="lista-eventos" style="list-style: none; padding-left: 0; margin-top: 20px;"></ul>
+    </div>
 
-  <script>
-    const grupoID = new URLSearchParams(window.location.search).get("grupo_id");
+    <script>
+        const grupoID = new URLSearchParams(window.location.search).get("grupo_id");
 
-    // Obtener nombre del grupo
-    fetch("../../Controller/get_grupo_detalle.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ grup_id: grupoID })
-    })
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById("nombre-grupo").textContent = `Calendario de ${data.nombre}`;
-    });
+        // Función para convertir YYYY-MM-DD a DD-MM-YYYY
+        function formatearFecha(fechaISO) {
+            const [a, m, d] = fechaISO.substring(0, 10).split("-");
+            return `${d}-${m}-${a}`;
+        }
 
-    // Obtener eventos del grupo
-    fetch("../../Controller/obtener_eventos_grupo.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ grupo_id: grupoID })
-    })
-    .then(res => res.json())
-    .then(data => {
-      const lista = document.getElementById("lista-eventos");
-      lista.innerHTML = "";
+        // Obtener nombre del grupo
+        fetch("../../Controller/get_grupo_detalle.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ grup_id: grupoID })
+        })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("nombre-grupo").textContent = `Calendario de ${data.nombre}`;
+            });
 
-      if (data.success && data.eventos.length > 0) {
-        data.eventos.forEach(ev => {
-          const item = document.createElement("li");
-          item.style.borderBottom = "1px solid #ccc";
-          item.style.padding = "8px 0";
+        // Obtener eventos del grupo
+        fetch("../../Controller/obtener_eventos_grupo.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ grupo_id: grupoID })
+        })
+            .then(res => res.json())
+            .then(data => {
+                const lista = document.getElementById("lista-eventos");
+                lista.innerHTML = "";
 
-          item.innerHTML = `
-            <strong>${ev.activitat}</strong> (${ev.data_event})<br/>
-            <span>${ev.descripcio}</span>
-          `;
+                if (data.success && data.eventos.length > 0) {
+                    data.eventos.forEach(ev => {
+                        const fechaFormateada = formatearFecha(ev.data_event);
 
-          lista.appendChild(item);
-        });
-      } else {
-        lista.innerHTML = "<li>No hay eventos registrados para este grupo.</li>";
-      }
-    });
-  </script>
+                        const item = document.createElement("li");
+                        item.style.borderBottom = "1px solid #ccc";
+                        item.style.padding = "8px 0";
+
+                        item.innerHTML = `
+                <strong>${ev.activitat}</strong> (${fechaFormateada})<br/>
+                <span>${ev.descripcio}</span>
+              `;
+
+                        lista.appendChild(item);
+                    });
+                } else {
+                    lista.innerHTML = "<li>No hay eventos registrados para este grupo.</li>";
+                }
+            });
+    </script>
 
 </body>
 </html>
