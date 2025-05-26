@@ -79,20 +79,77 @@ body::after {
     border-radius: 10px;
     cursor: pointer;
     transition: 0.3s;
-  }
-  
-  .chat-item:hover {
+}
+
+.chat-item:hover {
     background: #ffe6f0;
-  }
-  
-  .chat-item img {
+}
+
+.chat-item img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     margin-right: 12px;
-  }
-  
+}
+
+
 /*------------------------------------- CHAT- -------------------------------------->*/
+
+.tab-container {
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+    margin-bottom: 20px;
+    margin-top: 5px;
+}
+
+.tab {
+    background-color: #f9f9f9;
+    border: 2px solid #000000;
+    border-radius: 30px;
+    padding: 10px 40px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #000000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    user-select: none;
+}
+
+.tab:hover {
+    background-color: #000000;
+    color: white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+}
+
+.tab.active {
+    background-color: #000000;
+    color: white;
+    transform: scale(1.05);
+}
+
+.search-container {
+    max-width: 400px;
+    margin: 15px auto 25px auto;
+    display: flex;
+    justify-content: center;
+}
+
+#searchInput {
+    width: 80%;
+    padding: 5px 15px;
+    border-radius: 30px;
+    border: 2px solid #000000;
+    font-size: 16px;
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#searchInput:focus {
+    border-color: #000000;
+    box-shadow: 0 0 12px 3px rgba(0, 0, 0, 0.7);
+}
 
 .chat-container {
     display: flex;
@@ -147,10 +204,12 @@ body::after {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    position: relative;
 }
 
 .messages {
     flex: 1;
+    overflow-x: hidden; 
     overflow-y: auto;
     /* Permite desplazamiento */
     max-height: 100%;
@@ -158,19 +217,22 @@ body::after {
     margin-bottom: 10px;
     padding-right: 10px;
     /* Espacio para el scroll */
+    display: flex;
+    flex-direction: column;
 }
 
 .message {
     padding: 10px;
     background-color: #f0f0f0;
     border-radius: 10px;
-    width: fit-content;
-    max-width: 80%;
-    margin-left: auto;
     margin-bottom: 10px;
-    display: flex;
-    align-items: center;
+    max-width: 80%;
+    display: inline-block;
+    word-break: break-word;     /* Rompe palabras largas */
+    overflow-wrap: break-word;  /* Permite saltos seguros */
+    white-space: normal;        /* Permite el salto de línea */
 }
+
 
 .message.user {
     background-color: #000000;
@@ -267,3 +329,190 @@ body::after {
 
 
 /*---------------------------------------------------------------------------------->*/
+
+.message {
+    max-width: 60%;
+    padding: 8px 12px;
+    border-radius: 15px;
+    position: relative;
+    font-size: 14px;
+    line-height: 1.3;
+    word-wrap: break-word;
+}
+
+.message-received {
+    align-self: flex-start;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.message-sent {
+    align-self: flex-end;
+    background-color: #ffecfc;
+    border: 1px solid #ddd;
+    text-align: right;
+}
+
+
+.message-text {
+    /* ...tus estilos previos... */
+    margin-Right: 10px;
+    /* aumenta este valor para más espacio */
+}
+
+.message-time {
+    font-size: 10px;
+    /* más pequeño */
+    color: #666;
+    /* un gris suave */
+    margin-top: 4px;
+    /* separación del texto */
+    text-align: right;
+    /* alineado a la derecha dentro del mensaje */
+    user-select: none;
+    /* no se puede seleccionar */
+}
+
+.grupo-message {
+    max-width: 60%;
+    padding: 8px 12px;
+    border-radius: 15px;
+    position: relative;
+    font-size: 14px;
+    line-height: 1.3;
+    word-wrap: break-word;
+}
+
+.grupo-username {
+    font-size: 12px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+    user-select: none;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.grupo-message-own {
+    align-self: flex-start;
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+}
+
+.grupo-message-other {
+    align-self: flex-end;
+    background-color: #ffecfc;
+    border: 1px solid #ddd;
+    /* verde claro estilo WhatsApp */
+    margin-left: 10px;
+}
+
+.message-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.adjuntar-btn {
+    background-color: #000000;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.adjuntar-btn:hover {
+    background-color: #333333;
+}
+
+.adjuntar-btn .material-icons {
+    font-size: 20px;
+}
+
+.popup-adjunto {
+    display: none;
+    position: absolute;
+    background-color: white;
+    padding: 20px;
+    border-radius: 16px;
+    border: 1px solid #999; /* borde más oscuro */
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.35); /* sombra más intensa */
+    z-index: 20;
+    width: 280px;
+    bottom: 60px;
+    left: 10px;
+    transition: all 0.3s ease;
+    animation: fadeInUp 0.2s ease-out;
+    overflow: hidden;
+}
+
+.popup-adjunto.show {
+    display: block;
+}
+
+.popup-adjunto h4 {
+    margin-top: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #000;
+}
+
+.popup-adjunto input[type="file"] {
+    max-width: 100%;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    margin-top: 4px;   /* ← súbelo más reduciendo este valor */
+    margin-bottom: 10px;
+}
+
+
+
+.popup-adjunto button {
+    background-color: #000;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.popup-adjunto button:hover {
+    background-color: #333;
+}
+
+.close-popup {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 16px;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.close-popup:hover {
+    color: #000;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
