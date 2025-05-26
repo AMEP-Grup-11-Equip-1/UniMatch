@@ -284,26 +284,20 @@ function mostrarDenuncias(tipo) {
 }
 
 // Agrega navegación por teclado para el carrusel
-document.addEventListener("keydown", (e) => {
-  if (e.key === "ArrowLeft") {
-    rotateCarousel(-1);
-  } else if (e.key === "ArrowRight") {
-    rotateCarousel(1);
-  }
-});
-
 async function ShowInfosDenun(denuncia_id) {
   try {
-    if (!denuncia_id || isNaN(denuncia_id)) {
-      console.log("ID de denúncia inválido -- " + denuncia_id);
+    // Validação do ID
+    if (!denuncia_id || isNaN(denuncia_id) || denuncia_id <= 0) {
+      console.error("ID de denúncia inválido", denuncia_id);
+      alert("ID de denúncia inválido");
       return;
     }
-
+  
+    // Buscar dados da denúncia
     const response = await fetch(
       `../../Controller/denuncias_infos.php?id=${denuncia_id}`
     );
 
-    
     if (!response.ok) {
       const errorData = await response.json().catch(() => null);
       const errorMsg = errorData?.message || `Erro HTTP: ${response.status}`;
@@ -312,55 +306,80 @@ async function ShowInfosDenun(denuncia_id) {
 
     const denuncia = await response.json();
 
-    // Helper function to safely set content
+          console.log(denuncia);
+
+
+    // Função auxiliar para definir conteúdo seguro
     const setContent = (id, value, defaultValue = "-") => {
       const element = document.getElementById(id);
       if (element) {
-        element.textContent = value || defaultValue;
+        element.textContent = value !== null && value !== undefined ? value : defaultValue;
       }
     };
 
-    // Update details panel
-    setContent("denunciante", denuncia.denunciante);
-    setContent("denunciado", denuncia.denunciado);
-    setContent(
-      "denuncia-fecha",
-      denuncia.data ? new Date(denuncia.data).toLocaleDateString("pt-BR") : ""
-    );
-    setContent("denuncia-tipo", denuncia.tipo_denuncia);
-    setContent("denuncia-motivo", denuncia.motivo);
-
-    // Update status badge
-    const statusBadge = document.getElementById("denuncia-status");
-    if (statusBadge) {
-      statusBadge.textContent = denuncia.status || "Pendiente";
-      statusBadge.className = `status-badge ${(
-        denuncia.status || ""
-      ).toLowerCase()}`;
+    /*
+    if (!denuncia.status){
+      document.getElementById(status-denuncia).text="pendiente"
     }
+    else if (denuncia.status === 1) {
+     document.getElementById(status-denuncia).text="aprobado"
+    }
+    else{
+      document.getElementById(status-denuncia).text="denegado"
+    }
+      */
 
-    // Configure "View Content" button
-    const verContenidoBtn = document.getElementById("ver-contenido-btn");
-    if (verContenidoBtn) {
-      verContenidoBtn.onclick = () => {
-        if (denuncia.historia_id) {
-          window.open(`/historia/${denuncia.historia_id}`, "_blank");
-        } else if (denuncia.chat_id) {
-          window.open(`/chat/${denuncia.chat_id}`, "_blank");
+    // Tratar caso de história ou mensagens
+    if (denuncia.historia_id === null) {
+// Aquí usamos denunciante_id y denunciado_id de la denuncia
+      const mensajesResponse = await fetch(`../../Controller/obtener_mensajes.php?receptor_id=${denuncia.denunciado_id}`);
+      
+      if (mensajesResponse.ok) {
+        const data = await mensajesResponse.json();
+        if (data.success && data.mensajes.length > 0) {
+          // Formatear los mensajes para mostrar
+          const mensajesFormateados = data.mensajes.map(msg => 
+            `${msg.fecha}: ${msg.texto} (${msg.emisor === denuncia.denunciante_id ? 'Denunciante' : 'Denunciado'})`
+          ).join('\n');
+          
+          setContent('contenido-denuncia', mensajesFormateados);
         } else {
-          alert("No hay contenido asociado para mostrar");
+          setContent('contenido-denuncia', 'No se encontraron mensajes entre estos usuarios');
         }
-      };
-      verContenidoBtn.disabled = !(denuncia.historia_id || denuncia.chat_id);
+      } else {
+        setContent('contenido-denuncia', 'Error al cargar mensajes');
+      }
+    } 
+
+    else{
+// Também insere as histórias como "caixa de foto" dentro de .Denuncias
+      const fotosContainer = document.getElementById("caixa-fotos");
+
+      // Limpa o conteúdo antigo (se necessário)
+      fotosContainer.innerHTML = '<h2 id="Tipo_str">Item</h2>';
+
+
+
+    if (denuncia.imagem_historia) {
+      const img = document.createElement("img");
+      img.src = denuncia.imagem_historia;
+      img.alt = "Historia del usuario";
+      fotosContainer.appendChild(img);
     }
 
-    // Show details panel
+       // fotosContainer.appendChild(box);
+  }
+
+    // Mostrar painel de detalhes
     const detailsPanel = document.querySelector(".denuncia-detalhes");
     if (detailsPanel) {
       detailsPanel.style.display = "block";
     }
+
   } catch (error) {
     console.error("Erro ao carregar denúncia:", error);
     alert(`Não foi possível carregar os detalhes: ${error.message}`);
+  } finally {
+    // Esconder estado de carregamento
   }
 }
