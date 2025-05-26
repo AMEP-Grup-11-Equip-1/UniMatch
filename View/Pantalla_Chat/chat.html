@@ -50,7 +50,11 @@
         </div>
 
         <div class="chat-box">
-            <h2>Conversación</h2>
+            <h2 style="display: flex; justify-content: space-between; align-items: center;">
+                <span id="chatTitle">Conversación</span>
+                <button class="report-btn" onclick="openChatReportPopup()" style="background:none;border:none;font-size:16px;cursor:pointer;">🚩 Denunciar</button>
+            </h2>
+
             <div class="messages" id="messagesContainer"></div>
             <div class="message-input">
                 <input type="text" id="message" placeholder="Escribe un mensaje..." />
@@ -68,7 +72,7 @@
         function closeMenu() {
             document.getElementById('sideMenu').style.width = '0';
         }
-        
+
         let userId = 0;
         let receptor_id = null;
         let grupo_id_actual = null;
@@ -104,14 +108,14 @@
                             const div = document.createElement("div");
                             div.className = "chat-item";
                             div.innerHTML = `
-                            <div style="display:flex;align-items:center;">
-                                <img src="${avatar}" style="width:40px;height:40px;border-radius:50%;margin-right:10px;" />
-                                <div>
-                                    <strong>${match.name}</strong><br />
-                                    <small>Haz clic para chatear</small>
-                                </div>
-                            </div>
-                        `;
+                                        <div style="display:flex;align-items:center;">
+                                            <img src="${avatar}" style="width:40px;height:40px;border-radius:50%;margin-right:10px;" />
+                                            <div>
+                                                <strong>${match.name}</strong><br />
+                                                <small>Haz clic para chatear</small>
+                                            </div>
+                                        </div>
+                                    `;
                             div.onclick = () => abrirChat(match.id, match.name);
                             matchList.appendChild(div);
                         });
@@ -127,7 +131,8 @@
         function abrirChat(id, name) {
             receptor_id = id;
             grupo_id_actual = null;
-            document.querySelector(".chat-box h2").textContent = "Conversación con " + name;
+            document.getElementById("chatTitle").textContent = "Conversación con " + name;
+
 
             if (chatPollingInterval) clearInterval(chatPollingInterval);
             cargarMensajes();
@@ -179,26 +184,26 @@
                 method: "POST",
                 body: formData
             })
-            .then(res => res.text())
-            .then(text => {
-                try {
-                    const data = JSON.parse(text);
-                    if (data.success) {
-                        messageInput.value = "";
-                        cargarMensajes();
-                    } else {
-                        console.error(" Error servidor:", data.message || text);
-                        alert("No se pudo enviar el mensaje");
+                .then(res => res.text())
+                .then(text => {
+                    try {
+                        const data = JSON.parse(text);
+                        if (data.success) {
+                            messageInput.value = "";
+                            cargarMensajes();
+                        } else {
+                            console.error(" Error servidor:", data.message || text);
+                            alert("No se pudo enviar el mensaje");
+                        }
+                    } catch (e) {
+                        console.error(" Error parsejant JSON:", text);
+                        alert("Error inesperado del servidor");
                     }
-                } catch (e) {
-                    console.error(" Error parsejant JSON:", text);
-                    alert("Error inesperado del servidor");
-                }
-            })
-            .catch(err => {
-                console.error(" Error de red:", err);
-                alert("Error al enviar el mensaje");
-            });
+                })
+                .catch(err => {
+                    console.error(" Error de red:", err);
+                    alert("Error al enviar el mensaje");
+                });
         }
 
         // ---------------------------- GRUPOS ----------------------------
@@ -256,15 +261,15 @@
                             const div = document.createElement("div");
                             div.className = "chat-item";
                             div.innerHTML = `
-                            <div style="display:flex;align-items:center;">
-                                <img src="${grupo.imagen || '../../Imagenes/img2.png'}" 
-                                     style="width:40px; height:40px; border-radius:50%; margin-right:10px;" />
-                                <div>
-                                  <strong>${grupo.nom}</strong><br/>
-                                  <small>Haz clic para chatear</small>
-                                </div>
-                            </div>
-                        `;
+                                        <div style="display:flex;align-items:center;">
+                                            <img src="${grupo.imagen || '../../Imagenes/img2.png'}"
+                                                 style="width:40px; height:40px; border-radius:50%; margin-right:10px;" />
+                                            <div>
+                                              <strong>${grupo.nom}</strong><br/>
+                                              <small>Haz clic para chatear</small>
+                                            </div>
+                                        </div>
+                                    `;
                             div.onclick = () => abrirChatGrupal(grupo.id, grupo.nom);
                             groupListDiv.appendChild(div);
                         });
@@ -288,14 +293,14 @@
             chatPollingInterval = setInterval(cargarMensajesGrupales, 3000);
         }
 
-            function eliminarCuenta() {
-                if (confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.")) {
-                    fetch("../../Controller/eliminar_usuario.php", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        }
-                    })
+        function eliminarCuenta() {
+            if (confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.")) {
+                fetch("../../Controller/eliminar_usuario.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
                     .then(response => response.json())
                     .then(data => {
                         alert(data.message);
@@ -307,8 +312,8 @@
                         console.error("Error en la solicitud:", error);
                         alert("Ocurrió un error al intentar eliminar tu cuenta.");
                     });
-                }
             }
+        }
 
         function cargarMensajesGrupales() {
             if (!grupo_id_actual) return;
@@ -380,9 +385,9 @@
             formData.append("mensaje", text);
 
             fetch("../../Controller/enviar_mensaje_grupo.php", {
-                    method: "POST",
-                    body: formData,
-                })
+                method: "POST",
+                body: formData,
+            })
                 .then(res => res.text())
                 .then(text => {
                     try {
@@ -400,56 +405,158 @@
                 .catch(err => console.error("Error al enviar mensaje grupal:", err));
         }
 
-         if (grupoId) {
-        tabGroups.click(); // activa pestaña de grupos
-        // Esperamos a que los grupos carguen y luego abrimos el chat del grupo correspondiente
-        setTimeout(() => {
-            grupo_id_actual = grupoId;
+        if (grupoId) {
+            tabGroups.click(); // activa pestaña de grupos
+            // Esperamos a que los grupos carguen y luego abrimos el chat del grupo correspondiente
+            setTimeout(() => {
+                grupo_id_actual = grupoId;
+                receptor_id = null;
+
+                fetch("../../Controller/obtener_grupos_unidos2.php?modo=unidos")
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            const grupo = data.grupos.find(g => String(g.id) === String(grupoId));
+                            if (grupo) {
+                                abrirChatGrupal(grupo.id, grupo.nom);
+                            } else {
+                                alert("No estás unido a este grupo.");
+                            }
+                        }
+                    })
+                    .catch(err => console.error("Error buscando grupo:", err));
+            }, 500); // tiempo para asegurar que la pestaña se haya activado
+        }
+
+        function abrirChatGrupal(id, nombre) {
+            grupo_id_actual = id;
             receptor_id = null;
 
-            fetch("../../Controller/obtener_grupos_unidos2.php?modo=unidos")
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        const grupo = data.grupos.find(g => String(g.id) === String(grupoId));
-                        if (grupo) {
-                            abrirChatGrupal(grupo.id, grupo.nom);
-                        } else {
-                            alert("No estás unido a este grupo.");
-                        }
-                    }
+            // Si el nombre está en blanco, intenta buscarlo
+            if (!nombre || nombre === "Grupo") {
+                fetch(`../../Controller/get_grupo_detalle.php`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ grup_id: id })
                 })
-                .catch(err => console.error("Error buscando grupo:", err));
-        }, 500); // tiempo para asegurar que la pestaña se haya activado
-    }
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data && data.nombre) {
+                            document.querySelector(".chat-box h2").textContent = "Chat grupal: " + data.nombre;
+                        }
+                    });
+            } else {
+                document.querySelector(".chat-box h2").textContent = "Chat grupal: " + nombre;
+            }
 
-    function abrirChatGrupal(id, nombre) {
-  grupo_id_actual = id;
-  receptor_id = null;
-
-  // Si el nombre está en blanco, intenta buscarlo
-  if (!nombre || nombre === "Grupo") {
-    fetch(`../../Controller/get_grupo_detalle.php`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ grup_id: id })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data && data.nombre) {
-        document.querySelector(".chat-box h2").textContent = "Chat grupal: " + data.nombre;
-      }
-    });
-  } else {
-    document.querySelector(".chat-box h2").textContent = "Chat grupal: " + nombre;
-  }
-
-  if (chatPollingInterval) clearInterval(chatPollingInterval);
-  cargarMensajesGrupales();
-  chatPollingInterval = setInterval(cargarMensajesGrupales, 3000);
-}
+            if (chatPollingInterval) clearInterval(chatPollingInterval);
+            cargarMensajesGrupales();
+            chatPollingInterval = setInterval(cargarMensajesGrupales, 3000);
+        }
 
     </script>
+
+    <div class="profile-popup" id="chatReportPopup">
+        <span class="close-popup" onclick="closeChatReportPopup()">&times;</span>
+        <h2>Denunciar Xat</h2>
+        <form id="chatReportForm">
+            <input type="hidden" name="target_user_id" id="chatReportTargetUserId" />
+            <select id="chatReportReason" name="report_reason" required onchange="handleChatReportChange()">
+                <option value="">Selecciona un motiu</option>
+            </select>
+            <textarea id="chatOtherReason" name="other_description" placeholder="Escriu el motiu..." style="display:none;"></textarea>
+            <div id="errorMensajeChatDenuncia" class="error-message"></div>
+            <button type="submit">Enviar denúncia</button>
+        </form>
+    </div>
+
+    <!-- Al final del body, després del popup HTML -->
+
+    <script>
+        function openChatReportPopup() {
+            if (!receptor_id) {
+                alert("Selecciona primer un usuari amb qui tinguis conversa.");
+                return;
+            }
+
+            document.getElementById('chatReportTargetUserId').value = receptor_id;
+            document.getElementById('chatReportPopup').classList.add('show');
+            cargarMotivosChatDenuncia();
+        }
+
+        function closeChatReportPopup() {
+            document.getElementById('chatReportPopup').classList.remove('show');
+        }
+
+        function handleChatReportChange() {
+            const motivo = document.getElementById('chatReportReason').value;
+            document.getElementById('chatOtherReason').style.display = motivo === '9' ? 'block' : 'none';
+        }
+
+        async function cargarMotivosChatDenuncia() {
+            const select = document.getElementById('chatReportReason');
+            if (select.options.length > 1) return;
+
+            try {
+                const response = await fetch('../../Controller/get_report_types.php');
+                const motivos = await response.json();
+                motivos.forEach(m => {
+                    const option = document.createElement('option');
+                    option.value = m.id;
+                    option.textContent = m.name;
+                    select.appendChild(option);
+                });
+            } catch (e) {
+                console.error("Error carregant motius denúncia:", e);
+            }
+        }
+
+        document.getElementById('chatReportForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const target_user_id = document.getElementById('chatReportTargetUserId').value;
+            const report_type_id = document.getElementById('chatReportReason').value;
+            const descripcio = document.getElementById('chatOtherReason').value.trim();
+            const errorDiv = document.getElementById('errorMensajeChatDenuncia');
+
+            errorDiv.textContent = "";
+
+            if (!report_type_id) {
+                errorDiv.textContent = "Has de seleccionar un motiu.";
+                return;
+            }
+
+            if (report_type_id === "9" && descripcio.length < 5) {
+                errorDiv.textContent = "Has d'explicar el motiu si selecciones 'Altres'.";
+                return;
+            }
+
+            fetch('../../Controller/denunciar_chat.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    target_user_id,
+                    reporting_user_id: userId,
+                    report_type_id,
+                    description: descripcio
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        alert("✅ Denúncia enviada correctament.");
+                        closeChatReportPopup();
+                    } else {
+                        errorDiv.textContent = data.message || "Error desconegut";
+                    }
+                })
+                .catch(err => {
+                    console.error("Error enviant denúncia:", err);
+                    errorDiv.textContent = "Error del servidor. Torna-ho a provar.";
+                });
+        });
+    </script>
+
 
 </body>
 

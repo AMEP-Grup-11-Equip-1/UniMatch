@@ -267,3 +267,81 @@ body::after {
 
 
 /*---------------------------------------------------------------------------------->*/
+.profile-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 500px;
+    background: #fefefe;
+    padding: 30px 25px;
+    border-radius: 12px;
+    z-index: 1000;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    font-family: 'Poppins', sans-serif;
+}
+
+    .profile-popup.show {
+        display: block;
+    }
+
+    .profile-popup h2 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-size: 22px;
+        text-align: center;
+        color: #333;
+    }
+
+    .profile-popup form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .profile-popup select,
+    .profile-popup textarea {
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .profile-popup textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .profile-popup button[type="submit"] {
+        padding: 12px;
+        background-color: #ff4d4d;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        .profile-popup button[type="submit"]:hover {
+            background-color: #e04343;
+        }
+
+.close-popup {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 22px;
+    cursor: pointer;
+    color: #999;
+}
+
+.error-message {
+    color: red;
+    font-size: 13px;
+    margin-top: -10px;
+}
