@@ -21,7 +21,6 @@
         <a href="../Pantalla_Inicio/bienvenida.html">Inicio</a>
         <a href="../Pantalla_Perfil/perfil.php">Perfil</a>
         <a href="../Pantalla_Chat/chat.php">Chats</a>
-        <a href="../Pantalla_Config/configuracion.html">Configuraciones</a>
         <a href="../Pantalla_Ayuda/ayuda.html">Ayuda</a>
         <button class="logout-btn-side" onclick="window.location.href='../Pantalla_de_Bloqueo/Pantalladebloqueo.html'">Cerrar sesión</button>
     </div>
