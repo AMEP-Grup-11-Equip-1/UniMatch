@@ -2,17 +2,19 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chats - Unimatch</title>
-    <link rel="icon" href="img1.png" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="chats.css">
-    <link rel="stylesheet" href="../Menu/menu.css">
+    <link rel="icon" href="img1.png" type="image/x-icon" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="chats.css" />
+    <link rel="stylesheet" href="../Menu/menu.css" />
 </head>
 
 <body>
+
     <span class="menu-icon" onclick="openMenu()">&#9776;</span>
+
     <div id="sideMenu" class="side-menu">
         <span class="close-btn" onclick="closeMenu()">&times;</span>
         <a href="../Pantalla_Inicio/bienvenida.html">Inicio</a>
@@ -20,26 +22,45 @@
         <a href="../Pantalla_Chat/chat.html">Chats</a>
         <a href="../Pantalla_Config/configuracion.html">Configuraciones</a>
         <a href="../Pantalla_Ayuda/ayuda.html">Ayuda</a>
-        <button class="logout-btn-side" onclick="window.location.href='../Pantalla_de_Bloqueo/Pantalladebloqueo.html'">Cerrar sesión</button>
+        <button class="logout-btn-side" onclick="window.location.href='../../Controller/logout.php'">
+            Cerrar sesión
+        </button>
+        <button class="delete-account-btn" onclick="eliminarCuenta()" style="background-color: red; color: white; border: none; padding: 10px; width: 100%;">
+            Eliminar cuenta
+        </button>
     </div>
 
     <div class="chat-container">
         <div class="chat-list">
-            <div class="section-title">Matchs</div>
-            <!-- Aquí podrías cargar dinámicamente los contactos -->
+            <div class="tab-container">
+                <button class="tab active" id="tab-matches">Matches</button>
+                <button class="tab" id="tab-groups">Grupos</button>
+            </div>
+
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Buscar..." />
+            </div>
+
+            <div class="tab-underline"></div>
+
+            <!-- Aquí tus listas -->
+            <div id="matchList"></div>
+            <div id="groupList" style="display:none;"></div>
+
         </div>
 
         <div class="chat-box">
             <h2>Conversación</h2>
             <div class="messages" id="messagesContainer"></div>
             <div class="message-input">
-                <input type="text" id="message" placeholder="Escribe un mensaje...">
-                <button onclick="sendMessage()">Enviar</button>
+                <input type="text" id="message" placeholder="Escribe un mensaje..." />
+                <button id="btnEnviar">Enviar</button>
             </div>
         </div>
     </div>
 
     <script>
+
         function openMenu() {
             document.getElementById('sideMenu').style.width = '250px';
         }
@@ -47,26 +68,389 @@
         function closeMenu() {
             document.getElementById('sideMenu').style.width = '0';
         }
+        
+        let userId = 0;
+        let receptor_id = null;
+        let grupo_id_actual = null;
+        let chatPollingInterval = null;
+        const grupoId = new URLSearchParams(window.location.search).get("grupo_id");
 
-        const ws = new WebSocket("ws://localhost:8080");
+        const matchList = document.getElementById("matchList");
         const messagesContainer = document.getElementById("messagesContainer");
         const messageInput = document.getElementById("message");
+        const btnEnviar = document.getElementById("btnEnviar");
 
-        ws.onmessage = function(event) {
-            const messageElement = document.createElement("p");
-            messageElement.textContent = event.data;
-            messagesContainer.appendChild(messageElement);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        };
+        fetch('../../Controller/get_session.php')
+            .then(res => res.json())
+            .then(data => {
+                if (data.usuarioID) {
+                    userId = data.usuarioID;
+                    cargarMatches();
+                } else {
+                    window.location.href = "../Pantalla_de_Bloqueo/Pantalladebloqueo.html";
+                }
+            })
+            .catch(err => console.error('Error al obtener sesión:', err));
 
-        function sendMessage() {
-            const message = messageInput.value.trim();
-            if (message) {
-                ws.send(message);
-                messageInput.value = "";
-            }
+        function cargarMatches() {
+            fetch("../../Controller/obtener_matches.php")
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        matchList.innerHTML = "";
+                        data.matches.forEach(match => {
+                            const avatar = match.imagen && match.imagen.trim() !== "" ? match.imagen : "../../Imagenes/img2.png";
+
+                            const div = document.createElement("div");
+                            div.className = "chat-item";
+                            div.innerHTML = `
+                            <div style="display:flex;align-items:center;">
+                                <img src="${avatar}" style="width:40px;height:40px;border-radius:50%;margin-right:10px;" />
+                                <div>
+                                    <strong>${match.name}</strong><br />
+                                    <small>Haz clic para chatear</small>
+                                </div>
+                            </div>
+                        `;
+                            div.onclick = () => abrirChat(match.id, match.name);
+                            matchList.appendChild(div);
+                        });
+                    } else {
+                        matchList.innerHTML = "<p>No se encontraron matches.</p>";
+                    }
+                })
+                .catch(() => {
+                    matchList.innerHTML = "<p>Error cargando matches.</p>";
+                });
         }
+
+        function abrirChat(id, name) {
+            receptor_id = id;
+            grupo_id_actual = null;
+            document.querySelector(".chat-box h2").textContent = "Conversación con " + name;
+
+            if (chatPollingInterval) clearInterval(chatPollingInterval);
+            cargarMensajes();
+            chatPollingInterval = setInterval(cargarMensajes, 3000);
+        }
+
+        function cargarMensajes() {
+            if (!receptor_id) return;
+            fetch(`../../Controller/obtener_mensajes.php?receptor_id=${receptor_id}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        messagesContainer.innerHTML = "";
+                        data.mensajes.forEach(msg => {
+                            const messageDiv = document.createElement("div");
+                            messageDiv.className = (String(msg.emisor) === String(userId)) ? "message message-sent" : "message message-received";
+
+                            const textDiv = document.createElement("div");
+                            textDiv.className = "message-text";
+                            textDiv.textContent = msg.mensaje;
+
+                            const timeDiv = document.createElement("div");
+                            timeDiv.className = "message-time";
+                            const fecha = new Date(msg.fecha);
+                            timeDiv.textContent = fecha.toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            });
+
+                            messageDiv.appendChild(textDiv);
+                            messageDiv.appendChild(timeDiv);
+                            messagesContainer.appendChild(messageDiv);
+                        });
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    }
+                })
+                .catch(err => console.error("Error cargando mensajes:", err));
+        }
+
+        function enviarMensaje() {
+            const text = messageInput.value.trim();
+            if (!text || !receptor_id) return;
+
+            const formData = new FormData();
+            formData.append("receptor_id", receptor_id);
+            formData.append("mensaje", text);
+
+            fetch("../../Controller/enviar_mensaje.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(res => res.text())
+            .then(text => {
+                try {
+                    const data = JSON.parse(text);
+                    if (data.success) {
+                        messageInput.value = "";
+                        cargarMensajes();
+                    } else {
+                        console.error(" Error servidor:", data.message || text);
+                        alert("No se pudo enviar el mensaje");
+                    }
+                } catch (e) {
+                    console.error(" Error parsejant JSON:", text);
+                    alert("Error inesperado del servidor");
+                }
+            })
+            .catch(err => {
+                console.error(" Error de red:", err);
+                alert("Error al enviar el mensaje");
+            });
+        }
+
+        // ---------------------------- GRUPOS ----------------------------
+
+        const tabMatches = document.getElementById("tab-matches");
+        const tabGroups = document.getElementById("tab-groups");
+        const matchListDiv = document.getElementById("matchList");
+        const groupListDiv = document.getElementById("groupList");
+
+        let modoGrupo = false;
+
+        tabMatches.addEventListener("click", () => {
+            modoGrupo = false;
+            if (chatPollingInterval) clearInterval(chatPollingInterval);
+            tabMatches.classList.add("active");
+            tabGroups.classList.remove("active");
+            matchListDiv.style.display = "block";
+            groupListDiv.style.display = "none";
+            cargarMatches();
+            receptor_id = null;
+            grupo_id_actual = null;
+            document.querySelector(".chat-box h2").textContent = "Conversación";
+            messagesContainer.innerHTML = "";
+        });
+
+        tabGroups.addEventListener("click", () => {
+            modoGrupo = true;
+            if (chatPollingInterval) clearInterval(chatPollingInterval);
+            tabGroups.classList.add("active");
+            tabMatches.classList.remove("active");
+            matchListDiv.style.display = "none";
+            groupListDiv.style.display = "block";
+            cargarGrupos();
+            receptor_id = null;
+            grupo_id_actual = null;
+            document.querySelector(".chat-box h2").textContent = "Conversación";
+            messagesContainer.innerHTML = "";
+        });
+
+        btnEnviar.addEventListener("click", () => {
+            if (modoGrupo) {
+                enviarMensajeGrupal();
+            } else {
+                enviarMensaje();
+            }
+        });
+
+        function cargarGrupos() {
+            fetch("../../Controller/obtener_grupos_unidos2.php?modo=unidos")
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        groupListDiv.innerHTML = "";
+                        data.grupos.forEach(grupo => {
+                            const div = document.createElement("div");
+                            div.className = "chat-item";
+                            div.innerHTML = `
+                            <div style="display:flex;align-items:center;">
+                                <img src="${grupo.imagen || '../../Imagenes/img2.png'}" 
+                                     style="width:40px; height:40px; border-radius:50%; margin-right:10px;" />
+                                <div>
+                                  <strong>${grupo.nom}</strong><br/>
+                                  <small>Haz clic para chatear</small>
+                                </div>
+                            </div>
+                        `;
+                            div.onclick = () => abrirChatGrupal(grupo.id, grupo.nom);
+                            groupListDiv.appendChild(div);
+                        });
+                    } else {
+                        groupListDiv.innerHTML = "<p>No estás en ningún grupo.</p>";
+                    }
+                })
+                .catch(err => {
+                    console.error("Error cargando grupos:", err);
+                    groupListDiv.innerHTML = "<p>Error cargando grupos.</p>";
+                });
+        }
+
+        function abrirChatGrupal(id, nombre) {
+            grupo_id_actual = id;
+            receptor_id = null;
+            document.querySelector(".chat-box h2").textContent = "Chat grupal: " + nombre;
+
+            if (chatPollingInterval) clearInterval(chatPollingInterval);
+            cargarMensajesGrupales();
+            chatPollingInterval = setInterval(cargarMensajesGrupales, 3000);
+        }
+
+            function eliminarCuenta() {
+                if (confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.")) {
+                    fetch("../../Controller/eliminar_usuario.php", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);
+                        if (data.status === "success") {
+                            window.location.href = "../Pantalla_de_Bloqueo/Pantalladebloqueo.html";
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error en la solicitud:", error);
+                        alert("Ocurrió un error al intentar eliminar tu cuenta.");
+                    });
+                }
+            }
+
+        function cargarMensajesGrupales() {
+            if (!grupo_id_actual) return;
+            fetch(`../../Controller/obtener_mensajes_grupo.php?grupo_id=${grupo_id_actual}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        messagesContainer.innerHTML = "";
+                        let lastEmisorId = null;
+
+                        data.mensajes.forEach(msg => {
+                            const isOwnMessage = String(msg.emisor_id) === String(userId);
+
+                            const wrapper = document.createElement("div");
+                            wrapper.style.display = "flex";
+                            wrapper.style.flexDirection = "column";
+                            wrapper.style.alignItems = isOwnMessage ? "flex-end" : "flex-start";
+                            wrapper.style.marginBottom = "10px";
+
+                            if (lastEmisorId !== msg.emisor_id) {
+                                const nombreDiv = document.createElement("div");
+                                nombreDiv.className = "grupo-username";
+                                nombreDiv.textContent = msg.emisor_nombre;
+                                nombreDiv.style.margin = "0 10px 4px 10px";
+                                wrapper.appendChild(nombreDiv);
+                                lastEmisorId = msg.emisor_id;
+                            }
+
+                            const messageDiv = document.createElement("div");
+                            messageDiv.className = "grupo-message " + (isOwnMessage ? "grupo-message-other" : "grupo-message-own");
+
+                            const messageContentDiv = document.createElement("div");
+                            messageContentDiv.style.display = "flex";
+                            messageContentDiv.style.justifyContent = "space-between";
+                            messageContentDiv.style.alignItems = "center";
+
+                            const textDiv = document.createElement("div");
+                            textDiv.className = "message-text";
+                            textDiv.textContent = msg.mensaje;
+
+                            const timeDiv = document.createElement("div");
+                            timeDiv.className = "message-time";
+                            const fecha = new Date(msg.fecha);
+                            timeDiv.textContent = fecha.toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            });
+
+                            messageContentDiv.appendChild(textDiv);
+                            messageContentDiv.appendChild(timeDiv);
+                            messageDiv.appendChild(messageContentDiv);
+
+                            wrapper.appendChild(messageDiv);
+                            messagesContainer.appendChild(wrapper);
+                        });
+
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    }
+                })
+                .catch(err => console.error("Error cargando mensajes grupales:", err));
+        }
+
+        function enviarMensajeGrupal() {
+            const text = messageInput.value.trim();
+            if (!text || !grupo_id_actual) return;
+
+            const formData = new FormData();
+            formData.append("grupo_id", grupo_id_actual);
+            formData.append("mensaje", text);
+
+            fetch("../../Controller/enviar_mensaje_grupo.php", {
+                    method: "POST",
+                    body: formData,
+                })
+                .then(res => res.text())
+                .then(text => {
+                    try {
+                        const data = JSON.parse(text);
+                        if (data.success) {
+                            messageInput.value = "";
+                            cargarMensajesGrupales();
+                        } else {
+                            alert("No se pudo enviar el mensaje: " + (data.message || "Error desconocido"));
+                        }
+                    } catch (e) {
+                        console.error("No es JSON válido:", e, text);
+                    }
+                })
+                .catch(err => console.error("Error al enviar mensaje grupal:", err));
+        }
+
+         if (grupoId) {
+        tabGroups.click(); // activa pestaña de grupos
+        // Esperamos a que los grupos carguen y luego abrimos el chat del grupo correspondiente
+        setTimeout(() => {
+            grupo_id_actual = grupoId;
+            receptor_id = null;
+
+            fetch("../../Controller/obtener_grupos_unidos2.php?modo=unidos")
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        const grupo = data.grupos.find(g => String(g.id) === String(grupoId));
+                        if (grupo) {
+                            abrirChatGrupal(grupo.id, grupo.nom);
+                        } else {
+                            alert("No estás unido a este grupo.");
+                        }
+                    }
+                })
+                .catch(err => console.error("Error buscando grupo:", err));
+        }, 500); // tiempo para asegurar que la pestaña se haya activado
+    }
+
+    function abrirChatGrupal(id, nombre) {
+  grupo_id_actual = id;
+  receptor_id = null;
+
+  // Si el nombre está en blanco, intenta buscarlo
+  if (!nombre || nombre === "Grupo") {
+    fetch(`../../Controller/get_grupo_detalle.php`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ grup_id: id })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data && data.nombre) {
+        document.querySelector(".chat-box h2").textContent = "Chat grupal: " + data.nombre;
+      }
+    });
+  } else {
+    document.querySelector(".chat-box h2").textContent = "Chat grupal: " + nombre;
+  }
+
+  if (chatPollingInterval) clearInterval(chatPollingInterval);
+  cargarMensajesGrupales();
+  chatPollingInterval = setInterval(cargarMensajesGrupales, 3000);
+}
+
     </script>
+
 </body>
 
 </html>

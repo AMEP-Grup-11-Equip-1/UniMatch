@@ -7,7 +7,7 @@ class Usuario {
     }
 
     public function eliminar($id) {
-        $query = "DELETE FROM usuarios WHERE id = ?";
+        $query = "DELETE FROM usuario WHERE id = ?";
         $stmt = $this->conn->prepare($query);
         if (!$stmt) {
             return ["status" => "error", "message" => "Error en la preparación de la consulta"];
@@ -20,6 +20,64 @@ class Usuario {
             return ["status" => "error", "message" => "Error al ejecutar la consulta"];
         }
     }
+
+    public function actualizarPerfilCompleto($usuario_id, $nombre, $email, $descripcion, $password, $urlImagen) {
+    // No hasheamos la contraseña, la guardamos tal cual si no está vacía
+    $passwordToSave = null;
+    if (!empty($password)) {
+        $passwordToSave = $password;  // Guardar sin hash (texto plano)
+    }
+
+    // Construimos la consulta base
+    $sql = "UPDATE usuario SET name = ?, mail = ?, descripcion = ?";
+
+    // Parámetros y tipos para bind_param
+    $params = [];
+    $types = "sss";
+
+    $params[] = &$nombre;
+    $params[] = &$email;
+    $params[] = &$descripcion;
+
+    // Añadimos password si se ha recibido
+    if ($passwordToSave !== null) {
+        $sql .= ", password = ?";
+        $types .= "s";
+        $params[] = &$passwordToSave;
+    }
+
+    // Añadimos imagen si se ha recibido y no está vacía
+    if (!empty($urlImagen)) {
+        $sql .= ", imagen = ?";
+        $types .= "s";
+        $params[] = &$urlImagen;
+    }
+
+    // Condición WHERE
+    $sql .= " WHERE id = ?";
+    $types .= "i";
+    $params[] = &$usuario_id;
+
+    $stmt = $this->conn->prepare($sql);
+
+    if ($stmt === false) {
+        error_log("Error al preparar la consulta: " . $this->conn->error);
+        return ['status' => 'error', 'message' => 'Error al preparar la consulta'];
+    }
+
+    // Llamada dinámica a bind_param
+    array_unshift($params, $types);
+    call_user_func_array([$stmt, 'bind_param'], $params);
+
+    if ($stmt->execute()) {
+        return ['status' => 'success', 'message' => 'Perfil actualizado correctamente'];
+    } else {
+        error_log("Error en la ejecución de la consulta: " . $stmt->error);
+        return ['status' => 'error', 'message' => 'Error al actualizar el perfil'];
+    }
+}
+
+
 
     public function actualizarPerfilSinUniversidad($usuario_id, $nombre, $email, $descripcion, $urlImagen) {
         $sql = "UPDATE usuario SET name = ?, mail = ?, descripcion = ?, imagen = ? WHERE id = ?";

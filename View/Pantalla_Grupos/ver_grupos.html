@@ -4,131 +4,27 @@
     <meta charset="UTF-8">
     <title>Grupos</title>
     <link rel="stylesheet" href="ver_grupos.css">
+    <script src="ver_grupos.js" defer></script>
 </head>
 <body>
     <div class="container">
-        <button class="back-button" onclick="window.history.back()">← Volver</button>
+        <a href="../Pantalla_Inicio/bienvenida.html" class="back-button">← Volver</a>
 
         <div class="tabs-container">
             <button class="tab active" id="tab-disponibles">Grupos Disponibles</button>
             <button class="tab" id="tab-misgrupos">Mis Grupos</button>
+            <button class="tab" id="tab-unidos">Grupos Unidos</button>
         </div>
 
         <div class="grupo-lista" id="listaGrupos"></div>
         <div class="grupo-lista" id="misGrupos" style="display: none;"></div>
+        <div class="grupo-lista" id="gruposUnidos" style="display: none;"></div>
         <div class="no-grupos" id="sinGrupos" style="display:none;">No hay grupos creados todavía.</div>
     </div>
 
     <div id="popupNotificacion" style="display:none;" class="popup-notificacion"></div>
 
-    <script>
-        let usuarioID = null;
-
-        // 1. Obtener el ID del usuario logueado
-        fetch("../../Controller/get_session.php")
-            .then(res => res.json())
-            .then(data => {
-                if (data.usuarioID) {
-                    usuarioID = parseInt(data.usuarioID);
-                    cargarGrupos(); // Si hay sesión, cargar grupos
-                } else {
-                    document.getElementById("sinGrupos").textContent = "Debes iniciar sesión para ver los grupos.";
-                    document.getElementById("sinGrupos").style.display = "block";
-                }
-            })
-            .catch(err => {
-                console.error("Error al obtener la sesión:", err);
-            });
-
-        // 2. Obtener grupos y dividir en dos listas
-        function cargarGrupos() {
-            fetch("../../Controller/obtener_grupos.php", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" }
-            })
-                .then(res => res.json())
-                .then(data => {
-                    const disponibles = document.getElementById("listaGrupos");
-                    const propios = document.getElementById("misGrupos");
-                    const vacio = document.getElementById("sinGrupos");
-
-                    if (!Array.isArray(data) || data.length === 0) {
-                        vacio.style.display = "block";
-                        return;
-                    }
-
-                    let tieneGrupos = false;
-
-                    data.forEach(grup => {
-                        const esPropio = grup.propietari_id == usuarioID;
-
-                        const div = document.createElement("div");
-                        div.classList.add("grupo-item");
-
-                        const esPublico = grup.visibilitat.toLowerCase() === "public";
-                        const textoBoton = esPublico ? "Unirse" : "Solicitar unirse";
-
-                        div.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <div>
-                    <h2>${grup.nom}</h2>
-                    <p>${grup.descripcio}</p>
-                    <p><strong>Visibilidad:</strong> ${grup.visibilitat}</p>
-                  </div>
-                  <button class="join-button">${textoBoton}</button>
-                </div>
-              `;
-
-                        const boton = div.querySelector(".join-button");
-                        boton.addEventListener("click", () => {
-                            if (boton.classList.contains("success")) return;
-                            const mensaje = esPublico ? "¡Te has unido correctamente al grupo!" : "¡Has enviado la solicitud correctamente!";
-                            mostrarPopup(mensaje);
-                            boton.textContent = esPublico ? "Ya te has unido" : "Solicitud enviada";
-                            boton.classList.add("success");
-                            boton.disabled = true;
-                        });
-
-                        if (esPropio) {
-                            propios.appendChild(div);
-                        } else {
-                            disponibles.appendChild(div);
-                        }
-
-                        tieneGrupos = true;
-                    });
-
-                    if (!tieneGrupos) vacio.style.display = "block";
-                })
-                .catch(error => {
-                    console.error("Error al cargar los grupos:", error);
-                    document.getElementById("sinGrupos").style.display = "block";
-                });
-        }
-
-        // 3. Cambiar pestañas
-        document.getElementById("tab-disponibles").addEventListener("click", () => {
-            activarPestanya("listaGrupos", "tab-disponibles");
-        });
-
-        document.getElementById("tab-misgrupos").addEventListener("click", () => {
-            activarPestanya("misGrupos", "tab-misgrupos");
-        });
-
-        function activarPestanya(listaID, tabID) {
-            document.querySelectorAll(".grupo-lista").forEach(div => div.style.display = "none");
-            document.getElementById(listaID).style.display = "block";
-
-            document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
-            document.getElementById(tabID).classList.add("active");
-        }
-
-        function mostrarPopup(mensaje) {
-            const popup = document.getElementById("popupNotificacion");
-            popup.textContent = mensaje;
-            popup.style.display = "block";
-            setTimeout(() => { popup.style.display = "none"; }, 3000);
-        }
-    </script>
+   
 </body>
 </html>
+

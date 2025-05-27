@@ -6,41 +6,69 @@ class Grup {
         $this->conn = $connexio;
     }
 
+    public function insertarMensajeGrupo($grupo_id, $emisor_id, $mensaje) {
+    $sql = "INSERT INTO mensajes_grupo (grupo_id, emisor_id, mensaje) VALUES (?, ?, ?)";
+    $stmt = $this->conn->prepare($sql);
+    if (!$stmt) {
+        error_log("Error preparando consulta en insertarMensajeGrupo: " . $this->conn->error);
+        return ["success" => false, "error" => "Error preparando la consulta: " . $this->conn->error];
+    }
+    $stmt->bind_param("iis", $grupo_id, $emisor_id, $mensaje);
+    if ($stmt->execute()) {
+        return ["success" => true];
+    } else {
+        error_log("Error ejecutando consulta en insertarMensajeGrupo: " . $stmt->error);
+        return ["success" => false, "error" => "Error ejecutando la consulta: " . $stmt->error];
+    }
+}
+
 
     
-    public function crearGrup($nom, $descripcio, $visibilitat, $usuario_id) {
-        // Preparamos la consulta SQL sin el campo enllac_invitacio
-        $sql = "INSERT INTO grups (nom, descripcio, visibilitat, propietari_id) VALUES (?, ?, ?, ?)";
-
-        $stmt = $this->conn->prepare($sql);
-
-        // Verificar si la preparación fue exitosa
-        if ($stmt === false) {
-            error_log("Error al preparar la consulta: " . $this->conn->error);
-            return false;
-        }
-
-        // Vincular los parámetros
-        $stmt->bind_param("sssi", $nom, $descripcio, $visibilitat, $usuario_id);
-
-        // Ejecutar la consulta
-        if ($stmt->execute()) {
-            return true;
-        } else {
-            // Mostrar error si la ejecución falla
-            error_log("Error en la ejecución de la consulta: " . $stmt->error);
-            return false;
-        }
+   public function crearGrup($nom, $descripcio, $visibilitat, $usuario_id, $urlImagen) {
+    $sql = "INSERT INTO grups (nom, descripcio, visibilitat, propietari_id, imagen) VALUES (?, ?, ?, ?, ?)";
+    $stmt = $this->conn->prepare($sql);
+    if ($stmt === false) {
+        error_log("Error al preparar la consulta: " . $this->conn->error);
+        return false;
     }
+    $stmt->bind_param("sssis", $nom, $descripcio, $visibilitat, $usuario_id, $urlImagen);
+    if (!$stmt->execute()) {
+        error_log("Error en la ejecución de la consulta: " . $stmt->error);
+        $stmt->close();
+        return false;
+    }
+    $stmt->close();
+    return true;
+}
+
     
 
     // Afegir un usuari al grup
-    public function afegirUsuariAlGrup($grup_id, $usuari_id, $rol = "integrant") {
-        $sql = "INSERT IGNORE INTO grup_usuaris (grup_id, usuari_id, rol) VALUES (?, ?, ?)";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("iis", $grup_id, $usuari_id, $rol);
-        return $stmt->execute();
+public function afegirUsuariAlGrup($grup_id, $usuari_id, $rol = "integrant") {
+    $sql = "INSERT IGNORE INTO grup_usuaris (grup_id, usuari_id, rol) VALUES (?, ?, ?)";
+    $stmt = $this->conn->prepare($sql);
+
+    if (!$stmt) {
+        error_log("Error preparando consulta: " . $this->conn->error);
+        return false;
     }
+
+    $stmt->bind_param("iis", $grup_id, $usuari_id, $rol);
+
+    $success = $stmt->execute();
+    if (!$success) {
+        error_log("Error ejecutando consulta: " . $stmt->error);
+        return false;
+    }
+
+    error_log("Insertado o ignorado: grup_id=$grup_id, usuari_id=$usuari_id, rol=$rol");
+    error_log("Filas afectadas: " . $stmt->affected_rows);
+
+    return true;
+}
+
+
+
 
     // Expulsar un usuari del grup
     public function expulsarUsuari($grup_id, $usuari_id) {

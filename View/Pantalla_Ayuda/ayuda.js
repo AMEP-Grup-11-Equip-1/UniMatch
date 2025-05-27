@@ -8,6 +8,7 @@ fetch('../../Controller/get_session.php')
       usuario_id = data.usuarioID;
     } else {
       console.warn("Sesión no encontrada.");
+      window.location.href = "../Pantalla_de_Bloqueo/Pantalladebloqueo.html";
     }
   });
 
@@ -153,9 +154,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Popup sugerencias
 function toggleSugerenciaPopup() {
-  const popup = document.getElementById('sugerenciaPopup');
-  popup.style.display = popup.style.display === "block" ? "none" : "block";
+    const sugerenciaPopup = document.getElementById('sugerenciaPopup');
+    const guiaPopup = document.getElementById('guiaPopup');
+
+    // Tancar guia
+    guiaPopup?.classList.remove('show');
+    guiaPopup?.style.display && (guiaPopup.style.display = 'none');
+
+    // Obre o tanca aquest
+    sugerenciaPopup.style.display = sugerenciaPopup.style.display === "block" ? "none" : "block";
 }
+
 function openMenu() {
     document.getElementById('sideMenu').style.width = '250px';
 }
@@ -166,25 +175,47 @@ function closeMenu() {
 
 function eliminarCuenta() {
     if (confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.")) {
-        fetch("../../Controller/usercontroller.php", {
+        fetch("../../Controller/eliminar_usuario.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             }
         })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);
+        .then(res => res.text())
+        .then(text => {
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch (e) {
+                console.error("Respuesta no JSON:", text);
+                alert("❌ Error inesperado del servidor. Revisa la consola.");
+                return;
+            }
+
             if (data.status === "success") {
+                alert("Tu cuenta ha sido eliminada correctamente.");
                 window.location.href = "../Pantalla_de_Bloqueo/Pantalladebloqueo.html";
+            } else {
+                alert("❌ Error al eliminar la cuenta: " + (data.message || "Error desconocido."));
             }
         })
-        .catch(error => console.error("Error en la solicitud:", error));
+        .catch(error => {
+            console.error("Error en la solicitud:", error);
+            alert("❌ Error de red al intentar eliminar la cuenta.");
+        });
     }
 }
+
 function toggleGuiaPopup() {
-    const popup = document.getElementById('guiaPopup');
-    popup.style.display = (popup.style.display === "block") ? "none" : "block";
+    const guiaPopup = document.getElementById('guiaPopup');
+    const sugerenciaPopup = document.getElementById('sugerenciaPopup');
+
+    // Tancar sugg
+    sugerenciaPopup?.classList.remove('show');
+    sugerenciaPopup?.style.display && (sugerenciaPopup.style.display = 'none');
+
+    // Obre o tanca aquest
+    guiaPopup.style.display = guiaPopup.style.display === "block" ? "none" : "block";
 }
 
 

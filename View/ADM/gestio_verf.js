@@ -1,19 +1,43 @@
-// Função para fazer a requisição AJAX
+// Función para cargar los datos de verificación y denuncias
 function carregarDados() {
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", "../../Controller/gestion_verf.php", true);
-    xhr.onload = function () {
-        if (xhr.status === 200) {
-            const dados = xhr.responseText;
-            document.getElementById("tabla-datos").innerHTML = dados;
-        } else {
-            console.error("Erro ao carregar dados");
-        }
-    };
-    xhr.send();
+  // 1. Cargar datos de verificación
+  const xhr1 = new XMLHttpRequest();
+  xhr1.open("GET", "../../Controller/gestion_verf.php", true);
+  xhr1.onload = function() {
+    // Si la solicitud es exitosa, insertar la respuesta en el elemento con id "tabla-datos"
+    if (xhr1.status === 200) {
+      document.getElementById("tabla-datos").innerHTML = xhr1.responseText;
+    } else {
+      // Si hay error en la solicitud, mostrar mensaje en consola
+      console.error("Error en la solicitud 1:", xhr1.status, xhr1.statusText);
+    }
+  };
+  // Si ocurre un error de conexión, mostrar mensaje en consola
+  xhr1.onerror = function() {
+    console.error("Fallo en la conexión (solicitud 1)");
+  };
+
+  // 2. Cargar datos de denuncias
+  const xhr2 = new XMLHttpRequest();
+  xhr2.open("GET", "../../Controller/gestion_denun.php", true);
+  xhr2.onload = function() {
+    // Si la solicitud es exitosa, insertar la respuesta en el elemento con id "tabla-denun"
+    if (xhr2.status === 200) {
+      document.getElementById("tabla-denun").innerHTML = xhr2.responseText;
+    } else {
+      // Si hay error en la solicitud, mostrar mensaje en consola
+      console.error("Error en la solicitud 2:", xhr2.status, xhr2.statusText);
+    }
+  };
+  // Si ocurre un error de conexión, mostrar mensaje en consola
+  xhr2.onerror = function() {
+    console.error("Fallo en la conexión (solicitud 2)");
+  };
+
+  // Enviar ambas solicitudes
+  xhr1.send();
+  xhr2.send();
 }
 
-// Chama a função ao carregar a página
-window.onload = function () {
-    carregarDados();
-};
+// Ejecutar la función al cargar la página
+window.onload = carregarDados;

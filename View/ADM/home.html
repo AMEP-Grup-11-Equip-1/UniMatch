@@ -1,44 +1,63 @@
 <!DOCTYPE html>
 <html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UniMatch - ADM</title>
+    <!-- Enlaces a hojas de estilo -->
+    <link rel="stylesheet" href="ADM.css" />
+    <link rel="stylesheet" href="../Menu/menu.css" />
+    <link rel="icon" href="../../Imagenes/img1.png" type="image/x-icon">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unimatch - ADM</title>
-    <link rel="stylesheet" href="ADM.css">
-    <link rel="icon" href="../Imagenes/img1.png" type="image/x-icon">
+    <!-- Scripts para funcionalidades de menú y carga de datos -->
+    <script src="menu_lateral.js" defer></script>
+    <script src="gestio_verf.js" defer></script>
+    <script src="gestion_session.js"></script>
+  </head>
+  <body>
+    <!-- Icono para abrir el menú lateral -->
+    <span class="menu-icon" onclick="openMenu()">&#9776;</span>
 
-    <script src="menu_lateral.js"></script>
-    <link rel="stylesheet" href="../Menu/menu.css">
-
-    <script src="gestio_verf.js"></script>
-    <style>
-
-    </style>
-</head>
-
-<body>
-
-    <h1>UniMatch</h1>
-    </body>
-        <!-- Menú lateral -->
-        <span class="menu-icon" onclick="openMenu()">&#9776;</span>
-        <div id="sideMenu" class="side-menu">
-    
-        <span class="close-btn" onclick="closeMenu()">&times;</span>
-        <a href="home.html">Home</a> <!-- Enlace a la página de inicio -->
-        <a href="perfil_ADM.html">Perfil</a> <!-- Enlace al perfil del administrador -->
-        <button class="logout-btn-side" onclick="window.location.href='../php/logout_ADM.php'">Cerrar sesión</button> <!-- Botón para cerrar sesión -->
+    <!-- Menú lateral de navegación -->
+    <div id="sideMenu" class="side-menu">
+      <span class="close-btn" onclick="closeMenu()">&times;</span>
+      <a href="perfil_ADM.html">Perfil</a>
+      <a href="home.html">Home</a>
+      <a href="denuncias.html">Denuncias</a>
+      <a href="ayuda.html">Ayuda</a>
+      <!-- Botón para cerrar sesión -->
+      <button
+        class="logout-btn-side"
+        onclick="window.location.href='../../Controller/logout.php'"
+      >
+        Cerrar sesión
+      </button>
     </div>
 
-    <table class="table">
-        <tr>
-            <td>Nombre</td>
-            <td>Status</td>
-            <td>Denuncia</td>
-        </tr>
-       <tbody id="tabla-datos"> <!-- A tabela será preenchida aqui -->
-        <!-- Dados serão inseridos dinamicamente -->
-    </tbody>
-</table> 
+    <!-- Contenedor de la tabla de nuevos usuarios -->
+    <main class="table-container">
+      <h1 class="section-title">NUEVOS USUARIOS</h1>
+      <table class="table">
+        <thead>
+          <tr></tr> <!-- Encabezado vacío, se puede completar dinámicamente -->
+        </thead>
+        <tbody id="tabla-datos">
+          <!-- Los datos de usuarios se cargan dinámicamente aquí -->
+        </tbody>
+      </table>
+    </main>
+
+    <!-- Contenedor de la tabla de denuncias abiertas -->
+    <main class="table-container">
+      <h1 class="section-title">DENUNCIAS ABIERTAS</h1>
+      <table class="table">
+        <thead>
+          <tr></tr> <!-- Encabezado vacío, se puede completar dinámicamente -->
+        </thead>
+        <tbody id="tabla-denun">
+          <!-- Las denuncias se cargan dinámicamente aquí -->
+        </tbody>
+      </table>
+    </main>
+  </body>
 </html>

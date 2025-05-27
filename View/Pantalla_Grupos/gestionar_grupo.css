@@ -1,0 +1,122 @@
+body {
+  margin: 0;
+  height: 100vh;
+  background: radial-gradient(circle at center, #1a1a1a, #000);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.grupo-card {
+  background-color: #f5f5f5;
+  color: #111;
+  border-radius: 14px;
+  padding: 40px 50px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.06);
+  text-align: center;
+}
+
+.grupo-card h2 {
+  margin-top: 0;
+  font-size: 24px;
+}
+
+.grupo-card p {
+  margin-top: 10px;
+  color: #444;
+}
+
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: transparent;
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+  border: 2px solid transparent;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.back-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: #888;
+}
+
+.miembros {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.miembros ul {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+.propietario-label {
+  color: #dc3545;
+}
+
+.propietario-nombre {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.chat-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  width: 100%;
+  max-width: 320px;
+  transition: background-color 0.3s;
+}
+
+.chat-btn:hover {
+  background-color: #0056b3;
+}
+
+.salir-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 50%;
+  max-width: 160px;
+  margin: 0 auto;
+  display: block;
+  transition: background-color 0.3s;
+}
+
+.salir-btn:hover {
+  background-color: #b52a3a;
+}
+
+.expulsar-btn {
+  background-color: #ff4444;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.2s;
+}
+
+.expulsar-btn:hover {
+  background-color: #cc0000;
+}

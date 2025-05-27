@@ -2,14 +2,14 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bienvenido a Unimatch</title>
-    <link rel="icon" href="../Imagenes/img1.png" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="bienvenida.css">
-    <link rel="stylesheet" href="../Menu/menu.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="icon" href="../../Imagenes/img1.png" type="image/x-icon" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="bienvenida.css" />
+    <link rel="stylesheet" href="../Menu/menu.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 
     <script src="bienvenida.js" defer></script>
     <!-- Vinculamos el archivo de JS -->
@@ -19,30 +19,35 @@
     <h1>UniMatch</h1>
 
     <div class="carousel-container">
-        <button class="arrow left-arrow" onclick="rotateCarousel(-1)">&lt;</button>
+        <button class="arrow left-arrow" onclick="rotateCarousel(-1)">
+        &lt;
+      </button>
 
         <div class="carousel"></div>
-        <button class="arrow right-arrow" onclick="rotateCarousel(1)">&gt;</button>
+        <button class="arrow right-arrow" onclick="rotateCarousel(1)">
+        &gt;
+      </button>
     </div>
 
     <!-- Botones superiores -->
     <!-- Contenedor de botones alineados -->
     <div class="top-buttons">
-        <button class="circle-icon" onclick="toggleNotificationPopup()">🔔</button>
+        <button class="circle-icon" onclick="toggleNotificationPopup()">
+        🔔
+      </button>
         <button class="circle-icon" onclick="toggleProfilePopup()">+</button>
         <button class="circle-icon" id="openCreateGrup">👥</button>
     </div>
-  
-    
 
     <div class="profile-popup" id="profilePopup">
         <span class="close-popup" onclick="toggleProfilePopup()">&times;</span>
         <h2>Crear Historia</h2>
         <form id="historiaForm" action="../../Controller/guardar_historia.php" method="POST" enctype="multipart/form-data">
-            <input type="file" name="imagen" accept="image/*" required>
-            <input type="text" name="nombre" placeholder="Nombre" required>
-            <input type="text" name="universidad" placeholder="Universidad" required>
+            <input type="file" name="imagen" accept="image/*" required />
+            <input type="text" name="nombre" placeholder="Nombre" required />
+            <input type="text" name="universidad" placeholder="Universidad" required />
             <textarea name="descripcion" placeholder="Descripción" required></textarea>
+            <div id="errorMensajeHistoria" class="error-message"></div>
             <button type="submit">Guardar</button>
         </form>
     </div>
@@ -56,58 +61,89 @@
         <a href="../Pantalla_Chat/chat.html">Chats</a>
         <a href="../Pantalla_Config/configuracion.html">Configuraciones</a>
         <a href="../Pantalla_Ayuda/ayuda.html">Ayuda</a>
-        <button class="logout-btn-side" onclick="window.location.href='../Pantalla_de_Bloqueo/Pantalladebloqueo.html'">Cerrar sesión</button>
-        <button class="delete-account-btn" onclick="eliminarCuenta()" style="background-color: red; color: white; border: none; padding: 10px; width: 100%;">Eliminar cuenta</button>
+        <button class="logout-btn-side" onclick="window.location.href='../../Controller/logout.php'">
+        Cerrar sesión
+      </button>
+        <button class="delete-account-btn" onclick="eliminarCuenta()" style="
+          background-color: red;
+          margin-bottom: 0px;
+          color: white;
+          border: none;
+          padding: 10px;
+          width: 100%;
+        ">
+        Eliminar cuenta
+      </button>
     </div>
 
-  
+    <!-- Popup de notificaciones -->
+    <div class="notification-popup" id="notificationPopup">
+        <span class="close-popup" onclick="toggleNotificationPopup()">&times;</span
+      >
+      <h2>Notificaciones</h2>
+      <div class="notification-filters">
+        <button data-tipo="todas" class="active" onclick="filtrarNotificaciones('todas')">Todas</button>
+        <button data-tipo="match" onclick="filtrarNotificaciones('match')">Matches</button>
+        <button data-tipo="chat" onclick="filtrarNotificaciones('chat')">Chats</button>
+        <button data-tipo="grupo" onclick="filtrarNotificaciones('grupo')">Grupos</button>
+      </div>
 
-    <!-- Popup de notificaciones -->
-    <!-- Popup de notificaciones -->
-<div class="notification-popup" id="notificationPopup">
-    <span class="close-popup" onclick="toggleNotificationPopup()">&times;</span>
-    <h2>Notificaciones</h2>
-    <div class="notification-list" id="notificationList">
+      <div class="notification-list" id="notificationList">
         <!-- Ejemplo de notificación con botones -->
         <div class="notification-item" data-id="1">
-            <p>Juan te ha enviado una solicitud de grupo.</p>
-            <div class="notification-actions">
-                <button onclick="aceptarNotificacion(1)">Aceptar</button>
-                <button onclick="rechazarNotificacion(1)">Rechazar</button>
-            </div>
+          <p>Juan te ha enviado una solicitud de grupo.</p>
+          <div class="notification-actions">
+            <button onclick="aceptarNotificacion(1)">Aceptar</button>
+            <button onclick="rechazarNotificacion(1)">Rechazar</button>
+          </div>
         </div>
         <!-- Puedes duplicar bloques como este para más notificaciones -->
+      </div>
     </div>
-</div>
-
 
     <!-- Popup para crear grupo -->
-    <div class="profile-popup" id="popupCrearGrupo">
-        <span class="close-popup" onclick="toggleCrearGrupo()">&times;</span>
+      <div class="profile-popup" id="popupCrearGrupo">
+      <span class="close-popup" onclick="toggleCrearGrupo()">&times;</span>
         <h2>Crear Grupo</h2>
-        <form id="formCrearGrupo" action="../../Controller/crear_grup.php" method="POST">
-            <!-- Nombre del grupo -->
+        <form id="formCrearGrupo" action="../../Controller/crear_grup.php" method="POST" enctype="multipart/form-data">
+            <input type="file" name="imagen" accept="image/*" required />
             <input type="text" id="grup_nom" name="nom" placeholder="Nombre del grupo" required />
-    
-            <!-- Visibilidad: debe ser public o privat -->
-            <select id="grup_visibilitat" name="visibilitat" required>
-                <option value="">-- Selecciona visibilidad --</option>
-                <option value="public">Público</option>
-                <option value="privat">Privado</option>
-            </select>
-    
-            <!-- Descripción -->
+
+            <div class="toggle-group">
+                <input type="radio" id="publico" name="visibilidad" value="public" required />
+                <label for="publico">Público</label>
+
+                <input type="radio" id="privado" name="visibilidad" value="privat" required />
+                <label for="privado">Privado</label>
+            </div>
+
             <textarea id="grup_descripcio" name="descripcio" placeholder="Descripción" required></textarea>
-    
-            <!-- Botón de envío -->
+
+            <div id="errorMensajeGrupo" class="error-message"></div>
             <button type="submit">Guardar</button>
         </form>
+
     </div>
-    
-  
-    <button onclick="window.location.href='../Pantalla_Grupos/ver_grupos.html'">Ver Grupos</button>
 
+    <button class="grupo-button" onclick="window.location.href='../Pantalla_Grupos/ver_grupos.html'">
+      Grupos
+    </button>
 
+    <!-- Popup Denuncies -->
+
+<div class="profile-popup" id="reportPopup">
+    <span class="close-popup" onclick="closeReportPopup()">&times;</span>
+    <h2>Denunciar Història</h2>
+    <form id="reportForm">
+        <input type="hidden" name="target_user_id" id="reportHistoriaTargetUserId" />
+        <select id="reportReason" name="report_reason" required onchange="handleReportChange()">
+            <option value="">Selecciona un motiu</option>
+        </select>
+        <textarea id="otherReason" name="other_description" placeholder="Escriu el motiu..." style="display:none;"></textarea>
+        <div id="errorMensajeDenuncia" class="error-message"></div>
+        <button type="submit">Enviar denúncia</button>
+    </form>
+</div>
 </body>
-</html>
 
+</html>

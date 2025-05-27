@@ -1,0 +1,347 @@
+/* ------------------------ Perfil -------------------------- */
+
+.perfil-box {
+    background: #1f1f1f;
+    color: #eee;
+    padding: 40px;
+    border-radius: 20px;
+    width: 400px;
+    max-width: 90vw;
+    text-align: left;
+    box-shadow: 0 0 25px rgba(255, 105, 180, 0.6);
+    font-family: 'Segoe UI', sans-serif;
+    line-height: 1.6;
+    margin: 60px auto;
+    top: 50%;
+    left: 50%;
+}
+
+.perfil-box p {
+    font-size: 1.2em;
+    margin: 15px 0;
+}
+
+.perfil-box strong {
+    color: #ff4f7b;
+}
+
+.user-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.user-actions button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff4f7b;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.user-actions button:hover {
+    background-color: #ff2d62;
+    transform: translateY(-2px);
+}
+
+/* -------------------------- Seção de informações -------------------------- */
+
+.Infos {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 30px;
+    width: 90%;
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px;
+    background: #1f1f1f;
+    border-radius: 20px;
+    box-shadow: 0 0 25px rgba(255, 105, 180, 0.3);
+}
+
+/* ------------------------ Carrossel de Fotos com Descrição ------------------------- */
+
+.carousel-container {
+    position: relative;
+    width: 400px;
+    height: 550px; /* Aumentei para acomodar a descrição */
+    box-sizing: border-box;
+    overflow: hidden;
+    border-radius: 15px;
+    background: #2a2a2a;
+    padding: 10px;
+}
+
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.carousel-slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.carousel-slide.active {
+    opacity: 1;
+}
+
+.carousel-slide img {
+    max-width: 90%;
+    max-height: 80%; /* Reduzi para dar espaço à descrição */
+    object-fit: contain;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    margin-bottom: 15px;
+}
+
+.carousel-caption {
+    width: 90%;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    color: #fff;
+    text-align: center;
+    font-size: 0.95em;
+    line-height: 1.4;
+}
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 79, 123, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+}
+
+.arrow:hover {
+    background-color: #ff4f7b;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.left-arrow {
+    left: 10px;
+}
+
+.right-arrow {
+    right: 10px;
+}
+
+/* ------------------------ Lista de Matches ------------------------- */
+
+.Matches {
+    flex: 1;
+    background: #2a2a2a;
+    padding: 25px;
+    border-radius: 15px;
+    height: 550px; /* Ajustado para combinar com o carrossel */
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.Matches h2 {
+    color: #ff4f7b;
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    text-align: center;
+    border-bottom: 2px solid #ff4f7b;
+    padding-bottom: 10px;
+}
+
+.match-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.match-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 15px;
+    background: #333;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.match-item:hover {
+    background: #3a3a3a;
+    transform: translateX(5px);
+    box-shadow: 0 5px 15px rgba(255, 79, 123, 0.2);
+}
+
+.match-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ff4f7b;
+    margin-right: 15px;
+}
+
+.match-info {
+    flex: 1;
+}
+
+.match-name {
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+
+.match-date {
+    color: #aaa;
+    font-size: 0.9em;
+}
+
+/* ------------------------ Abas de Denúncias ------------------------- */
+.denuncias-tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #444;
+}
+
+.tab-button {
+    padding: 8px 20px;
+    background: none;
+    border: none;
+    color: #aaa;
+    cursor: pointer;
+    font-size: 1em;
+    position: relative;
+}
+
+.tab-button.active {
+    color: #ff4f7b;
+    font-weight: bold;
+}
+
+.tab-button.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #ff4f7b;
+}
+
+/* ------------------------ Lista de Denúncias ------------------------- */
+.denuncia-item {
+    padding: 15px;
+    margin-bottom: 15px;
+    background: #333;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.denuncia-item:hover {
+    background: #3a3a3a;
+    transform: translateX(5px);
+    box-shadow: 0 5px 15px rgba(255, 79, 123, 0.2);
+}
+
+.denuncia-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.denuncia-user {
+    font-weight: bold;
+    color: #ff4f7b;
+}
+
+.denuncia-date {
+    color: #aaa;
+    font-size: 0.9em;
+}
+
+.denuncia-type {
+    color: #ff9eb5;
+    font-style: italic;
+    margin: 5px 0;
+}
+
+.denuncia-status {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.status-pendente {
+    background-color: #ff9800;
+    color: #000;
+}
+
+.status-resolvido {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+/* ------------------------ Responsividade ------------------------- */
+
+@media (max-width: 1000px) {
+    .Infos {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .carousel-container {
+        width: 100%;
+        height: 450px;
+        max-width: 400px;
+    }
+    
+    .Matches {
+        width: 100%;
+        max-height: none;
+        margin-top: 20px;
+        height: auto;
+        max-height: 400px;
+    }
+}
+
+@media (max-width: 600px) {
+    .perfil-box {
+        padding: 25px;
+        margin: 30px auto;
+    }
+    
+    .carousel-container {
+        height: 400px;
+    }
+    
+    .carousel-slide img {
+        max-height: 70%;
+    }
+    
+    .arrow {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+    }
+}

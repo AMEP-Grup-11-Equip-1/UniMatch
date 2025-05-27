@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ver Grupo</title>
+  <link rel="stylesheet" href="ver_grupos_unidos.css" />
+</head>
+<body>
+
+  <a href="ver_grupos.html" class="back-button">← Volver</a>
+
+  <div class="grupo-card">
+    <h2 id="nombre-grupo">Nombre del Grupo</h2>
+    <p><strong>Descripción:</strong> <span id="descripcion-grupo"></span></p>
+    <p><strong>Visibilidad:</strong> <span id="visibilidad-grupo"></span></p>
+
+    <div class="miembros">
+      <p><strong class="propietario-label">Propietario:</strong> <span id="nombre-propietario" class="propietario-nombre"></span></p>
+      <strong>Miembros:</strong>
+      <ul id="lista-miembros"></ul>
+    </div>
+
+    <button class="chat-btn" onclick="irAlChatDeGrupo()">Chat de Grupo</button>
+    <button id="salir-grupo" class="salir-btn">Salir del Grupo</button>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const grupoID = params.get("grupo_id");
+    const usuarioID = localStorage.getItem("usuario_id") || 1;
+
+    // 1. Cargar detalles del grupo
+    fetch("../../Controller/get_grupo_detalle.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ grup_id: grupoID })
+    })
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("nombre-grupo").textContent = data.nombre;
+      document.getElementById("descripcion-grupo").textContent = data.descripcion;
+      document.getElementById("visibilidad-grupo").textContent = data.visibilidad;
+      document.getElementById("nombre-propietario").textContent = data.propietario_nombre;
+
+      const lista = document.getElementById("lista-miembros");
+
+      data.miembros.forEach(usuario => {
+        if (usuario.id != data.propietario_id) {
+          const li = document.createElement("li");
+          li.textContent = usuario.nombre;
+          lista.appendChild(li);
+        }
+      });
+    });
+
+    // 2. Salir del grupo
+    document.getElementById("salir-grupo").addEventListener("click", () => {
+      if (confirm("¿Seguro que querés salir del grupo?")) {
+        fetch("../../Controller/salir_grupo.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ grup_id: grupoID, usuari_id: usuarioID })
+        })
+        .then(res => res.json())
+        .then(data => {
+          alert(data.message || "Has salido del grupo.");
+          window.location.href = "ver_grupos.html";
+        });
+      }
+    });
+
+    function irAlChatDeGrupo() {
+      const grupoID = new URLSearchParams(window.location.search).get("grupo_id");
+      if (grupoID) {
+        window.location.href = `../Pantalla_Chat/chat.html?grupo_id=${grupoID}`;
+      } else {
+        alert("No se ha encontrado el ID del grupo.");
+      }
+    }
+
+  </script>
+
+</body>
+</html>
+

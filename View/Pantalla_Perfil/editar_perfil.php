@@ -9,7 +9,7 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Perfil</title>
-    <link rel="icon" href="../Imagenes/img1.png" type="image/x-icon">
+    <link rel="icon" href="../../Imagenes/img1.png" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../Menu/menu.css">
     <link rel="stylesheet" href="editar_perfil.css">
@@ -27,8 +27,12 @@ session_start();
         <a href="../Pantalla_Chat/chat.html">Chats</a>
         <a href="../Pantalla_Config/configuracion.html">Configuraciones</a>
         <a href="../Pantalla_Ayuda/ayuda.html">Ayuda</a>
-        <button class="logout-btn-side" onclick="window.location.href='../Pantalla_de_Bloqueo/Pantalladebloqueo.html'">Cerrar sesión</button>
-        <button class="delete-account-btn" onclick="eliminarCuenta()" style="background-color: red; color: white; border: none; padding: 10px; width: 100%;">Eliminar cuenta</button>
+<button
+        class="logout-btn-side"
+        onclick="window.location.href='../../Controller/logout.php'"
+      >
+        Cerrar sesión
+      </button>        <button class="delete-account-btn" onclick="eliminarCuenta()" style="background-color: red; color: white; border: none; padding: 10px; width: 100%;">Eliminar cuenta</button>
     </div>
 
     <!-- Contenido principal del perfil de edición -->
@@ -45,12 +49,18 @@ session_start();
             <input type="email" id="email" name="email" value="<?php echo $_SESSION['email']; ?>" placeholder="Nuevo correo electrónico">
 
             <!-- Campo de Descripción -->
+
+
+
             <label for="descripcion">Descripción</label>
-            <textarea id="descripcion" name="descripcion" placeholder="Escribe una nueva descripción"><?php echo isset($_SESSION['descripcion']) ? $_SESSION['descripcion'] : ''; ?></textarea>
+           <textarea id="descripcion" name="descripcion" placeholder="Escribe una nueva descripción"><?php echo htmlspecialchars($_SESSION['descripcion'] ?? ''); ?></textarea>
+
 
             <!-- Campo de Contraseña -->
             <label for="password">Contraseña</label>
-            <input type="password" id="password" name="password" placeholder="Nueva contraseña">
+           <input type="text" id="password" name="password" value="<?php echo isset($_SESSION['password']) ? htmlspecialchars($_SESSION['password']) : ''; ?>" placeholder="Nueva contraseña">
+
+
 
             <!-- Campo de Foto de Perfil -->
             <label for="imagen">Foto de Perfil</label>
@@ -64,6 +74,25 @@ session_start();
     </div>
 
     <script>
+
+
+fetch('../../Controller/get_session.php') // Cambia la ruta a la real
+                .then(res => res.json())
+                .then(data => {
+                    if (data.usuarioID) {
+                        userId = data.usuarioID;
+                        console.log('Usuario logueado con ID:', userId);
+                        // Aquí puedes llamar a cargarMatches(), cargarMensajes() o lo que sea, 
+                        // para cargar la conversación con el userId ya disponible
+                    } else {
+                        console.warn('Usuario no logueado:', data.error);
+                        window.location.href = "../Pantalla_de_Bloqueo/Pantalladebloqueo.html";
+
+                    }
+                })
+                .catch(err => console.error('Error al obtener sesión:', err));
+
+                
         // Función para confirmar si el usuario quiere guardar los cambios
         function confirmChanges() {
             return confirm("¿Estás seguro de que deseas guardar estos cambios?");

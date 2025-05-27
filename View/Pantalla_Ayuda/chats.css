@@ -1,0 +1,372 @@
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(to bottom, #000000, #000000);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  justify-content: flex-start;
+}
+
+/*------------------------------------ Fondo -------------------------------------->*/
+
+body::before,
+body::after,
+.glow-1,
+.glow-2,
+.glow-3 {
+  content: "";
+  position: fixed;
+  /* Fijar las bolas de luz al fondo */
+  border-radius: 50%;
+  opacity: 0.4;
+  filter: blur(200px);
+  z-index: -1;
+}
+
+body::before {
+  width: 700px;
+  height: 800px;
+  background: #ff4f7b;
+  top: 20%;
+  left: 45%;
+}
+
+body::after {
+  width: 700px;
+  height: 800px;
+  background: #e429fd;
+  bottom: 20%;
+  right: 45%;
+}
+
+.glow-1 {
+  width: 300px;
+  height: 300px;
+  background: #ff69b4;
+  top: 55%;
+  left: 15%;
+}
+
+.glow-2 {
+  width: 280px;
+  height: 280px;
+  background: #ff1493;
+  bottom: 45%;
+  right: 15%;
+}
+
+.glow-3 {
+  width: 350px;
+  height: 350px;
+  background: #ff85a2;
+  top: 25%;
+  right: 25%;
+}
+
+/*---------------------------------------------------------------------------------->*/
+
+.chat-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 8px;
+  background: #f3f3f3;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.chat-item:hover {
+  background: #ffe6f0;
+}
+
+.chat-item img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.empty-list-message {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-style: italic;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  margin: 10px;
+}
+
+/*------------------------------------- CHAT- -------------------------------------->*/
+
+.tab-container {
+  display: flex;
+  justify-content: center;
+  gap: 35px;
+  margin-bottom: 20px;
+  margin-top: 5px;
+}
+
+.tab {
+  background-color: #f9f9f9;
+  border: 2px solid #000000;
+  border-radius: 30px;
+  padding: 10px 40px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #000000;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  user-select: none;
+}
+
+.tab:hover {
+  background-color: #000000;
+  color: white;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+}
+
+.tab.active {
+  background-color: #000000;
+  color: white;
+  transform: scale(1.05);
+}
+
+.search-container {
+  max-width: 400px;
+  margin: 15px auto 25px auto;
+  display: flex;
+  justify-content: center;
+}
+
+#searchInput {
+  width: 80%;
+  padding: 5px 15px;
+  border-radius: 30px;
+  border: 2px solid #000000;
+  font-size: 16px;
+  outline: none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#searchInput:focus {
+  border-color: #000000;
+  box-shadow: 0 0 12px 3px rgba(0, 0, 0, 0.7);
+}
+
+.chat-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 50px;
+  width: 100%;
+  height: 80vh;
+  max-width: 1200px;
+  padding: 20px;
+}
+
+.chat-list {
+  width: 30%;
+  background-color: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  overflow-y: auto;
+  margin-right: 20px;
+}
+
+.chat-item {
+  padding: 15px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+.chat-item:hover {
+  background-color: #ffe6f0;
+}
+
+.chat-item img {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.chat-box {
+  width: 65%;
+  background-color: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  /* Permite desplazamiento */
+  max-height: 100%;
+  /* Limita la altura máxima */
+  margin-bottom: 10px;
+  padding-right: 10px;
+  /* Espacio para el scroll */
+}
+
+.message-user,
+.message-admin {
+  padding: 10px;
+  border-radius: 10px;
+  width: fit-content;
+  max-width: 80%;
+  margin-left: auto;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.message-user {
+  background-color: #ececec;
+  color: black;
+  margin-right: 0;
+}
+
+.message-admin {
+  background-color: #444444;
+  color: #ececec;
+  margin-left: 0;
+}
+
+.message-time {
+  font-size: 12px;
+  color: #999;
+  margin-top: 5px;
+}
+
+.senderName {
+  font-weight: bold;
+  color: #ff4f7b;
+  margin-right: 8px;
+}
+
+.message-input {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
+}
+
+.message-input input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+.chat-box button {
+  background-color: #000000;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.chat-box button:disabled {
+  background-color: #515151;
+  cursor: default;
+}
+
+.chat-box button:disabled:hover {
+  background-color: #515151;
+}
+
+.chat-box button:hover {
+  background-color: #000000;
+}
+
+.logout-btn-side {
+  font-size: 20px;
+  color: black;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 16px 32px;
+  width: 100%;
+  border-top: 1px solid #ddd;
+  text-align: left;
+}
+
+.logout-btn-side:hover {
+  color: #000000;
+}
+
+.logout-btn-side {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #000000;
+}
+
+.section-item {
+  padding: 12px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+.section-item img {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.section-item:hover {
+  background-color: #ffe6f0;
+}
+
+
+
+.rating {
+    font-size: 28px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.star {
+    color: #ccc;
+    transition: color 0.3s;
+    font-size: 32px;
+}
+
+.star.hover,
+.star.selected {
+    color: gold;
+}

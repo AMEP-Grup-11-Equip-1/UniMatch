@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UniMatch - ADM</title>
+    <!-- Estilos principales del panel de administrador -->
+    <link rel="stylesheet" href="ADM.css" />
+    <link rel="stylesheet" href="../Menu/menu.css" />
+    <link rel="stylesheet" href="chat.css" />
+
+    <link rel="icon" href="../../Imagenes/img1.png" type="image/x-icon" />
+
+    <!-- Scripts para funcionalidades del menú y sesión -->
+    <script src="menu_lateral.js" defer></script>
+    <script src="gestion_session.js"></script>
+    <script src="gestion_ayuda.js" defer></script>
+  </head>
+  <body>
+    <!-- Icono para abrir menú lateral -->
+    <span class="menu-icon" onclick="openMenu()">&#9776;</span>
+
+    <!-- Menú lateral de navegación -->
+    <div id="sideMenu" class="side-menu">
+      <span class="close-btn" onclick="closeMenu()">&times;</span>
+      <a href="perfil_ADM.html">Perfil</a>
+      <a href="home.html">Home</a>
+      <a href="denuncias.html">Denuncias</a>
+      <a href="ayuda.html">Ayuda</a>
+      <button
+        class="logout-btn-side"
+        onclick="window.location.href='../../Controller/logout.php'"
+      >
+        Cerrar sesión
+      </button>
+    </div>
+
+    <div class="chat-list">
+      <div class="tab-container">
+        <button class="tab active" id="tab-new">Nuevas</button>
+        <button class="tab" id="tab-open">Abiertas</button>
+        <button class="tab" id="tab-closed">Cerradas</button>
+      </div>
+
+      <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Buscar..." />
+      </div>
+
+      <div class="tab-underline"></div>
+
+      <!-- Aquí tus listas -->
+      <div id="NewList" style="display: block"></div>
+      <div id="OpenList" style="display: none"></div>
+      <div id="ClosedList" style="display: none"></div>
+    </div>
+
+    <!-- Caja del chat seleccionada -->
+    <div class="chat-box" id="chat-box" style="display: none">
+        <h2 class="chat-header">
+        <span>
+          Chat
+          <span id="chatUserInfo"></span>
+        </span>
+        <button id="closeChatBtn" onclick="closeChat()" class="close-chat-btn">Cerrar</button>
+      </h2>
+      <!-- Protocolo actual del chat, oculto -->
+      <div hidden id="ProtocoloId"></div>
+      <!-- Contenedor de mensajes del chat -->
+      <div class="messages" id="messagesContainer"></div>
+      <!-- Input para enviar mensajes -->
+      <div class="message-input">
+        <textarea id="message" placeholder="Escribe un mensaje..."></textarea>
+        <button onclick="sendMessage()">Enviar</button>
+      </div>
+    </div>
+  </body>
+</html>
